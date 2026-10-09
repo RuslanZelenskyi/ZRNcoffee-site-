@@ -9,6 +9,9 @@
 <meta name="author" content="Руслан Зеленський, ZRN Coffee">
 <meta name="theme-color" content="#f3ead9">
 <link rel="canonical" href="https://zrncoffee.pp.ua/">
+<link rel="alternate" hreflang="uk" href="https://zrncoffee.pp.ua/">
+<link rel="alternate" hreflang="ru" href="https://zrncoffee.pp.ua/?lang=ru">
+<link rel="alternate" hreflang="x-default" href="https://zrncoffee.pp.ua/">
 <!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:locale" content="uk_UA">
@@ -27,7 +30,7 @@
 <style>
 :root{
   --bg:#f3ead9; --bg2:#ece0c7; --card:#fdf9f0; --ink:#2a2217; --sub:#6f6150;
-  --gold:#a9792f; --gold-soft:#8c6526; --gold-bright:#c89640; --line:rgba(169,121,47,.26);
+  --gold:#8a6324; --gold-soft:#6b4a1c; --gold-bright:#b8862f; --line:rgba(107,74,28,.28);
   --dark:#211a11; --dark2:#2b2217;
   box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
 }
@@ -49,6 +52,7 @@ button{font-family:inherit;}
   font-size:.7rem; font-weight:700; letter-spacing:.03em; padding:5px 7px;
   border-radius:3px; cursor:pointer; line-height:1;
   -webkit-tap-highlight-color:transparent;
+  text-decoration:none; display:inline-flex; align-items:center;
 }
 .lang-btn:hover{color:var(--ink);}
 .lang-btn.active{
@@ -57,10 +61,8 @@ button{font-family:inherit;}
 }
 .lang-sep{color:var(--line); font-size:.65rem; user-select:none; padding:0 1px;}
 @media(max-width:600px){
-  .lang-btn{padding:4px 5px; font-size:.65rem;}
-  .hd-right{gap:0;}
-  nav.hd-links{gap:2px;}
-  nav.hd-links a{padding:7px 8px; font-size:.7rem;}
+  .lang-btn{padding:6px 8px; font-size:.75rem; min-height:40px;}
+  .hd-right{gap:4px;}
 }
 
 /* ===== header ===== */
@@ -69,14 +71,53 @@ header.header-hidden{transform:translateY(-100%); opacity:0; pointer-events:none
 .hd-inner{display:flex; justify-content:space-between; align-items:center; padding:12px 0; gap:10px;}
 .logo{font-family:'Fraunces',serif; font-size:1.2rem; letter-spacing:.03em; color:var(--ink);}
 .logo b{color:var(--gold-soft); font-weight:600;}
-nav.hd-links{display:flex; gap:4px; font-size:.78rem; flex:1; min-width:0; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch;}
+.hd-logo{
+  font-family:'Fraunces',Georgia,serif;
+  font-size:1.28rem;
+  font-weight:600;
+  letter-spacing:.08em;
+  color:var(--ink);
+  text-decoration:none;
+  flex:none;
+  line-height:1;
+  padding:6px 4px;
+  -webkit-tap-highlight-color:transparent;
+}
+.hd-logo:hover{color:var(--gold-soft);}
+.menu-btn{
+  display:none; background:var(--card); border:1px solid var(--line); color:var(--ink);
+  width:44px; height:44px; border-radius:10px; align-items:center; justify-content:center;
+  cursor:pointer; flex:none; -webkit-tap-highlight-color:transparent;
+  box-shadow:0 1px 3px rgba(33,26,17,.06);
+}
+.menu-btn:active{transform:scale(.97); background:rgba(169,121,47,.1);}
+.menu-btn svg{width:22px; height:22px; stroke:var(--ink);}
+.mobile-nav[hidden]{display:none !important;}
+.mobile-nav{
+  display:none; position:fixed; inset:0; z-index:70; background:rgba(33,26,17,.45);
+}
+.mobile-nav.open{display:block;}
+.mobile-nav-panel{
+  position:absolute; top:0; right:0; width:min(320px,88vw); height:100%; background:var(--card);
+  border-left:1px solid var(--line); padding:18px 18px 32px; overflow-y:auto;
+  box-shadow:-8px 0 28px rgba(33,26,17,.12);
+}
+.mobile-nav-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;}
+.mobile-nav-head span{font-family:'Fraunces',serif; font-size:1.1rem;}
+.mobile-nav a, .mobile-nav button.mn-link{
+  display:block; width:100%; text-align:left; background:transparent; border:none;
+  padding:14px 12px; font-size:1rem; font-weight:600; color:var(--ink); border-radius:8px;
+  cursor:pointer; font-family:inherit; border-bottom:1px solid var(--line);
+}
+.mobile-nav a:hover, .mobile-nav button.mn-link:hover{background:rgba(169,121,47,.1); color:var(--gold-soft);}
+nav.hd-links{display:flex; gap:6px; font-size:.82rem; flex:1; min-width:0; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch;}
 nav.hd-links::-webkit-scrollbar{display:none;}
 nav.hd-links a{
-  cursor:pointer; white-space:normal; text-align:center; line-height:1.15; font-weight:700; letter-spacing:.01em; color:var(--gold-soft);
-  padding:6px 6px; border-radius:3px; position:relative; overflow:hidden; isolation:isolate;
+  cursor:pointer; white-space:nowrap; text-align:center; line-height:1.2; font-weight:700; letter-spacing:.01em; color:var(--gold-soft);
+  padding:10px 12px; border-radius:6px; position:relative; overflow:hidden; isolation:isolate;
   border:1px solid transparent; transition:color .25s, border-color .25s, transform .2s, background .25s;
   -webkit-user-select:none; user-select:none; -webkit-tap-highlight-color:transparent;
-  font-size:.7rem; flex:0 0 auto; min-width:2.4rem;
+  font-size:13px; flex:0 0 auto; min-height:44px; display:inline-flex; align-items:center; justify-content:center;
 }
 nav.hd-links a::before{
   content:''; position:absolute; inset:0; z-index:-1; opacity:0;
@@ -124,11 +165,14 @@ nav.hd-links a.nav-active::after{
   background:var(--gold-soft); color:#fff; border-radius:50%; font-size:.62rem; font-weight:700;
   display:flex; align-items:center; justify-content:center; line-height:1; box-shadow:0 1px 4px rgba(0,0,0,.3);
 }
-@media(max-width:600px){
-  nav.hd-links{gap:1px; flex:1 1 auto;}
-  nav.hd-links a{padding:4px 4px; font-size:.6rem; min-width:2.1rem;}
-  .lang-btn{padding:3px 4px; font-size:.6rem;}
-  #cartBtn{width:36px; height:36px;}
+@media(max-width:760px){
+  nav.hd-links{display:none !important;}
+  .menu-btn{display:flex;}
+  #cartBtn{width:44px; height:44px;}
+}
+@media(min-width:761px){
+  .menu-btn{display:none !important;}
+  .mobile-nav{display:none !important;}
 }
 
 /* ===== hero ===== */
@@ -153,7 +197,7 @@ nav.hd-links a.nav-active::after{
 .ornament .ln{width:36px; height:1px; background:linear-gradient(90deg,transparent,var(--gold));}
 .ornament .ln.r{background:linear-gradient(90deg,var(--gold),transparent);}
 .ornament .dot{width:6px; height:6px; border:1px solid var(--gold); transform:rotate(45deg);}
-.tagline{font-family:'Fraunces',serif; font-style:italic; font-weight:340; font-size:clamp(1.15rem,3.2vw,1.65rem); color:var(--ink); opacity:0; animation:rise .9s ease forwards .72s;}
+.tagline{font-family:'Fraunces',serif; font-style:italic; font-weight:340; font-size:clamp(1.02rem,2.9vw,1.48rem); color:var(--ink); opacity:0; animation:rise .9s ease forwards .72s; max-width:26ch; margin-left:auto; margin-right:auto;}
 .tagline b{font-style:normal; font-weight:600; color:var(--gold-soft);}
 .hero-offer{margin-top:18px; font-size:clamp(.9rem,2.1vw,1.08rem); color:var(--sub); max-width:42ch; line-height:1.55; opacity:0; animation:rise .9s ease forwards .85s; text-align:center;}
 .order-steps{display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:5px 9px; margin-top:12px; font-size:.72rem; letter-spacing:.03em; text-transform:uppercase; color:var(--gold-soft); font-weight:600; opacity:0; animation:rise .9s ease forwards .95s; max-width:340px;}
@@ -218,8 +262,10 @@ section{padding:56px 0;}
 
 /* ===== catalog ===== */
 .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:20px;}
-.card{--accent:#a9792f; position:relative; background:var(--card); border:1px solid color-mix(in srgb, var(--accent) 45%, var(--line)); border-radius:12px; overflow:hidden; cursor:pointer; display:flex; flex-direction:column; transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease; scroll-margin-top:90px; opacity:0; transform:translateY(18px); box-shadow:0 0 0 1px color-mix(in srgb, var(--accent) 22%, transparent), 0 10px 26px -14px color-mix(in srgb, var(--accent) 40%, transparent);}
+.card{--accent:#a9792f; -webkit-tap-highlight-color:transparent; -webkit-touch-callout:none; outline:none; position:relative; background:var(--card); border:1px solid color-mix(in srgb, var(--accent) 45%, var(--line)); border-radius:12px; overflow:hidden; cursor:pointer; display:flex; flex-direction:column; transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease; scroll-margin-top:90px; opacity:0; transform:translateY(18px); box-shadow:0 0 0 1px color-mix(in srgb, var(--accent) 22%, transparent), 0 10px 26px -14px color-mix(in srgb, var(--accent) 40%, transparent);}
 .card.in{opacity:1; transform:translateY(0); transition:opacity .6s ease, transform .6s ease, box-shadow .25s ease, border-color .25s ease;}
+.card:focus{outline:none;}
+.card:focus-visible{outline:2px solid color-mix(in srgb, var(--accent) 55%, transparent); outline-offset:2px;}
 .card:hover{box-shadow:0 0 0 1.5px color-mix(in srgb, var(--accent) 60%, transparent), 0 20px 36px -16px color-mix(in srgb, var(--accent) 55%, transparent); transform:translateY(-3px); border-color:color-mix(in srgb, var(--accent) 70%, var(--line));}
 .card.in:hover{transform:translateY(-3px);}
 .card img{width:100%; display:block; aspect-ratio:480/506; object-fit:cover; object-position:top center;}
@@ -246,6 +292,13 @@ section{padding:56px 0;}
 .brew-tag{font-size:.65rem; letter-spacing:.02em; color:var(--gold-soft); background:rgba(169,121,47,.1); border:1px solid var(--line); padding:2px 8px; border-radius:999px; white-space:nowrap;}
 .add{background:var(--dark); color:#f3ead9; border:none; padding:7px 13px; border-radius:3px; font-size:.78rem; cursor:pointer;}
 .add:hover{background:var(--gold-soft);}
+
+
+.taste-bars{margin:12px 0 14px;display:flex;flex-direction:column;gap:7px;}
+.taste-row{display:grid;grid-template-columns:78px 1fr;gap:10px;align-items:center;}
+.taste-label{font-size:.68rem;letter-spacing:.04em;text-transform:uppercase;color:var(--sub);font-weight:600;}
+.taste-track{height:5px;background:rgba(42,34,23,.09);border-radius:99px;overflow:hidden;}
+.taste-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold-soft),var(--gold-bright));}
 
 /* ===== who we are ===== */
 .who-we-are{padding:60px 0; background:var(--bg2);}
@@ -287,7 +340,7 @@ section{padding:56px 0;}
 }
 .rf-field input, .rf-field select, .rf-field textarea{
   width:100%; background:var(--bg); border:1px solid var(--line); color:var(--ink);
-  padding:11px 13px; border-radius:6px; font-size:.9rem; font-family:inherit;
+  padding:11px 13px; border-radius:6px; font-size:16px; font-family:inherit;
 }
 .rf-field input:focus, .rf-field select:focus, .rf-field textarea:focus{
   outline:none; border-color:var(--gold);
@@ -412,6 +465,19 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
 }
 
 
+
+.reorder-box{margin:14px 0;padding:14px;border:1px dashed var(--line);border-radius:10px;background:rgba(169,121,47,.06);display:none;}
+.reorder-box.show{display:block;}
+.reorder-box p{font-size:.88rem;color:var(--sub);margin-bottom:10px;}
+.reorder-box button{background:var(--dark);color:#f3ead9;border:none;padding:10px 16px;border-radius:6px;font-weight:600;font-size:.88rem;cursor:pointer;font-family:inherit;}
+.sub-box{margin-top:18px;padding-top:14px;border-top:1px solid var(--line);}
+.sub-box h4{font-family:'Fraunces',serif;font-size:1rem;margin-bottom:6px;color:var(--ink);}
+.sub-box p{font-size:.85rem;color:var(--sub);margin-bottom:10px;}
+.sub-row{display:flex;gap:8px;flex-wrap:wrap;}
+.sub-row input{flex:1;min-width:160px;padding:12px;border:1px solid var(--line);border-radius:6px;font-size:16px;font-family:inherit;background:#fff;color:var(--ink);}
+.sub-row button{background:var(--dark);color:#f3ead9;border:none;padding:12px 14px;border-radius:6px;font-weight:600;cursor:pointer;font-family:inherit;font-size:.88rem;}
+.sub-msg{font-size:.82rem;margin-top:8px;color:var(--sub);}
+
 /* ===== shipping / payment info modal ===== */
 #shipOverlay{position:fixed; inset:0; background:rgba(33,26,17,.55); opacity:0; pointer-events:none; transition:opacity .2s; z-index:55; display:flex; align-items:flex-end; justify-content:center;}
 #shipOverlay.open{opacity:1; pointer-events:auto;}
@@ -425,7 +491,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
 /* ===== product modal ===== */
 #modalOverlay{position:fixed; inset:0; background:rgba(33,26,17,.55); opacity:0; pointer-events:none; transition:opacity .2s; z-index:60; display:flex; align-items:flex-end; justify-content:center;}
 #modalOverlay.open{opacity:1; pointer-events:auto;}
-#genericModal{background:var(--card); width:100%; max-width:640px; max-height:90vh; overflow-y:auto; border-radius:14px 14px 0 0; border:1px solid var(--line); border-bottom:none; transform:translateY(24px); transition:transform .22s ease;}
+#genericModal{background:var(--card); width:100%; max-width:640px; max-height:90vh; overflow-y:auto; border-radius:14px 14px 0 0; border:1px solid var(--line); border-bottom:none; transform:translateY(24px); transition:transform .22s ease; outline:none;}
 #modalOverlay.open #genericModal{transform:translateY(0);}
 @media(min-width:720px){#modalOverlay{align-items:center;} #genericModal{border-radius:14px; border-bottom:1px solid var(--line);}}
 .modal-top{display:flex; justify-content:flex-end; padding:12px 12px 0; position:sticky; top:0; z-index:2; background:linear-gradient(var(--card) 70%, transparent);}
@@ -516,11 +582,15 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
 /* ===== order form (in-drawer) ===== */
 .back-link{background:none; border:none; color:var(--sub); font-size:.82rem; cursor:pointer; padding:0; margin-bottom:14px; display:inline-flex; align-items:center; gap:4px;}
 .back-link:hover{color:var(--gold-soft);}
+.order-summary{background:rgba(169,121,47,.08); border:1px solid var(--line); border-radius:10px; padding:12px 14px; margin:0 0 16px; font-size:.9rem;}
+.order-summary .os-row{display:flex; justify-content:space-between; gap:10px; margin:4px 0; color:var(--sub);}
+.order-summary .os-row b{color:var(--ink); font-weight:600;}
+.order-summary .os-total{margin-top:8px; padding-top:8px; border-top:1px solid var(--line); display:flex; justify-content:space-between; font-weight:700; color:var(--ink); font-size:1rem;}
 .f-field{margin-bottom:14px;}
 .f-field label{display:block; font-size:.76rem; text-transform:uppercase; letter-spacing:.05em; color:var(--sub); margin-bottom:7px;}
-.f-field input[type="text"], .f-field input[type="tel"], .f-field textarea{
+.f-field input[type="text"], .f-field input[type="tel"], .f-field input[type="email"], .f-field textarea{
   width:100%; background:var(--bg); border:1px solid var(--line); color:var(--ink);
-  padding:11px 13px; border-radius:6px; font-size:.9rem; font-family:inherit;
+  padding:12px 13px; border-radius:6px; font-size:16px; font-family:inherit;
 }
 .f-field input:focus, .f-field textarea:focus{outline:none; border-color:var(--gold);}
 .f-field textarea{resize:vertical; min-height:56px;}
@@ -547,7 +617,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       "name": "ZRN Coffee",
       "alternateName": "ZRN",
       "description": "Мікроростерня свіжообсмаженої кави. Моносорти та авторські бленди. Обсмаження під замовлення.",
-      "email": "zelensky007ruslan@gmail.com",
+      "email": "zrncoffee@gmail.com",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Черкаси",
@@ -737,18 +807,22 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
 
 <header id="siteHeader">
   <div class="wrap hd-inner">
+    <a href="#hero" class="hd-logo" onclick="scrollToSel('#hero');return false;" aria-label="ZRN Coffee">ZRN</a>
     <nav class="hd-links" aria-label="Основна навігація" data-i18n-aria="nav.aria">
       <a data-nav="catalog" onclick="scrollToSel('#catalog')" data-i18n="nav.catalog">Моносорти</a>
       <a data-nav="blends" onclick="scrollToSel('#blends')" data-i18n="nav.blends">Бленди</a>
-      <a data-nav="why" onclick="scrollToSel('#why')" data-i18n-html="nav.why">Чому<br>ми?</a>
-      <a data-nav="ship" onclick="openShipModal()" data-i18n-html="nav.ship">Доставка<br>та оплата</a>
+      <a data-nav="why" onclick="scrollToSel('#why')" data-i18n="nav.whyShort">Чому ми</a>
+      <a data-nav="ship" onclick="openShipModal()" data-i18n="nav.shipShort">Доставка</a>
       <a data-nav="faq" onclick="scrollToSel('#faq')" data-i18n="nav.faq">FAQ</a>
     </nav>
     <div class="hd-right">
+    <button type="button" class="menu-btn" id="menuBtn" aria-label="Меню" aria-expanded="false" aria-controls="mobileNav">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
     <div class="lang-switch" role="group" aria-label="Language">
-      <button type="button" class="lang-btn active" data-lang="uk" aria-pressed="true">UA</button>
+      <a href="https://zrncoffee.pp.ua/" class="lang-btn active" data-lang="uk" aria-pressed="true" hreflang="uk">UA</a>
       <span class="lang-sep" aria-hidden="true">|</span>
-      <button type="button" class="lang-btn" data-lang="ru" aria-pressed="false">RU</button>
+      <a href="https://zrncoffee.pp.ua/?lang=ru" class="lang-btn" data-lang="ru" aria-pressed="false" hreflang="ru">RU</a>
     </div>
     <button id="cartBtn" aria-label="Кошик" data-i18n-aria="nav.cart">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h2l2.2 11.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L21 9H6"></path><circle cx="9" cy="21" r="1.4" fill="var(--ink)" stroke="none"></circle><circle cx="17" cy="21" r="1.4" fill="var(--ink)" stroke="none"></circle></svg>
@@ -757,6 +831,22 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
     </div>
   </div>
 </header>
+
+<div id="mobileNav" class="mobile-nav" hidden>
+  <div class="mobile-nav-panel" role="dialog" aria-modal="true" aria-label="Меню">
+    <div class="mobile-nav-head">
+      <span>ZRN</span>
+      <button type="button" class="modal-close" id="mobileNavClose" aria-label="Закрити">×</button>
+    </div>
+    <button type="button" class="mn-link" data-nav="catalog" onclick="closeMobileNav();scrollToSel('#catalog')" data-i18n="nav.catalog">Моносорти</button>
+    <button type="button" class="mn-link" data-nav="blends" onclick="closeMobileNav();scrollToSel('#blends')" data-i18n="nav.blends">Бленди</button>
+    <button type="button" class="mn-link" data-nav="why" onclick="closeMobileNav();scrollToSel('#why')" data-i18n="nav.whyFull">Чому ми?</button>
+    <button type="button" class="mn-link" data-nav="ship" onclick="closeMobileNav();openShipModal()" data-i18n="nav.shipFull">Доставка та оплата</button>
+    <button type="button" class="mn-link" data-nav="faq" onclick="closeMobileNav();scrollToSel('#faq')" data-i18n="nav.faq">FAQ</button>
+    <button type="button" class="mn-link" onclick="closeMobileNav();openBlogOverlay()" data-i18n="nav.blog">Блог</button>
+  </div>
+</div>
+
 <main id="main-content">
 
 <section class="hero" id="hero">
@@ -764,7 +854,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
     <img class="mark" alt="ZRN Coffee — логотип мікроростерні" src="data:image/webp;base64,UklGRsZbAABXRUJQVlA4WAoAAAAQAAAApwIAjQEAQUxQSLMiAAAB/yckSPD/eGtEpO4jkNxGciRVmEMnKvv/D84sM7PmHNH/CRj/b7QDAAYANAA6ABucTc1I1DHGhLuJyQ1uSGrs4huzSSEGqt3gRi/pjdHaJgnYt0KKxWAFYF+S4iBByb4SR0nQt6RXElqJGQm6XlA/SwKSEqQf20chxQaQkljqkfQsJkDYHQsPQsvmeTboOJLeLZP2yicRykwAaODa8UgS1ivMjn62SPIABStvzYndps+Ge388BXLbSJIkKeW/1VWd03u+I2IC/LcDinLjFbYNMMXZHViMz9CVKX1wPdxrOCc9zNereQRU6Xxjap4LVN+iZu1omq+ObqAUqPqMykeovPBKsRwYuJEfT43bKtUjZVfNqUHlIxC4nsLlWHUR/YCK64VW52o0N6LDzU+o4vECNHMRv3g6H2DDfq6cc4dZ/M58X0+3bat2o1tb63OjyJIVlmS2w1ZIMgsiDIKwyA4mw2FmZs4zMzOfHGP2ZDl5fgCmmM/R7InNY2+t9WApETEBdGvbVrYte99fkMjdXSNCOnCXquiLaqgA7g55xj52syciJsCzbduu29q2VWqHIRzhCXqn5W1ofvL6g/UZK75iEr0nnAhHAGO0ZZgWpM7Re3RFxAT41rZtmVpb247zobXhY2nGsozJsRru7u4+mrct7gR3Cy5JgAgEdwheFHWfE00gVz1PpfpcREwAbv/f/r/9f/v/9v/t/9v/t/9v/9/+v/1/+/9OPDMTwKuEQX0waHC6Ru3cG69SiwGPLF7jFrWoJNqoLcMXwJQOtFh+OiHsDBgjQDISIIMMRm2EhXEnA26TW1IbiSQhIXehBLidMbgXtxGQMaAOBvsHUiXx6cnDH3PjwUytVkuVJLkzNtm2ccat2dk+StbL5WL69jaZzpcJ/63vOFfS/katKmQDTkktSZKc8x/86i+h4pEvPp+HjNVGuMW5RVKSlLPyP//W37Arb30rRVf6gawhg7PP0EbylS9rmo6iewMGAwYDNkuS5ft8Mh4MXh9u7173D8vfETgv5MlvPGSAv/m7v3xBAfHm9xDzu78BXT3lo9RGheXHp6zpZ38A6dMzdofexSDT5XTcX1t8vbiyvnsJCJwHMDnnnPrnxKtFFQ6c8VHqTZ3cIVfmAVtiqkrtCnH6ZP0Rjk2Vb10nV+i/B4EAfHa0uTg/PfNuz5DZ1SeqNUn9E5z1HBWOGVfqQ5epQ1KiqUKY4izufSo2duWpSQyrAQhIRyuzI8Mv1kHgKgMlBpwt9YCLBaqYgKawmELtbLmdbCOXby9hDc2HBhCUN2f6e6b2ILOrLGLPa1G0iaAqKiKj4gS3G1TZiPQUJ0agQVBeH2vtnTtHONfM4dNzuWCKvynOqWGhk8wb2d3LjE6DOHvb1TK0jsDVkweG9XyAonUUFZdcoMTnUoUNxcun4DQyAIO8M/6g6TXIVWMPDNG6plQsufC5OKWGuREyXykZzjFyjTiZfPTwuYVzy9poQcXiKB8KFjdRhSuKxxJOowaMKE/dvjOH8HDkwWEGx+WfSDmbHUW+ikse9xnRRqWxr+6so6EIaZXuH8tFUvxVlAzfShWu/FSsO40msDjq+uzpMRoCOwDoVS+Fkgpfcc4mp8l8FaWzMzHCLbbu/LdQNBP22ZKKRFH8oR7r8itU4cqPlSpphGFnafJLZkGxwA5hTpov5OL4kLmGFri61v1DMeKN/ulnboOCEQM0089PnLz2mN6t/gcUoNn+4+9LyC+5OLWtZMUhD0JnRx77pGnUi7n4bEvOP2S507+2Mflk62yzybgozri8fWh612gzhdn+/SFe720CTL2on7gOyRNPG6gX6/T2IS4KSudHzjySj92/qxpDfYljv7Fl0RNdfaIwldLaK3pk7Gyj23I9xKIoMfMZ1d6s/VvnFKmotbY8kg0wPFkfiWPx+n2LXkXThFwkQHE7743ga0rN+7gOIqxBXniSTK9Jq7cqFA1uS75APqDFblQHgaQ/5s0lp57EveeieJ2TL+Y9c0pFIJeT68V3ML0mvbmVKGJnaz8kr4MnF9QQ6ou1x5UnZ6ye4Ma8XETYYhXC3HoxXgi258asvYHoWfO3TUGng3MFkKzAPctZ7dDY6MnpE2fck/HNRbmgmK5cyh/M3drqqNi5p/apOebfdy161sw9CtvYXyOHp0epGXVs9BtjvVmVm8tyUSE213HuVFp35Rrh1Ob0T08sehtrxBR4Wt4hb5NWWqwaQX2xQiMrb92pt5T3fn0eHV+m/Pq9nC+Inlm5zqFCgw6ekkSv8thPfZrFca6D0Qo5a07bTnFN0NhckRG1/C29y+/9wjTHG7yaQfmCtTCE6hlG3nZhMXXvzfWU8twvvZ7FcOuzmdS3qpQ3DL5VyjW5sCuQSCostJInrCf5C75/jGGzD/R5QOttZXJWHDaVqAXVFfHPf5r6v0oH4d7UzgMyYJDB3biNW4wBA244jFD7xhy9ipmfeCJZGGN35f65gxFIOec+wAB9EhibQB9ACkDS3DDKM7m0NeXvnz5HLckggQCBWqzubHUyQgZkt9hg2hi3kwwYtwWwszhi9yJQZz7ANoLm1pVKOsKm1YBAYHAbtzECBG7jDqrki+Vas7Oz222UAcNVcta6rXR9QUXnspxjtuoKjH6fY9TA1cswuMYVIqOLW7X2/vkffv/lYBthV4H1uoW8tXZaKji/5NJYqQsLjyq1Q569j8N0Xt8cP1QtAjw8xoe5zvEffvllx1IVgFte6wMoBGZ6gjqm5S7IjGx38d5/KYisWL4kwwUyA4qHf/ft1Dmyo1krd8rytQW13LYjp8X2hVVHF94g7u7Te5Z9KGTGwqP//mbsFEUDnoxcnxQDtPrUpK2jAp+WHURWzl1LWfehRGnq1o3JEjiWtfFtSb6myAMvxaxseQTS0a0Noph27hIRRiP8pvHxGysW8KCPlDvnjaeruCOoXP0cnGKIenpPOG3Bq9bB9ziU9fbfy1neWG97wZQIHRR8ME9Y7dyawgFY+MXAGooE6X/Gla5JYYDeJ3Iy5gGQpz4TpyBqL1+woIDF0ewa2Chp6P/IXXP0J1ZpB9Ac3TzDhJSpdY0jxE8DI7C8doBGDdbsIIXO+UHzmEwQeu8jWYDMMZmYFIfmk7GsSxQJ0b+ilEdymb+zzRuVMLjmpRHqldmOAtxbpz+xzX5jRXl0TE3jnAi7+32iYKGaUBTlM48wL1EkrPExnEM6JNabxziILF++VMCon0jE1aunjXSt1LIt588pVbq3piiw+7wQIT+5gKOI1Q14hWKBVjpQ/uiMJI11i7AlLgn82XMoik9uS1eEN0Mzcu7Ycnic3zohatLOTRK6dHPeQYCdM+IVCobOW05w3shl+uoZU4ri+vpeCpvyzGYTRbm2jkvCWwu91OPN1t2KCOqGzhUi+DfvElT55ANs5gN0v1Xe7BMCD97IUWAywMKX3jxvhQC98iwulMKZ/eaSnC8EPTg5a/E+YVND3zdE8OXr78lBuPY++P9S1MwQOSPIY/Sq3N3AQZyV/mHqiEF94rJTCDH3CZJOHavKF1sNLmm8VYRVS5sRg8m3nosYbnxJpWStdyDnCUGP0Z/fPSaqOfwbXBSQ02cuWxGAz58WMwKmpskV2z04dY8oRUHfTIs4FPc/kajvvIyczWXXvpwjdJn8zu2yCGrqXCexAONdYRYWUU9kBqDVnqQcsdXYxJMXchDRSB6IRevsyakcQUy9xOh+NiMXztw1vG/CqndLTPbOEwKnc7gnKYvzrkNcJ3NMV+QgovPeV0ysDKEYnKlYvaRpLfeSn+tw0G9jgpp6t0SEs0pPSY4A56cZ2aZnVrlxOLWenymK2JmNRESayTWCnjmFRpbePyjJ9TB73i0T1jW+EZnvZnEEMTvHCNfUM+pheucEh+kOZi4qrKMZgk7NjjLTsZHVvxzDkwJBZcXCNyJTvE6ZQ4ydGmUp22i3nQs8GMZ4+wAFge7DUpEBK6dElCtncU/KAzE5RR4KhI6FmJ8JT0UtvSM+V3ZCAKfVW6am3LovV9/RlPrdpskTU/cmUWyY9VUcwZxuotEF2uxB9a31+kx4KuqzZyL0/TpBX2jSq3KBgWmlehbP+yXkCa51aRGii90YYqreU7qlp6fUs+c6xlexsxgrPgxHKAI0ar0pl6SFAVQYGpdjdJpHnliucaMIAU4IWulDtmJwQa4yQi7jTlpsAhO19/2NOJ37ks9lnTnpOMfVJfBQkJ6siqCiULyQYkQskB9yWQdaGEDVdS412kXg3tOCSF2meKLsM70Lch3KOrtziIOIst0oVtYWDeik/RJXG49E95hMVLUu1i5W/LUAJL0YpP5stm+Vw4j67AmLlZwvlm5GFzuOSU2rWSFwVKLxpQjrGpeIODWKzpPENnO1FQey9bZk15dStnDXOIjofh87orUkX9LPctn+FseByUlVmTxm7fvvRFTL1y6I2BLmxzr5HKb8X399hn1cfrpP9RKCKQeVNNNOWLH3Oo+ZCp6uVhvRAyrrX94Uvilb6qmiI6nyjQMchWL+QtEi88WYLzeji4/+dFiyQQzNq4oEHgapv0cmbOtq7aIFXA3zAYbvm8HUF5r7613Ixpy2nMphzqOOvimJoLL6+h6LmFITT18WnyVVnN3/0gj0qpvqlQvHJLUPy1FQ+6uJiK31/BCPK2wD0ARQ6Z//hnygd0k7OU1J4v4lcbuzoSNeRbeHPJDsCccnNdbr3/6BjN63XyIqXcacuL6oFESm7a8oYmC/i5/rPp9ar/7lZM2NHSKGTRC2O/2pLGrOTwU5P6saA8aXdhQHUt+aquQwKp3+CjIRhcoFUWsWq1aIg1LVtDXcW3Ic66DzAleFzgLPO1XBdv9+qZiRJ29iAlobGa4mxMSjGRQFeD6C6j5aJWe4yEq5ayL34nUUAVZ/hiqXb2wT13bXulI1nEXrnxex1cFDqshZuxhlTdWX9i5aUSDb6jJ1Xk3KR8hE1JI7LGbk6nbTRBTLZJVqcRvw/GGNyNMTeaYJOcZnMkxN7UtzRA2X7xHkdIU8fPlOIPuyeSdzPB0EBrU28oX2tC+LGrO1hCKYnQN8JdqJ2uM5KwpkS21UAV1GnE7OhafCVb+aiFl56q0Jh4CVjKpVJ/DVXUIPvJTD2Wo+Un+vhjyB7uMUixrY2Cbq/Cf4SpIJ6kLsLjnSWcsZ4WWk6Sw5w1dZsXAlEbWuf3DaimBVJlHVqCtPHzZQmKRXvfHOob0cFZEnaO9xKaI2sfaWCLq7ch2woWuvvExg0fFO0eSi8WhSPET4KSr5G+JWrn/KVSuEeWWqV+pKbJ11HOug41KOdQodkzOHt+rdpZGDt58QVExmStegCCnP7NesKMDsCMG3i6bDoNtFnoh6cq+4EVOfd94KcjZEdh2MAKyuE8j0rWYp1ClM+JXw1bT3gIsa4Q/eNDHN4jDXyRUkPZx3oOyghTqs+keJq/d/gtBZw/ArEXb0Z3XFkgm9KM/tVawomKlxuc5idu6WcBTzlzfE1sDGlHEQlQZYV4AxgNVbBJI7tuVAPAGi6aWIar74GkRvT96eScRM2esdeAVlInqW9matKMB2p6mrJi08TDhM9ssze7VGl+tHmKCi+6cIrZ5SXtgisDU2WV8hPVwWUd2w9xVaa+fjc8I6OxhA19Clrxs3A0Gld18pbzgZTbXgMOirx2JjJP3/BZGHL8hZuXIwbYVxtjNIPbX0cE9hUsPb/xQaK6cagZ2Vn6J0CV2k3sDnd+QwwMx07nAuUt+YiOv/2AXbIjM+34gErxaQLwkt7q9YYUzq2M6cL3OVdu+WCWuNfgPRVjN/dZLYjQ2qEFnqi+uHkygKaLXddZJE80ulMJT/HqGpgsbyyiSRna0PkPl66EJfwFe3CT30XEE0PKnabBE1NTQ1iZ4Kc3lzpU7wpz+lCjksti87kEs9h8oVjYWHW3IUZwd/T+aGSDZntndOkxXJet9I5lzy5GETxcmWe7EjbJepSuO/iQmrW+My3RQYzh68e7thEdpZ089hrpuhwNfvEXp4TkTU7BKf9O8KY63+E6K2FBhqK+988uYM0d2wd4+scl2EqdQvsXfRccxZywkOMHux8Kcmrj5bFbWiAJGBysLBZ3761ikyCga3f0aJnE55bl8oCtZsN6p7fE3OYaz5/yVztZBQGjRgWjV97vrLq596bxpLBHf2ugU5rzDXbxFY9C0p1TXE0zcKI195C4thdWbUFqvNnfM/npTHKRhEdPnCHoj+MxrS3oIVxhx1lalnWnNNxHX1vTMMb/WlE85HGdzaYkBYaicgdSeQWoQB2RhQtdHYqtbq3VatxBuAGWIYG/unzACpePnMYXIYrLlRlBcCx2Eqdw/kKPLGnodGnvuJW9lHOZNzJmPcYqCNAUSrcBsQPdA2VarVZLlYGR8aOIZ0fY3BMhxw96ZTIAaXlXJipBrsEVHl5tMJNCzwwspJRqzZB47P6oW96oBSrL0+TVxx2HVJThKahnVyo4SjJO++YjGsop5sjRIhPrVID845DYQZJC++GoikudG8GGnLhEzY2ecVM8SVijRSMnDpBuYY3LzsOIiB1ewD0UXgMJI2bzmO/caS0zBVE8Vy5k6VY1CeOBxDYayDtgv7g8hlnuLerIiaePE5wy0VCbm5PGMdA+Drd3EYYHoYfRBbQrOw3j4h8rNzWUOVXSRIF+c4JsXW+ZzCGLeuZykHpmnS/U2lML72LkNuCqQxf5qRqYHlmZ06gbXcjD+EXASOAk0OIILK1eezaMhcHETnLMfpS+soDozN6kPM3Bw+LtlxXtmxKAuU9usoAJOQ2DxrhTHl7gP5+vbIRPNMZoKKyffrpjQWGkVznPrEft1hQGs91BeTlh8mhTGHd5xKg8pFYopZ4NvrCgSDz5Uu48TwvXciavL592SG3kUhlSNbFUA8nIzkUtOZLrPlKDTbgcPAu5edhs4UxOU8xVOBJhFTniOhMCl708s5tEoP3ytQ93sI8dWD870yBWzW1ggs+hcz1w96BkVUmas8DybQw9P9C+IqEaTDWSuMOW4q4+uhi0oEu3cvCLw7FjFAi93dS+IKqeRzezgM6MUA16xxiaZpOYoolK9mQHljs0IOywLx4JpTHNO+lqVrsRUagvTucSLwzv07MtyqzXCyuI5CycW2+nDCcdBOu6lmwyFgD1fkKKKS3IoZVC9WX+6BQ9nKJOVzWwROmp6Qq0gMURp1ENfUvEiEDKXCDIfTU8eIPJYLsLZohUGpa0fXoWmtOMRRRGv6jOWAup2xMvQGTD77OB1OojDWVpftjz0bHom4rnKBaJ2lncbRXWQKPvnSFg4DTD1HVxu2JltHBO68vDkyUjWZ7Hz48UWFKpRcaAPcX7LCmErHdpauJB9xAI7BSc5RZMXCJcoIoWKTVeYfvga5ChKWG2+Ooyig1V58pWEPq10C9+7fsYwo2RmLjWM/DaJG9PImgc3MLFfeo7LJmSyKqLpbiYxkRSy1DP8CyK4RJB5esOKoPLgvX2HSUn+njqKY2teJiPfDR+2/CCJRO3r6tRqBtTdQ4eNttTzFW9FYPhLv1vBjEIma0qsbkWBqSlfimOxlv2TyBde6IkPJasAnGRVqTKWD04502b51JQ3J2n18IRNUtIcjZUi91u5/bJCqSDKRzPLcLlYYa60b/OPKc+O8iJvPf1OWkNUAne24irYLthewcYM4wMiM+LEqT28eE7lzNxdZqnKs90/25OrJO+3PWmHMacsh/uhylh6uK0URlfU1lik0sRVBMYDZLqqYWSWf3yKyVp5RhWyfRtsJrPZlIgKsjDy9fLJQRcoKs7biQDA8r3jdN+d3juUoorV6dgQ47ewpQ8jYBiGQOtjOdv3seBRroTHJ1cK0RO1gBoWxz3qPf4RRGULdozJh1b4yspUW1uqvP/skU5aEsHECEKhDdlbjnS/HMYC2aVGti1mBz97FYSBbHkIdRFD2zuzcLBNGdAYjlzGeZqF5h4AnvjsR1Np8cI6rhInB6opTHBif/zGO0f6HsxlhLVf/RpjPKpI/mPL9BTkGZnBIVGtq6WCayBdtJ+pUgq2l+8Q1ey9zZQ3pwaUdgOr9ClF09nRPrhJbRki+tB0pab7NqU0pFneX5TAUShcE2iai/OVLOQboeSPVQpeo95YcB/G0gsqS9byDuKZ3u1bm0IUYTH5VImzl/pIcgshcrh9OoDDWwRuZVpcfU7pzHEnpLZY5MskUAqVvh+Ug1vwjK0T2fvEuDgN8/WknQOUHdQ8ohbHeXKSOQDcEQYtfnioI0PFSux/i/ks5hTGvfkUFgVHJofZvX4i4/stXWfbQJMuCoHs9OIo2H5XQEI+91lQYxBc+zgLhskPbrFIYa+RXjGCLoGbzv/ZwkMTICPuBvPKAwJ79hvksEkHVNmmxAxFn9Q1SVi6Im0IF+YHOnmzj3JKiAA/POY68/eXJcfqu9MmeHEWuPz8BM3IlXdDyuYOv1ssW8psIK584qKEoUP2S97PKjqw/gAnD1gNT+DLSnerID7h8uqgqoElor75CXHn2W64aFENNMxbuQmHk6U+oUoyVPHSFp9Z6S1mORphKgcThghUF5Y2vGm8QlE1zDE9FWHN4x2k0yYRG8DivIz+AobF4FaY8v0dg8ck/uBel7aPaHmFTvviBzIiWCZ3ssuHw1Jw0HuJozA/YuO1Is597F5UYMTtXCiPeetFpVCWs0feOL6CXnShahaLy9gkUBUSi1Pa7DeL6+gHmWKeXvlXyJk9ITxbkmgPlSzs4DlKpWS/P8FauP521jjk6wby/iy/WuybjmgNzd9EpTlx2zPG6XzbF2dxFHHPw1lVpC3/7J0UNquremD8UYJq7I7wVU8/HPbpk4u5Wzz1vzPtHJ7j2SPnSJh8StNFJAfkCuy+b0S15kF5wo6rJD9BUPwolE0UD7r5oZcOGadzYR3iqvPC20AhDSkpuu8Lb1LmcpUhluro3wfidzU6Ft9KbixbH/VqglfG0avij1Xa7Bkm+tMmeHv1eA/kirzzGFG7ZZUMmk8T4FLXp/SvQ8FbpF+Fv5cmsNcqYFBq+tfFW5617mWsQN14jht83QWBv7CAKuJj/hHoYa6GHQKxDful+qXO28bRiRxHTT5ouZOCDjTDA0BsUxpUpiO0LVolLTe8yAu+vmiK4BbmJyScTjmIddh1lKYpMkvTUXpNRql5ZU53Elc8/qaAiEFLeeigHAeYHcZRavbg+Urp9cWcPhzFvLVkUtuZTAld6F1SLiM0LHiHslfr7RVwvv0VxA99elKNY250luQbx1H4DjYxWW/sPL4jryrPzZtRLHopB5euEgwBzk+QLcwDfuEspN52zchhz+4BCn/zZlIh7ObQm50miD89YJUyvG23i6oMpNPJID8bA81+UcRRrZ+RCIVhM4tRhhfKtdG8ti2P2HlgUenFjUIQ1yy9wBFcyC+zV1fIlTXQSWTdqpigughHQyn+f4CgoTSxRk1YeveDSdX7vGIexlv/FqTDE1YNmEdY6mjqWa4/k09uySlXi2QsR+T+2KZAMYg7+bVuOAuzMmxrU3FkZEWxUK4Gtmf9DxYGIanU/JPS7xQCqB9idRaOgzeLBhhyHy79HlMHS/y4rhbEr73Y+XMXJ5x/i8iSN/TombGpofyyKJOMweAOFQVnp3TGuOYB716wRoC6tOIevs8P/J0slyCX08mMCG9OLlX6SKpJrj6bQ8LX55bQI2qAbnyhRIgvg9RXHwRjfmn6KULMvbeHhU5MmWwcQrtbKXbKiYHrJF5/UrDCI51eyUEpG3F10KkWO12NncDXZZ8ou+Vg0j9YigfUnP2ebENm4/rhJGTbGrR08zp4PIAqSBcizz8ZRINLF+mcIrkwG+ep2KVL6/kXIp/LfZJdFIZkoErC/aWLPlj9DLhnvX87DxgZJg90awtVZ/6ISNUZsMfnshBVJyTyND3nyUQUNV4e1yJ0ifLWO/4esOPYuAHlzLxak2I/bVSFfu19+bHBUNPzV3U+UKEhBqqH+7jyKZEiFHwWVBby5kFVqpEljH3njbOURclEAe1cAXt4juFmpiPVl77pSnt+n5KTvv8nh8xeZEsUp1QC7VxwLXH0b1AcVBqzecKmxfrdu8sbZ6ASZC2QXkTx72LS8yDd7yVKREJX9F1B5cavFCT6ff44qFKh2DZhbawQTbm9lmtzbf4VBXtjB5YXXvTLyxlnnFsUqFSFp64xp9d+n1xcTJHUnEyYFN5edSstMxwhfnR3foCEpgGVAXRh5KMgyIM/tVOE/tb57CWfUBV3SlvZewOXEMTgoGP5o+IAKIc1o3Hj+6TLgxp0Arl59/PZywqQkiYD+dWFSKZ/ZwxoWtibp3aOKiDT4/4cX+vQ7kgySQIBICIQkhAx2G2PLgAQSAiQwAmOMkUCAbXAbpVSpb75TOz60OedwWBxPN7c/3+W7kvxJfPPG8DTXjYtyICgnV8i+88Oio2gVCEQL7U1bi46ifRtMXwUIVcTxKc+uV1E0sCivTQ3OLqwdltKUrRIKmqjvTaIhUWv0spPa1iiGlAFwYYlhtDNIR6tLO4ejyfr0z4FD+cwreEg6a50+PsDhrCI5ZsXywjAARnyvIcwTpQXcXrJKB73Dop7o2vK0hwL8HQtMIvSu7E+jkqHtJxfUFeUTy3VrKGpK+ew2LheJptdyXQExe4HjUZkhXlmxyoT0qoU65Lkz6DjIXa4+nkRlgsYt+SOBTEPmwgkKv3xlF5cHaX6cOqSpzI8XPmDvslUaEl9awvUH5LHTDRc9eWq/gUqCWPwz8dFIJgI0T1VQsQMvblAWVf3uTN2yOSE86pQd3L9gjSCx/4923YJGQ2jEpS/G7tdxZ0/EtztTtxTVBC504Et3w/VU6Bfy0UcEmQzg/z1SwRMPLruxJcB6REwCCa+maex5/LWmFaqrXBgF8zGWs6S2Q76+RSw25XyKxbCEazng8FxWCVinA1hsn1DTp3xyT4HUF45iMSWjtHWEajhgdY3IbZnlQtaXG3vItZvQ7pxV+DgKMCuxvVGhlvfcHo5zxLmyMmy9PQTXbPKdW1bB44Imway+uz/9DtVsWLszKMqCWjJMIvXzidH34Jwhq5DnDnGUtq5RrJWaeNP/xsK5UqjYuWEVu1mSqRmOn/WvI1yTufZoAsVgVzSKhezF26ahA4RzgywDfGmLDyMyO8Pp0P3hE4RzolRx76o/bEAUKLY7bj87QrjmcvONMSsCT1iJRiw1ft21jWTXVODlu4Q44woAIMz8zmuvXmpiQEMlLCRi86IjKFKUyoWFAYQZv7G9u3quAgYNT2DlqccNq7BVykVAheHUre2t6wt1cIuGw6UhAa9vEsBFSiWhwXggGoDbqT+OpHAuHw4QGE5fv7e+fH46AbiNYkmBQa/PWQMz9URg90FdFFb3xTACK2XQ9IXrN1aunJ4ZVxvAfXGfcIQ1+dx95TwYsxU9/b+/zVIfcDsb3B+1qEU9uJ3byQLUlTEGjEGdjLBaZNSNUBfqTvTVcTnCggICA5pZOHdl6eL8yamJZr1WUV/6K/qhwdy8TGUweZ6NDTH/+6Pbk7WEcRfGtrMzPsrZGQNGndRGIoEkJIxBGGNj2wgh1B4ZsG1ydrZzC6iDQIAQbUQSUpLUInUQIAklSUkJSSQDS5NkPfvHEyEWGKA6Pjk1PXtyempyrFGppiQJZCGEOhthAmFpurysYmGBVP2TX6vUE85YHQTIIE0ssdHfgPoB/PWPUi4tQIBaTOeUlAQILAtAgACBAMNAchAe5z/68koS0IX40LD/XicILRUD1sDcm3pwPzQgI8Bx3I0AI+jqYAZvhFz8PwOWoadukftXXNWueyMWFeB/tBCBBmV01nxY3YP6v/9v/9/+v/1/+//2/+3/2/8fTx4AVlA4IOw4AADw+wCdASqoAo4BPj0ejESiJySmJhQpqOAHiWNu8k9iy7NXwxmTzlc9eOA9EElbV/+3/qfbTyT6p/Qf5v9qv8Z+3fz/XT/A/gr8sek9OL7B+837v+0/lL85v+d/1Pbt5gf6l/sT/pfbO9b37geob+l/4T9n/dq/4v/Q/4vu//pX+/9gD+Vf2v/q+0x/2fZg/tH+4/+HuHfxj+8/9v10/3F+DD9rv29/4/yE/yP+x/+T8////9AHoAf+72D/4B+7vt79tP5V+I37AfTL4f+z/038V/7V/wvMv9I/VfyH/rf/j/zXtEerXpXz6/i31c/B/2P0W/4fkX8Xv471Bfxf+Pf5X+xeNj9a/Aa1H++f7f1BfU35X/mP65/lv/h/nvTN/rfQ78e/rX+d+2z7AP4h/Iv8v/Yv7v/6f8T/////8R/h2/Wv8n/o/cA/h/8q/x39y/zP/i/wv//+0n9c/0H97/tf/j/vHtW/HP7X/sP8L+8/+P///4CfxP+T/4j+xf5T/uf4D////b7gPX3+vHsKfqB98P7/ktXm1eaKRfroR8BIY0Ui/XQj4CQxopF+uhHwEhjRSL9dCPgJDGikX66EfASGNFIv10I+AkMaKRfroR8BIY0Ui/XQj4CQxopF+uhHwEhjRSL9dCPgJDGikX648rso3NuqRlh/rZElOtOKk7BIKjH0qxDi0JWrrwQLn5/z+8/CQxjSCP0JKs3CsgxSpGv1tmeJ4/itmVLPFn7PqwcdF0CP/3FVVl7UoAooQVPVkKo2f/GTqPnEgU9S7nGRVUAYzVhUgiQ4zwnqLKMRn9c9KW4g2XaQo7WibOgPSGeYHJla80UgdUqYFJBUBuFTzbjQ3mA4yXv/DAPh56BmidKwv312+U6TER4d/bdzJwmyAdRoOXvzeD/oup9DmJwKa9UX7aIkfcjYWfU/P8B/eG/rzImzK0rktOHZDllfWgXvakjpuKxl0l5LfSzTyaTnWAbeXR7PVreclzC/7Dc8547b4Iu1uaWOfrnqpmtoyfmm4jCgextMi32bDSefNVviTXuqOGsWuIAZzavNFABaZphCtXFL9ExYaWz2oB8uH3pKK+2alJCeB4KbnpOE5PycxSNWpwFoBukyiY1u1JsnjeaWsp7youJADOfOmpw/Ke06dOFYX9bkwEhjRSL9QDY3rMjaXbLLXDnxUI+AiIvPDiw+j1hc7SCGo51xZM9weumiuFB9AobSwsUFAgC177UkSAllCeormikX66Ed/uDmUbK73wlYup1tJ3Mx1OWQbVRVGV/Q3PNICGJSzn9Fi5rpbhCz7wHFUlglFagb6DAxESpmcLQYKL9dCPgJAyNpi1KehKIMqSbeqd4Tev+t2NFIvqC1wNMoNI56DWViptEGVVFdevoRLIptRck4w3wQ+7nyb3eohmpqAhSQbaasESlXL82NgyMnBLdzB0zavNFIvr5+7k7MTRzl+ZCZW7UN4n7M0eZDUbl6oA/HM4MQB7/l5ITqWelgj1VeKIgCbPZTeop9cU/dPQT4esIdv1oxZIJIC+hH6jqwO7xQANU7SnBXw+X66EfAQ6bEd3hVqiP24FxkZi4eUfoQTLxR/4fmcRVFkCZuR9XOaVU4WosuaiNVcVAX4EzTOQZnelSNUt+5sltROXMNCIfJbDOw3HvOqGvznOmXvv5opF+ufy5OsOJPdmX8i1+Ocjdhr2U75hM/inUcSF7mwnauksHpYRZAypW2fATJ0Wn9uWHgjgwWN30GrjjlGrq1bHvEfIcK72zdxeRQf3Tqa5eDASGMTkSAo7Ka+Lm2tbX2FjeWOhMtDDp2MpaBrqfLl9uIfMl5BUmJf4UJTnvdUzPKM0wdYzqBaDA3BHDhBWTNOD4hug7ajLQadd3rDWrowi1ZeXoApii/XQj3ZD4M13yLkcbPHh47Z747V8FvqNbi9BOiT2VDLFbBp42gYeS88qFWRwGiZ5p5ndZBzWQFMP5FWdTll14nf1flBS7MkTpMAKYGZnxfJviVWhUt4b+vNnZbQPJZrRiV6+8uFyDjNPWUkyOi9c/k3RVA24zkuWfnSvH/ILCge1jV8FjQRN6P8uJKUHrz0Aus05wrBhtLVKP9IFemIqZOO42xm9TOpL3rqaLGij62IO1avLkBzByHLOefcfCHORfPz3m8daF4AmA5xe6OOWu2OJ/AnuU4R/dU9B6dD8Wu7eHlwCve/eMRYvlAPOt7JbzYRIAZ+FEdhDiFuJXiKV1bApZZBtVIft3XCc0m4NveQqKJkliP+zs+ooPn5lmgFHGTrz+LxhanmN+nNMDvK5RIUjUc4j63BwOr8hVdC2F00iScNynxOgUssg2qjyHXiNjbOTjzv6+lbMy2Eph+j1N3u1Tiq+jCIGUztZm9geUi7Ioq9w80p3UtaSHKjctyQ0VNMRWmp3FwSsHz8hMnqIsziVCPwB2TiLxrul1L+GNFH5wg6ccb5sU+uNbqplhxQJHzYDqOV8wDl3cA6JYVyGWtHgH7UWq1/Qqkd/vkaTPKfBMl7tV6p+k+aiMhg2cuB8XLAkyrlPiICLRMgZEkKBGujrgxBTppgz5uwGEheynvgNDzVKt/YhGV69cMBQQczWVAW4VkGZlNAXFQgHgVkTp1X9QY+AkHGV/NFIvuC9n15tXmikX66EfASGNFIv10I+AkMaKRfroR8BIY0Ui/XQj4CQxopF+uhHwEhjROQAD+/Z2gAAAAAAAAAAAAAAAAAJj+81XrtDRfS7dfIA/rwVxjJEkMB1/yTgg/8k4i/8k4pCdbceNTEySYtiGvjLp09YHiSc0SVqifUjgMr2py9E/KRnDtStvPj+GWpZH+D8B1SZuggRXX/JOAIj+aMf7T//66gf/83UBdoaL6Xbr5AH3fBXGMgiTMStcd/IZEafUd8uKVDRECaffBL6DPN2/MUuvHidw6AXwRUGuort4xcpp7Rap6SJUEjVsyYoRSvK2y8QP1+JqAyPmDI6CcYHW0rgExbfKbnjqrIRwt9Nc7m4YksCzIJZQW9Sa7sctYkzxpRIFMnAy7SMOHAx333u8c/MmOzFnaij4For/oKrU0hsrfSlickuvlhuNKE8EIuDZWLSFzV3a70QqnQwc+YEGJySBbloNVLubSklSRhAhnF0N2NaERPd1yYJxR5577oj2+iPzS8tBBjDIuTrfZhElj4NYqQp05ZsxOU6qBH1k55OUAGy7imf2ITZiFaOSVVbARb7PhGBZVGxY5TwpkvOBlHUPeCVEppjDr15nEvzF8uzhikXNGEXEgxiPM+YQDUpzDqjwMiei3IhcM3siZVzszVj5VoO7k/TrdJ83T1Z6wKRfn6U/m3aQGS/pBz5xzNfintJTADTCMs9DQ3F+C85MfNpYmdquLN0gROFlTf2lt7YX9fntNDcrTjZpZH86mYeKLIoPCdZGXlhvEQKK0HznxiMPWZFB73ZKdiRIybDTeY2dOhWVRvZe4TD1tO4qzcjCAtkiSZo1Qzzgibkwu8L/THhSW+0T/iUpus9kvyvw5+7cx09JtFxNBD4+7w58GakmrBOGgTIENytYvK9faFOFHdkFr7nQQp11VCRrVeUYpPL59EmZgzjXvq8a8JVC0i1ULV2dZmvLYPpxCtCriakjTCDQa9ebbZoRAB+TJiQgdaSMV4GLGZmwl0gzxvUYoz/KzUyl3b5IRbXa5SJP/lkPw1Xz7GGs3aOFkn7mbGluSkgMnsm1LMsz/XexHZ0DVyfbI9fGQYkxY79oRDt98+i3ZpiaLWnz+xbTkzwXISf5Tz/GEGAlwZksTqZ0gViFyu2QsOJNby1N4/5tKGUYcuBugMN1fxwd6ROmbv+0cosHgBD9Btj54e5sfferNlSyElN739MBCPthNINuBYv1g9wWuNR3VZ7emN6HPlFNXLz1Et8tbriz0dGjA41dFzqizx0jcX+W/nLSOFRLF5SnZphkD74HJivHOgpSbofQj5Qht3tznAVVeRPVP1IsFau0ttP+6UNkFtFue8DReYFACAoDehTgj6QNEQ1kDjUEYRDhQ0QFhekwfeNC5IfcIPH8vvZN7TB//0SsffqfICAg86A0UdvFULZUmwV6UPJ4dwRVuITyXPSFq3fl2Plch6Gl8w4qUJQg6JGqHC4I/GV5fUtgYiZGrtXfLxnYu4pbsy8YlBk4AAjg4CQY/obedb++wQ6hQU0IIoNVz+PmmE6+yTQvRWK3OyhcvIcGvsSoWvOSj4cTqEXVtnaqysg7gFC/du9ovDWXpAnXthA2ZhRjOHvRP68310qtRZAsnBsJI+IbDeh7DcS9dzBGxDqeNbIMrKsdIefYgwmf6f/oRs3MDv+3E1FzOjc89CrfuoHkila8K6cZdKiqw+TQAIwlfdCjiQK4aKqsozv5iFjl4Tu2CJyLv90G7eZYLewxzuhjRTrleE1yLuIc5Jj81uotfCiZedWOrLUDiV9NFy4CXHzJjWosavnIP2xod0iHgD+Mgu2xy6aN8eML+q+IGYrnXPjWuyAjjAn6FUfuaM1qjAABLTPCxDRiUq9VgPsnYqA1rzU97ZBkwgUJ4uFJjBzTFZztY4ARGU3iVUJ4Sns6A2Fe0tUZJHrk5VaiyFD/EtnA348HrLG4dMU58ngrDwiuB7OP2OgYGOtDRPyjRQyyJpNkA95RLmpkIw+/67RgkNPQqV+SJ0K+Lfwhe/mufmaGj4nmiD8wyZxUpOcXyXX276gQrRAwqJmNuo2sZ8P/p3fWX7tYCiZnf+/k3tT2nd86MLyuKFN9kPPlglWzGSbn+MODRPLePL+9ojkH1P9T3MkSz2ufC7RNeAUel1+Nb2VexSHCZNxzsjcQSJZloPbygk8dA7rXBXPwi+xoq0PWqbq5KUWGcCZ9NV8QXpddvwRCSen04WcO3wqWjts1byrei+RhvjMeh4d5gCmXuG5mN8msQD/FCoGSTzDCcbOSFcs0jqj/v4CHFwOLCr3svSQNRXgIGjuzXtphsiPubbsj4naaG4iI1LpuosJvso8MPmiraasPdvlgT24LTDyouJciPz8z4uWd8PLByygMmXyLa3/GvWJ+/oFb0YghAzTcPaMqIIZMqiu8/jKUiP8z/1lt27mi3eeUY1qJHel0cDLkK/YByjF30W3mSWvVDYI+4EyIe2LMgLYf+M6KIGygAAd6BTt3dCEy+NMYnwBvSu/KgDlWWUAEFCZcORQ+fIoneBkVeEHUJJvb6cHQFM/+vYABpwn8GDRQ9jvsj86ikf0w5k8bc+k+rUERliA/smHoFE8rRJS/lxEW7waF/wJkKxUb5azfRN7r06agEIf/5BnFl/6SrSl6gMcMVT/Y9Plz/1Szia473Sp0agJhajq/v/Jxw2WTqP+Fern1U5Hwl7RNK35jus5nv/Q1K+XX60V3tdcq/lHSs+WJCThJzSSuZZEIzKB75xbM5opQE8R+S8spUC7j51HnJXNVOPV1B48p3xry4h7g8/baLv0+pDQ/J+4w3Ryo+uo6ZmTnHDdbe4lDpo1hCgFi1RGBBiCZwyZS7oDSBb4Mp5E/heFej25qvR2ZXTGHOERHTxpVHu8BVe54NzRYSI+nAh/781+ksOpPMhCPPe0fMELbASqCxlWGnNA79LC5KrMRv0KXarhjLwOPWChHs3kxyJ+RrNNbM+892LRiLG8s6o80JK7ldEkuok/PLabKoQ+UChuH3VICODgNaR9BKEpTzEl7Phsiz5ss0iIddzI9LBOHGaYs4/AimFxwJrIyiqBXy2wa7PRNGO772f+Bx30+jW0xc9nVJts8lYXM7DC/uSl4XXHLfFqCfcsJiskpHpSpz6ImU6BBkt9A5x2N26tDxtkfi9razoT+2Mbi/ulTVSBf+gRZ5leYqQHcLbDIMn4tIhkAO4d/yqcvw6XXiW7WnPbwLqS7fxhFYmo8fOvmDH8rS+7kL9O+7snf3K0Th/vz6QlmE38+kQ+w+wwaLFI3ylYyjequDnhhBi3X9sE59KKJ45cFenlTPWlZz07HzXB9atC478aAS9sp/xIK7wttbc+Kgumwh0o4npuBkWhGRWF0iikIjtUz1Kd7rgpMPyPO/ijNYTsDzXf6i7CPc2GiVnr7R0Mnf15dIHmEHMVBYaIAdihD9ZuaRR25CLpBy5BDgSW5gbG4ow4nW60vz1E8ll++wzFibuVYQ0sDzAqKg08EwAAAAANmQqTjdI+ETL9FNzmUwgK1HIz05ue1+xKQY6aRQM8oQ1b6fCFhbKOoIdAJi8zCeZLCKfFI70IT2RFx3yDF9RjNK3atcugy+hNhFO9uov3RdYQsA9EZesRm0MiKleKvYC7Gi4hozfX4DAqQkhoAS3OUceYUbgGENjrErDglKpNPcRSGMHNxn0qlgEL/yCHQsVZQed3lYbwLfEhd+nDbvSbxIH3CETp6FcwlvkNrDGk89N9R+1G86twvG2teH74ck2Luprz+hUmXxNEJz1pd2qNtezlpD1+f50i2QbhKu+FWKzSUcAAAAvaZ6A/WcyWmAXWn5PJPWes4L/gAjI8Ar2qd6vCmYKDzYHBN9ZKQQZp3hrQv5TCaoA6JIK3yCJQo4lf/lfcw9imcU5nT8HXEmEOdJZEEGKwTjip5nONEDJ2YC7BV1cxMKIebvZB33LNxqVMHU8/E6PqoEQ3FpMz/WEY9wcsmstmNPAJ6mXOB+PmNi5rJ8wE+oBiSDt03LElNYaZwI55ASYLG7crwDgqydm/5TeXw+ThzY7rdSUFata7ICrEYkX+qIcpjsDCPRxt3Ca631pLUSDmOppUxo7lmpAlXbbK7oOoB49EGWf1TdR//8S5eW0fIvuZuLOpsJZv95zwPXnFzoDljN2wp6l+HcaPOt0qGdiHesSNRgFyR7/SeTfAqezbfxipUzoWRTet3AEmqpeR6wr36qniGjDg51HO6PBz/hFZSCWTsCjKWvewtmhXsU19RBzHE0I4EoEGqLXe2qN6HB1Ekm0AUexvuF5c4GvOGpNtGNnNaF9o40U/widb6+Kh1bcfGo0cShlLU0Sb+c3jzOHfyK/uMHcmNYebhw2XxRt/6YCA2OHnd1YQq2+lCJDOAjOwzXzdwdv5e2vNLtDMXetctKw7ymXe18w5yVTAkirc1Rh4/gsG6R+UcCNcrYPTD90p4lleXGSuxrzYWpZip8dDhAbVQQtQgOraqa+nd2NbSVFxhZh/KTmeyxK1cWD8VTE76HmnxyKqCaPPmTvVjpbf8FGBYQHEFcKPdClNbw2q4VfYkP2UUPdYGtgUXocTqB8m/vvrJiIHSdqDQFzqDxPAd9OZkDNshbq10mo9QfXg2Mw4GhB51FLLG7SlQziQ2gxEV1E1kSdG0z8lk4AKfK/KdA17sup3zX0V/HV+wMFQ1A4RjMG60kv4jS4DXuC7a6mkKr2UlCghMJ9FQFG0981NBfrFpG+h10/jMcU1013otRBZGabwGHfFyfj/YXQ57aDt0XKXt2bwX2Eg1YyJiJjVjfJaj+NHVwdm4u5cV8KrpNIiaYz+gYaULl0SaMQP8FfHLgxSBqvrgnX4VUvXNQAiWeWFzVUOp/VdDdefInJgYtmpt7Jnx+bzY/a/BBlPZNwKh8iglbfidghYf6XvVp/rN+0YCX3ZS93e2zUpTqyXEs5Wk1ZsVZ0MPq1XxHqdRT+mZXQPy1Mw4So9wKnSyx1hZmSzA8GO1tlqM9qMRSBysEGRf1xrHCnblbayL9z4im9coHrJfAyGJGa0kQplH7PjHLVhJIrS25K5uEK6SDIQAjbmOVKXLAacQQARVjxva8BZ2ru/7GDiI3NdRLmIPBncWpMiF/R8CBOwd/Ku0vVy6yoiCjAh0QIh7m2aUVeXaW9me1BKmusHB3h8OB4KTbl1x/YaMj6E72XeTIN0QjE/jvSfbAMVCDSIpnqa6D8ksLO7xrHx7DxGX/oNBtuEJhvEHu1XZnWuDoS7Bun9OgdYf5s2QExu82IpJt+Ss4OZ086bolIdJ1nvHk2G1+kK1ioBcOXtMHyCv799wmujdTq7n8VG15BqN1QqaWGmHORnLgkf6OUXRI7t8FKBivXdRRmAAgFXqCyc0gP/re+iOzMCX9KfhK+8aKVpcrLo7xJ5wtOq0HzfVnY0ND8zmBqepUXXDcDGC9dWAKXooFfwB/oxMaZrhAxme7+96Gpyo1d2XN37S3ev1rEG9mNKrmQwh0kd7fenuEK3bD4w3fcn2DZ9TSf607FY8wirH8JdFS9v4Q0tCM35qsp8lWPP6s75lNsChK0+WMnqW/shaQ0ehoDcX+ybyWg6WjBAMIE4uR4oTa9VoI1mHYFnxZz7qux1vTzQdnboz+2ZIg2m5spWW6J6m1uuzrWwm5vi55xLVt6H8bGppnMmZrt5IEQyKV2e2olwu8HtT6yBhM94N0olFMe/c1p94DYowpKM2fhCYez6RJSjmCpBh0k+RVkuDsZNPeB0U4DhvX1UQiH+V/i/K1K2Ha2AA80HXWagnJdZAFZMxjzHXBwoYglHberDKhvS4fDfCIA7f3n7YZrTauXokTBpWHDwzkFT9ECa0TvpB4oGMtDagRC6+M+8A7HGiRE30AXisgnerP8MeHxpJvYDOSBnALFG1djuNGn/ieEZmcyFz9F0PoeCYeV6Twqsb9p5dqeqE4+dc9cyO3xncaM/vEEz5NCgJOhJglRe8npC+QYOLE0EzzvwFf8YTenyxfr4QA6vXsyBxKxD/5X06vN8qKpAvoqrP9i5NGTYqIlEquF42YrIHDEUjJZnAeiZlKE4ZpRuGSdsWUw/B/Bl55MEVxj0qWSqznDLz1MCmHY4Hto6Tny/WoLOSp4jTuVWWdtDF5nFmsP/KGYEl+UjOJe2ukjLNIVtq5vv8sAB2flrYqBVHusVdo9f1OSdSbZqdIexTSX2AaSvX2Ic5iQvrWO3XHeowe0vMpj3C/cmTCR+dyqq9K8nUCmgE0z5uR1ld/rIlUOA3GQ4U5TMu00Y0qxg11LEeXOnUfua1npaEXRZ5ACVC7Emf8GyhWZgOsnVlFScHegVLvkRxYnLSuI/BjTYbvS9nXJvdatnMigYvADwtKkev6nazUCEqNPnSfc7hX47RiwDMiWolyIHbAV9vF6e39j5k5+Wgo83ArxN14n1uEqH4nKd7gtDJnIkwoONxra2rV7n93ozE4OI/UVlmp1jnYBS2NFp1dForlZvEWRIJwYNERbLaNA/XX7IBT2MN35etPxMronu2BVcSLah/qR1AQdHXxh7CWKool2xU2hOb8xnzV2O/cAkfqKgzuR+YSnO3biHumBDb7K+98zk+1sPLIX2TT/0uZlbO59pfboM6Vd/+jmWY/rc1d0Mi3+ILsx9WMFwcEay8igy68Hv43dTMPA7Em99k2MrGbfhRtWBrVvk87APWRpwRUKd79Y+RRekwna/8JEuMNgYh1EDmR11l8ac3zT9mO7QeUL+TvVVBoPztqEpKkJtYChNXtqXu+70g7NTHd85oh0lUxKR/Ew/YEv142B4pKCjwhqpUTFDt7lOmA+DDCJIV27T38t41OpXxdR4AJj+QlvXDDrRL+ddaZi/QSQve3r4lUQDMc4JlTbTWoYSYQ8rnnd+Z/fUL2EZKtqT2JYpjR7aU8evH+vjqb4JvrrFHfzDDvU+MLqjXdL8VGeQqOXpGQO1jlFosbDdoc1uIy+TUagF2lxU76SJPsIx75Z7Kf6K2HJSLoIIdW15rtmqac22HQ7RodIMYc98dr429+a5IzWzVqce86C5Af+SeBWhL11w7mZx8wgZiJPQsGVdsooHLlVmBj5Bpcp5m2eHMQcDQTiQZNFKZA3wNu1OSyeQQqMD1ts15jF+X54Mb9QkOy7PtcOb2h98oiYhWZGxuEclSGZ8U38G6G+azz1dwFEU9Q/d82WzXOc1hL5UA/hVzEhsHisDGSD8Dgvgl0MbND1oLZ2QE5DXnsRP1h8+uk1lYl57moApbmWDc702AKHHzz/WnrjFYxuYbfaQcAu5tkEJ397xthp8RKxb86ZVkSLpWBobZOCEQhkfIOtMii9CALhH01Uu1aBHQeHUwyg2KaFMvVgH9TLTIunBMkS1acLt9Ypl5OqoOM1Qq5DE7YJ6C5LvkEYpTEI9DzJQRBbx/9W08n5oSjuDm28SJ6yT1eaTp6d0rkQKjPbSylTeIm2CcqzGD4tQD6IEMv6q20qWtqhtZN7rd3gDlOJAx9XPQlg4Fp8gwasd0Vw65HHnE333LR489wEr+48c33MtmlzEv5BrQWMTEPliHi4g7dRAkBxguBHKNxpVB9OFYjRDmTdqMP48U22NsYG+xHIobM25z+WFW6ttRIfd7PDsaCRf79UzcB88LpcbD+L09vBhAjeLLHB7XWdxkZBS3yxM/YyVfUZQRTlOp0Ys49yk7nHANkhnV5cSxmJYDeU1JCB8bib/8Mku1otgq15JlKQ8dIDMltZXYkz64nI1Fiz8wPAxew9bi/P9CRBqzWhkxPW11HErjaDZT5FYFeIsoLsGSeMflJLbbs2hJjmR7rAN/xSXjDvxHK3+dybmCcLtRuNLLakHXauBx5aUtVhIDPknrlWlJHZls3sbJwjMLKudsfIem8G5q5QU9osxqjrKleGmnRvothbHIZ0I+FK/ceMuxREDS/62GPGetaK+hf508Oc6uq+Jh6RFuXflKPxAF1nKKF0y0PVYa6TlSgsuDpcB4und///aiIAaf4KcYxD5rW2G6jzWiW7KB2S9mTnIcv0SggQ+P/jDJ6efJDoDXIpsyzm/2HrLm2jpLONHY6BukdF3ntmPHmS6PYrDp5O0hiktBBDCv/fWwW+p5jieHabQSviGoNdqPPLHAu7WIhiC4wM0sIC/EF+ITEx0Myy09SKa6xZ+VFWWkA00HOTLPuVO24RuispvCILCWaRJ4pxyofLA+JBqGcpprOd/voNKtBvnlmOG1A+q1W1Elvib4w813J1DHlPZqwFYylo8v7gPA6Tk+N2iejUmfZ7zy/JvUzNQudF/XyXzxAXBcz54nUc73wqYYNv+EjNCMNKEMTAfJiJ+7Cx8E4h3PmWfJ+C4nJnL3QjB25JVj4vXL6/nhyTF9LwlG2AwUcEUtcxEtOsIMF9o4L5Lp7MzOQrJquowRKuLNqGXvCFVY+AY4yFsHjfd/iTW1pRhb1OUNYAid3TheRbRikBw4U27JAJkCg4UMOh0bAIrbs/PECGJskSNxe5XgTqrkFbn5YwWoX0wC8wHpa0RcFdC1ppYik9XcLXykwJJRo5RfMaOouBCWryBIe12eTwqkr+V4S+W0oUqScY+1qkwdAtACsPPDAJ2f8TzcyA7HKsZsMSlIPyCmWop3CIjo1+hn2fhWooqY40QPjEg5OXOUcn5RNfR/+tgDZGbG3lVegG2rHPG4EkAJZMHonGQvVw9QusKxzcLSn0Axn901sXl54NXv+SjrW6eam78B5zM0UO22oUOT0WvmyMzZWZIH8+9H/o1heA2mg602Raa7liIgG8Nja+iauqDd8vqL2yL3YXBoXE4E1KkyleNPjIs4OhfTrnhOjwbqMq67l1o59Ymk3KhJMCaMM9nbg4HmagjRHjc6iCizRNtZC3rkjdmPy969eQrB+5DJzow0p5IGyXPyo44atKefvSeiQE21+7BYkGMHRZqdfsr9LJ8Pv5CGiceXYKmHNnheyqn7/K8v0i6MwqcYKi8BolCIK8uelGxdIuXrq2fCQEJk6+g2EJHA72dMT5/HPpyn6fKehZE43kiZQpncQx3KadEmELzKwnMYb/sMfUVgIAAUaz8aeMAKMiWLeexxDrBTCUCvOThU6SScP4BGA8cLKstj0CycbRu17iG/pqLfmmwEdXShbPFWzgk6e++PY3wQSXKD8nM/8F5ayYLPV0huGWH0xrvHKsPvsCWvSQlC6V5G3fjsOI9ECpTqoMz/zCokRe37aSduuhP+eSyq7tot48oTt5dqSU117oAobAO5xRAzatyNlfZrOkM+gTnw8dCBSj0GcrlvgvixwpOylADCxioq4Ww8nicXeKn5lhfieAegWTOkYUS6OBNRO0U/CcmJwbbUERCe5MywlJMXh3u15UmoddSumHWTcNPmmGCk56R6Az1OtnU4cQu90JUbrRbHVpwgPnxBFxrSgfxAWCxp8/eN5qncAbDiY5tQkxCSwJoAoLFKBcvMbHs8kbi3ua6VwFVGoClBZe33aVXf925DGI5Rls5lazaYjEhd3PnYsSeE1CocErCi5cxgAj1NedxRWakJW9nP965fOjc0QUmalDwW9y+CvyJmfzClhqRufBmSwwoWxqfm8J3CAFuBEBFZrI2LmQvMCf/5UOYjRZ9zSOpjjG8WNYF4z42pB650B/xxgGDhO+cime8e0VEZegIljWlLWudLi145hE+AUF8Kn1WMo9kepNgWmu4H6keUWGMoJ22Cylp+lampm7oYtU19xH6lrHCDiFpy6t6mcI+VjqTs5upI6F6ELvwgirjFR10hAXFTGuh77qA/ymtqnEpeMzyQ7YsVOl1ionezkMOcZXth8t0KoQbFAykAjdIxGY4NmSC+a/fqCVH3rP9e9sgYiudDlGVDmc971J+QA02LLR3I1GRWhebCAVLFcM2UHcN27WkC02BNoZK86WC7oHYvkDFyAWUFvl8aEZmvw3uetXFW/IClVXv1ax/+kQtiFeyZ34LGyWzF+A5hLGJZltvnoY+G2gERWKnLP3Q1h2ncR2SCNxIpStgOBxixWnNOcqU6ihqffIND/pGqMfoilBptH+k4aTrMowEfjfX0KSrJx+jpKbwfbPNEPBEKpTLTHDecmiQUnlUYjjUeuvS3DfgvZ0g3tF2fQ3fSTYL8jlKtwJKNaKBUm00IAMgmgDVS+NuTJnmA0x31N0AR8sKBb6HRvJlwTTh4cesyrg0Ht459DwEs27Offk3zVDvylHmE8ruCkwNbuFKjkzYdytO/P//zYf3xNaatDgSh3qQ1rrwgXRJ7CB+YUq6nqI+Du+13VG9dckeEgBL5YptAIVp5SUrSD98zZbCZtAPfoU2fJUVHSF7KS4+/Y0yYijIU0wCNtjAIz5mvO9Cua+WyaQ+LGJzP4Lutj05rWl4Idh8LIyzPb3JqkukaYCdr7iPboZJIm3tquKemarsrbg9kmnJWMQJoeyk7n1x07y386llr0f3qmtoRF+6jlG9AFRiP4AFgya87DD4vQT1oxE46LM93OWhj4/Xr6RRxcuA/kcEksPhllEyO/RmiE09OGE6eXTNJ+3qiMxljVYGtRRwheL7aBR1ilySQBQNaLkKdOHhs8OuGuxMzZpnfx9fe9ktLIV7mjVzyjG9tIGoYVMDXBozQGnTNBEF7c2PHdb2jWeuwwkfYKIgaYyGZX7tnGjB2Ftau7hNY/qYJbjoZGao5OG5xmqEeJEgAE9K3Fl5Lo0QTb1VAnpv4g0QIbnGPS9yxa1hf3+joGkfkYlYcUpzuwacDYp59oDv3lPv/9v6//3CP//+39u7DAo6g3D7G57n6QQBM5/uQaW2fvjfzguBZTzKoJSCfmCuQ8xLml2jpjtmqwb02Bn093ujDaVnfT8hMdygqkKx3R8Nc68x78Jim7fMNSLXRYUI36wL93wnOSbEKvFZXlQAwrKTF3uAO9XFK1SM+lmeckBI93n4k7CGBWA2DWQNWlQ8UM+y26KfQhRTuBSO4wp2tktXPytkfRDwEtlCmGzGkkvkUa37yEYy+uF8Z7zD391U0n0t91Iua3Ea065WEeqZffCJWGpbIcDJKvakxrBVEdMxGSIbC5FwS5/BP4tZBi+AgEHvU846/vh1Uniz8maBwcTVbsPzY5Jafml4MD+88BM1BFEuVIYT4/30U5mVc3ITr6F0UnJPThy+ZPgDcOzEwPgKiqslgJZ/0RLn+ovFndkncDUpCk5wwDxZWHkLjH4ydcwGKpvirwcKfpXDGO8qVCXLe8TvI4mUDsL/UXWcLpVsbxJnM9I6KWueDs/EvMNWAiK9A/cIF/xx3fLy/y/2EACZMg/ICQ1W1XtF1+Lr7a6Zy3lhRjiyddi7obsd6NNbhpYiOkcIByWM2ydMFUrPCmUqOQ2LhvYOhOdd5RM94zJZ7g7PorUqNB2rkv4LQuY2lXvOwzGfV0tjB3yI1ZhQaD4jn0yVXJg+uiOZTNlN5XIEn0UCiEVT37+TFcwLU1ntMuE1pcnNpsLwnllZ5Yt0ywgyBTYyqrdogvBdOM7j/JSz87Lo2qDFuAv6ByFnxMDYBeARM0B0JmAREFxKwF17EWm1Jn2ALrZANW4n6tJeZA2FtGFCZ0kP6QFJNGT7mMK+RmPNc2+EV/Ys5fLVQ/vgV7a+aUcOHe9IZgf/e+Ijb6GD6ffpAvZCNZ6B/+iPNHRJYJ7JxtEpG69H9AEpubhE+QQPwHpkFB5gWSK1EYXH5aUsba1wbY0Y9hyN0gQqkV8Hc3hRHv/2CdQDNxceNhwEWQRQ8uBld8XjXJxCPnK+kg3LPbutwio5gu8EkE1P1PdqBcNtkRKfAFS0KY+Ny0jn9B5w6SsU/OW71Ho7MmllLDjLm9z+04KZnug4vdZmbHBtOJLL+tSuPbRueeYEE7Kcny9IcGBwb5jhFPOFssiwe6Lv2uCRDWNsrePTPJO9D0XCU0nHiQBBxHZ3BuQDTivEFlGghF54TMWT6PyMYAIsOxsrASoa9tjwVn1brSargsUFuZMWpRYYqXW5gCq6nRmku9aj+hevSN3ReZtoef1mRg630YLiF5Jc9ymKKFL06pH7Bg65IqlJV2oPK7fLt3K6czoBMm9iztl2MBACqtXV4SBAczJwGrRDoonU4OIBinvCbnyjPkfNsQGXTEBTlpvmEzY5u7PGZ1+anu/cQFA+iWVAA14paX+hw4PIMbWq5c+hbbds08srRAVsuZNPtpM6Ye4V+tJTQAwnEI3Xm9162wZWFR6lyt44n6v24ZrFepwXjXBH/E/n7nnauT3ZDA6cdtoh82znkJhPcoJzbsgainHILDCuFG5KwRXnhPZePZ9NkIrQphtdq4CR9el0kDl6MfZAclVRiGwDrajs/WXE429Rey4iO+9EilYHjdRt3e3Zgw+15f9mp7G5FRcVoRJ8o8ikRrtKQcWbmW34tFhb7Ej1VZXwKTm2ruuF4p0IH95VsbrIFZ/k08hhRTuvBTOYYxTecETX/a26vquILudhuYEP1Ez6SPfOrn1PwUBKMoomPTDyZD/gfug0p0STHzjGaRSozDxnOZH/6l+KzyoBD/X0Hj+cV3BqsnfCaup/uZge4MraacP51fgfQC3Gd0PKrdEHjQcJjuEXeJQy7lDiznc5qUNIiZCJH2/JECbV+FDFhgm0/YmhZz6EZgQX/dnn9y+lW+02VuTPhgVeYB6DfUreGm7/1Ez4h8GzHTFBDOfJlpowfxWiGYrVnWgIyx2N9xNX3kaShkJxmYxBVobyVkrfl2s6fbBYmxLkrqHFo6F0IZn7RJWCBCuCJKETFPV0f+Zeo5og3/DNBKttmqpaP2y/Lii641fGvkaTUEdTZVYW8l1Q9WXySdMyOzr1rKi5WYZ0VXhUXOFCl6VMvQX38PESByTmaerbaFOO6Ken6pZgbm3M9+7fACbM9UibUOhdKwFIH/6BbFmOSYDkb+ZqyRuEoFdHYeOsekCQXqXrLnSEaW0MQXRa8TZ3b3hW3ItEHrQzM/0Bma2f0TUPDgSoT8m4mkpXw2GPg45qmprvwnFlvppMwm1sDB8Qri5+bkFakh0k4yA0CwOy7btFaHI4CLSglfXtHCjPiHDxQ5VPkRI/aimZYyRw2c+l7IOSiVZsSCw2jjN0sIyvnpPaWArTUdseeB36A+kvjn6MofFxfoe+shcFBBkdKgHg1KKVcFOMN0ZzLx1u/fnR3tHpAvj/sTR4NrUJhc2D9HAZ+XSsPsAEZzKDX8Ng3ua1ABGGj8ZYAJqRTC0/4ZCUlhmV9FrOOp1vEZ4SQ6aV5DqvbtgNaW0nAmqsrW71GrEKsoWLigNxKzz/JeSnFjSvsYBSvTYQ4Z3sGh1NF4Qbcew+PG3yqNixHj3JIJtWMkuMYZw5Q32Xsl0DN3ht6P+S7YbEbof8CR8ob7QBJLh2W2ECV7KC1gx/FK1PgxKkzIaVv/1WD///COytq/9NVTkxBWA4DgVR637/9AXcfRkSLhH3SmCkhaWaX2piSTz8/RWENa90qmof96JA5nsrxkyMx83ssZ7BKvEC9SJT4L6p+IBorfrfKAuUGu1P51dXcmSt6mBT1A37bFokigMkTztZOnLHC/4r36DU6/6GixDW9PHwv3/lgq/mPM4HaES62XpEukEWbcOyjTvvP+Zl4Ebw141iuT/suuQ9WxvLIIigrp+FL5rH9SdpCJRU7x8hwpvNaHtwXHuj4he5EsX6hDTKyvcESS4FDidv9g5CojzU5rKyw1UnCxZ4IyZVx/qjsSVy6nnozlNWsmSpxuLLup//kcOaX3p1u8XSyE/gMTlUMfkpnQjbDZz2foK/kpxo6dY2ksj+338OQiRnGXaZDT67B5CBvJxfTfGbRwGsgf4GPgF+PpEDQLX6TefHegNCfCaHl8ssRM1aIWQpbtynCeTwzUlkyiciGxmHwE9nqN7H5+Lx8tGCEo3FXlfQuM2Ot3ufV+XGIxTbHg4/8gLqApGkOqVy7sbTxz5+p41cEIKASuzxV/Mf+/QE5T3VMfThWSgTXS90UTNt1ii0eKwTbt7hiAXRIBA2znwmAmIENFdf3h53DnKZHURB2Zb9Qbg/r0HkxTd6HDxKalv57HZwHglJQLLGzBT7Z7QCI9LcPx/grCIutOXyKXkKJTtX+p4kKAulHLHa834vzXxINIT/U2bzn90AGSo4dPuRfww4pJwndUTfeu92jCM+REbPITNzeqZe5ak5Ffo4CjYgRKn9zUwFVNVSBTljZ8NOJki4yc5vpwws3FIvsY1XrCr0s2EVTtkwFjKRC/IZGt/xiecQGTSmcjUVBXGQRqcqjjP66JUPYM73ZHlGh+B0mmSl44KJs6Y874pe3BBJK1/A4g221kl942vwqlMlRSOtrX9KsVRcubE0K/08JSv+0YhOJ533HFChwx9S3Z0R1j2uA2yN7xsxuSOi6X2xdsKyYuPj4mjRu6LHYsV30BUGR43ILWrP/LFGMDCNhERjK4OrY2TeMEmKRgbEuBCyTpaHiPe6EDwxdruYrRvTFi6j6BnVkyDnI0mO6iPh/TUE83QILM4QHbap1oUz4wzz1IXYsalaY2n67l4jsP3eYeniNHgvsspwMk17PIamxAnaYiuCqzhPku16fd8FYDvDi/jL60i2IZfdjFkjw8Y5AUUf1FCKF3NhyZHD6zIEgVWcIrs5fwD97+Svx0w9/jSj/pvz4Kf9sTe7kvavrR9/dlARIwVn+PauNL9FS28tCj6Cnfr8h4rVVH2B0QCmQbvnA12/pyrwLWnG5e9o2pMmiqSLB31LFm/lf2GkA7M9uyBTX2gZ4Ae6zGGTQsZdw1YbYFN0PLKjWQphna4bu3AnfmRMSPQ6scVAYHdWnCtsYFXt2r9VRN9L4kQq362p1ITwhirYiKaIpPzNgSIw1YdMM7siOKwYSiIoMLMuqv64Ej3ZPEZpYkGzIg3gEqZt2u/YhwBT5P+5HfrvR5P2OI0b5mbJbh+BiyPAtnEVUChwD0Mm/ooeO/edU/d0XeF+5FqRVZ1oWCOlZnjBfq2kjVJrRgyhLg74g7hDEJKv/7g5briohnvkPDq7EhFxZ6Ih9r+QAObTilBJYiwjwAQH+ar8BOLysUTDjmiZ/2AbRrE28ePZJTqgKb/DmEp2BxfIZ29Cs+VcAXS8kpPmG9Ih+zYJ0Vmz7/dTxEnpFrT/6hhwuFVc5BHvAImAHvsEGu2qd8zBlLxdCEudQPfcnJzY90i68D6eL0sW5ZHnSOTQvL6Nf25VcjNZo+I3PLU+AbfX9VJE/qWVZP0Y3+fJKazJX+YGosAZPuNFdDusfW1g2aFB7UyOuppSb1e7LoBY8a+w8BoZY21Z23O229JVz59MbLRiJgAF15UCNzI79SQC3KQS6IGnT+J/g+z28hneYGnHBjwkX+nRRfyN7PuBWMS1+aJUW51OU+rdrwB/06fQkgUQJc+zBBbQSm9YFtRmI7rMiQx6OKwjsAAc/Q3KKObplqmqDFTAUlVsBhjkjIjTVSzQcdpwbiHKZNX5JwxA75oKZmzGWogTp3c7GWX7IbXG0aBJr+OzrTnFWXCspQivtfK+Q39fa1gjMiXgoQBPcmvFZqlVRlqU62Q1bb36HJFqe2U7R8FK1d0EX0ygLI496LYeapqSHXhWjpbw2jsS13zymjCWRKs6C/EwwkYMcHNDxKjTXGlOgqaG7aXvWa0AlA91Q9ZaAzjFZ3MJ8PVB1pgtUHMrX0OEyiksjzz62EFStYXPlikAHVV1iETK4mpyJY8eTldK5vxmUl1MuETFP4H74TohTK2gdkDNsTzRQhzsNM25QBRiEpaVG10FgUQR+oTv67k47YRkPE4X6IzjI9NT1oQ5fATy4kVg4UEDW1x4A1zs/iquGlSgIE0Zj2chOBlG5DldJjaUu4WkPY/HwRiOkEWkXY/wDbLdzCm3xH8MubmCFUX6FkmZAr8gGBwfpb1qo8b1XFqYNORo//3pWD1/TNX0s1vLRTWG7L3vu7BB/evFixCNAcKJlF40OdeHuV5L+n6r0nm/SXQV3tpQaNzM5KIX2itkrT5AJBoefVe9ztZq5cUGSNJQrT+BLsL7PMyhwrkJixgwAX1nZLs/H8RIpvSkH5qNEI39yHwlJv9x6xKVaepx4M1RHs6Mf1+OYUfllRsJqudcfP89R2lhjgmka9k6fjw63De3mszKDbsET/+C76K5GkAN0dCPgsRnMNqkB5gHKt1z85PGNCyxCatt+L7kgOYy6YSRnkxEOb+LMLFpPcIGrxxAG3gq5DTfA324qQQWZqYyvj+DiDxeNJ5OF1se/V6rpORv2iK0koTwVYmHUualZaokIWKLPQN5D0isvqdP/Q7X0tASRdQYPApPoTkIjJV7m1H2u0iNRqERV4oW6eyN5XmnraZlAZvuFv9YO1CyiiyENFk7AnUx6OPrj/+0EzStFLw7Anq97bNPiCQWDoCwZaDMkopL/vBSvWqbnw7BWRlHMT9K/X8CdFT8/1TFn58hzZpwFcr/zRfhuJ/QDvx2Q428ufkaQ8Lsr6EZvZ+8EikPlvkdQsSpdVySfGF9nUYjmoLxtBzPYqNmtbL+TjfsQdgu9zuqXD+Tb4KL05ZHVrthOl+ixzgkHg1cEO9MMYCN5702sEhHQ6A3+NtC4XmznYVnyAPNkE97hU+n5c5paG4WZgTD3CIzKASwgsfvcMKssSqOhOc2UhqaX6ZcYo3uo6UnCACnLdJeGwt+tWElHf+j8mzT4OYCKt3jjvqZHcoV57R7e6zgkSRnGBLP+14Y5Y8FRvZlwGJ4gIx2xndeLy5s8dkzAzpUAAAAAAAAASpgWoAAAAAAAAAAAAAAAA" alt="ZRN">
     <div class="brandline">Coffee Roasters</div>
     <div class="ornament"><span class="ln"></span><span class="dot"></span><span class="ln r"></span></div>
-    <h1 class="tagline"><b>The Art</b> of the Roast</h1>
+    <h1 class="tagline" data-i18n-html="hero.h1"><b>Свіжообсмажена кава</b> в зернах з доставкою по Україні</h1>
     <p class="hero-offer" data-i18n-html="hero.offer">Свіжа обсмажка під ваше замовлення.<br>Моносорти та авторські бленди ZRN.<br>250 г — від 310 ₴</p>
     <div class="order-steps">
       <span data-i18n="hero.s1">Ви обираєте</span><span class="arrow">→</span><span data-i18n="hero.s2">Ми обсмажуємо</span><span class="arrow">→</span><span data-i18n="hero.s3">Пакуємо</span><span class="arrow">→</span><span data-i18n="hero.s4">Відправляємо</span>
@@ -785,23 +875,6 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
     <p class="trust-fact" data-i18n="trust.fact">Обсмажуємо після оформлення замовлення й відправляємо того самого або наступного дня — від вашого замовлення до кави на столі минає мінімум часу.</p>
   </div>
 </div>
-
-<section class="who-we-are" id="who">
-  <div class="wrap">
-    <div class="who-grid">
-      <div class="who-text">
-        <h2 data-i18n="who.title">Хто за ZRN</h2>
-        <p data-i18n="who.p1">ZRN — це не фабрика.</p>
-        <p data-i18n="who.p2">За брендом стою я — Руслан Зеленський.</p>
-        <p data-i18n="who.p3">Я сам відповідаю за обсмаження кожної партії та за те, що ви отримаєте у пачці.</p>
-        <p class="who-contact" data-i18n-html="who.contact">Пишіть у <a href="https://t.me/runik1983" target="_blank">Telegram</a></p>
-      </div>
-      <div class="who-photo">
-        <div class="who-photo-placeholder" data-i18n-html="who.photo">Тут буде ваше фото<br>(поки можна залишити так)</div>
-      </div>
-    </div>
-  </div>
-</section>
 
 <div class="wrap">
   <section id="catalog">
@@ -827,6 +900,24 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       <a class="help-pick-cta" href="https://t.me/runik1983" target="_blank" rel="noopener" data-i18n="help.cta">Написати в Telegram →</a>
     </div>
   </section>
+
+<section class="who-we-are" id="who">
+  <div class="wrap">
+    <div class="who-grid">
+      <div class="who-text">
+        <h2 data-i18n="who.title">Хто за ZRN</h2>
+        <p data-i18n="who.p1">ZRN — це не фабрика.</p>
+        <p data-i18n="who.p2">За брендом стою я — Руслан Зеленський.</p>
+        <p data-i18n="who.p3">Я сам відповідаю за обсмаження кожної партії та за те, що ви отримаєте у пачці.</p>
+        <p class="who-contact" data-i18n-html="who.contact">Пишіть у <a href="https://t.me/runik1983" target="_blank">Telegram</a></p>
+      </div>
+      <div class="who-photo">
+        <div class="who-photo-placeholder" data-i18n-html="who.photo">Тут буде ваше фото<br>(поки можна залишити так)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 
   <section id="why">
     <div class="section-head"><h2 data-i18n="why.title">Чому саме ми?</h2></div>
@@ -904,7 +995,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       </div>
       <div class="faq-item">
         <button type="button" class="faq-q" aria-expanded="false"><span data-i18n="faq.q3">Як довго кава залишається свіжою?</span><span class="faq-icon">+</span></button>
-        <div class="faq-a" data-i18n="faq.a3">Найкращий смак свіжообсмаженої кави — до 40 днів після обсмаження при правильному зберіганні. Дату обсмаження завжди вказуємо на пачці.</div>
+        <div class="faq-a" data-i18n="faq.a3">Після обсмаження каві потрібно відлежатися 3–5 днів (дегазація). Найкращий смак — приблизно до 40 днів після обсмаження при правильному зберіганні. Дату обсмаження завжди вказуємо на пачці.</div>
       </div>
       <div class="faq-item">
         <button type="button" class="faq-q" aria-expanded="false"><span data-i18n="faq.q4">Яка доставка і оплата?</span><span class="faq-icon">+</span></button>
@@ -935,13 +1026,22 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       <div style="font-size:.84rem;line-height:1.5" data-i18n-html="foot.tag">Мікроростерня · Черкаси<br>Обсмажуємо після замовлення</div>
       <div class="foot-contacts" style="margin-top:12px">
         <a href="https://t.me/runik1983" target="_blank">Telegram</a>
-        <a href="mailto:zelensky007ruslan@gmail.com" data-i18n="foot.mail">Написати на пошту</a>
+        <a href="mailto:zrncoffee@gmail.com" data-i18n="foot.mail">Написати на пошту</a>
         <a href="#" onclick="openBlogOverlay();return false;" data-i18n="nav.blog">Блог</a>
       </div>
     </div>
     <div class="foot-schedule">
       <div><b data-i18n="foot.orders">Приймання замовлень</b><br><span data-i18n="foot.ordersH">Пн–Нд · 9:00–20:00</span></div>
       <div style="margin-top:10px"><b data-i18n="foot.roast">Обсмаження</b><br><span data-i18n="foot.roastH">Пн–Сб · 9:00–18:00</span></div>
+      <div class="sub-box">
+        <h4 data-i18n="sub.title">Свіжа кава вчасно</h4>
+        <p data-i18n="sub.text">Залиште email — нагадаємо про свіжу партію або нові сорти.</p>
+        <form id="subForm" class="sub-row">
+          <input type="email" id="subEmail" required placeholder="email@example.com" autocomplete="email">
+          <button type="submit" data-i18n="sub.btn">Підписатися</button>
+        </form>
+        <div class="sub-msg" id="subMsg" hidden></div>
+      </div>
     </div>
   </div>
 </footer>
@@ -958,6 +1058,10 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
   <div id="cartView">
     <h2 data-i18n="cart.title">Ваше замовлення</h2>
     <div class="ship-progress" id="shipProgress"></div>
+    <div class="reorder-box" id="reorderBox">
+      <p data-i18n="reorder.title">Повторити останнє замовлення?</p>
+      <button type="button" id="reorderBtn" data-i18n="reorder.btn">Додати ті самі позиції</button>
+    </div>
     <div id="cartItems"></div>
     <p id="empty" data-i18n="cart.empty">Кошик порожній</p>
     <div class="cart-total"><span data-i18n="cart.total">Разом</span><span id="cartTotal">0 ₴</span></div>
@@ -968,6 +1072,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
   <div id="formView" style="display:none">
     <button class="back-link" id="backToCart" data-i18n="cart.backLink">← Назад до кошика</button>
     <h2 data-i18n="ck.title">Оформлення замовлення</h2>
+    <div id="orderSummary" class="order-summary" aria-live="polite"></div>
     <form id="orderForm">
       <div class="f-field">
         <label data-i18n="ck.name">Ім'я*</label>
@@ -975,7 +1080,12 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       </div>
       <div class="f-field">
         <label data-i18n="ck.phone">Телефон*</label>
-        <input type="tel" id="ofPhone" required autocomplete="tel" value="+380" inputmode="tel" placeholder="+380XXXXXXXXX">
+        <input type="tel" id="ofPhone" required autocomplete="tel" value="+380" inputmode="tel" placeholder="+380XXXXXXXXX" maxlength="13">
+        <div class="field-hint" id="phoneHint" style="display:none;color:#a33;font-size:.8rem;margin-top:6px"></div>
+      </div>
+      <div class="f-field">
+        <label data-i18n="ck.email">Email</label>
+        <input type="email" id="ofEmail" autocomplete="email" placeholder="name@example.com" data-i18n-placeholder="ck.emailPh">
       </div>
       <div class="f-field">
         <label data-i18n="ck.delivery">Спосіб доставки</label>
@@ -1024,8 +1134,8 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
 <div id="modalOverlay"><div id="genericModal"></div></div>
 
 
-<div id="shipOverlay">
-  <div id="shipModal">
+<div id="shipOverlay" role="presentation">
+  <div id="shipModal" role="dialog" aria-modal="true" aria-label="Delivery">
     <div class="modal-top"><button type="button" class="modal-close" id="shipModalClose">×</button></div>
     <div class="ship-block">
       <h3 data-i18n="ship.delTitle">Доставка</h3>
@@ -1082,8 +1192,14 @@ uk: {
   'nav.blends': 'Бленди',
   'nav.blog': 'Блог',
   'nav.why': 'Чому<br>ми?',
+  'nav.whyShort': 'Чому ми',
+  'nav.whyFull': 'Чому ми?',
   'nav.ship': 'Доставка<br>та оплата',
+  'nav.shipShort': 'Доставка',
+  'nav.shipFull': 'Доставка та оплата',
   'nav.faq': 'FAQ',
+  'nav.menu': 'Меню',
+  'nav.close': 'Закрити',
   'nav.cart': 'Кошик',
   'hero.offer': 'Свіжа обсмажка під ваше замовлення.<br>Моносорти та авторські бленди ZRN.<br>250 г — від 310 ₴',
   'hero.s1': 'Ви обираєте',
@@ -1091,6 +1207,7 @@ uk: {
   'hero.s3': 'Пакуємо',
   'hero.s4': 'Відправляємо',
   'hero.cta': 'Обрати каву',
+  'hero.h1': '<b>Свіжообсмажена кава</b> в зернах з доставкою по Україні',
   'hero.brush': 'Мрій · Кохай · Твори',
   'trust.lead': 'Ми — <b>мікроростерня</b>. Творчий підхід до обсмаження: у кожному сорті прагнемо розкрити весь його потенціал.',
   'trust.fact': 'Обсмажуємо після оформлення замовлення й відправляємо того самого або наступного дня — від вашого замовлення до кави на столі минає мінімум часу.',
@@ -1130,7 +1247,7 @@ uk: {
   'faq.q2': 'Зерно чи мелена — що краще?',
   'faq.a2': 'Зерно довше тримає аромат. Якщо маєте млин — беріть зерно. Якщо млина немає — оберіть помел під свій спосіб (турка, еспресо, фільтр, френч-прес), і ми змелемо перед відправкою.',
   'faq.q3': 'Як довго кава залишається свіжою?',
-  'faq.a3': 'Найкращий смак свіжообсмаженої кави — до 40 днів після обсмаження при правильному зберіганні. Дату обсмаження завжди вказуємо на пачці.',
+  'faq.a3': 'Після обсмаження каві потрібно відлежатися 3–5 днів (дегазація). Найкращий смак — приблизно до 40 днів після обсмаження при правильному зберіганні. Дату обсмаження завжди вказуємо на пачці.',
   'faq.q4': 'Яка доставка і оплата?',
   'faq.a4': 'Нова Пошта або Укрпошта. Оплата — переказ на картку або накладений платіж. Від 1200 ₴ доставка безкоштовна.',
   'faq.q5': 'Скільки йде доставка по Україні?',
@@ -1187,6 +1304,14 @@ uk: {
   'ck.title': 'Оформлення замовлення',
   'ck.name': 'Ім\'я*',
   'ck.phone': 'Телефон*',
+  'ck.email': 'Email',
+  'ck.emailPh': 'name@example.com',
+  'ck.phoneErr': 'Укажите номер в формате +380XXXXXXXXX (9 цифр после +380)',
+  'ck.summary': 'Ваш заказ',
+  'ck.email': 'Email',
+  'ck.emailPh': 'name@example.com',
+  'ck.phoneErr': 'Вкажіть номер у форматі +380XXXXXXXXX (9 цифр після +380)',
+  'ck.summary': 'Ваше замовлення',
   'ck.delivery': 'Спосіб доставки',
   'ck.city': 'Місто*',
   'ck.branch': 'Відділення / поштомат / адреса*',
@@ -1215,6 +1340,17 @@ uk: {
   'ck.pay.cod': 'Накладений платіж',
   'blog.title': 'Блог ZRN',
   'blog.all': 'Усі статті',
+  'reorder.title': 'Повторити останнє замовлення?',
+  'reorder.btn': 'Додати ті самі позиції',
+  'reorder.done': 'Додано до кошика',
+  'sub.title': 'Свіжа кава вчасно',
+  'sub.text': 'Залиште email — нагадаємо про свіжу партію або нові сорти.',
+  'sub.btn': 'Підписатися',
+  'sub.ok': 'Дякуємо! Ви в списку.',
+  'sub.err': 'Не вдалося надіслати. Спробуйте ще раз.',
+  'ui.acid': 'Кислотність',
+  'ui.sweet': 'Солодкість',
+  'ui.bitter': 'Гіркота',
   'ui.fresh': 'Обсмажуємо після замовлення',
   'ui.choose': 'Обрати',
   'ui.ideal': 'Ідеально до:',
@@ -1245,8 +1381,14 @@ ru: {
   'nav.blends': 'Бленды',
   'nav.blog': 'Блог',
   'nav.why': 'Почему<br>мы?',
+  'nav.whyShort': 'Почему мы',
+  'nav.whyFull': 'Почему мы?',
   'nav.ship': 'Доставка<br>и оплата',
+  'nav.shipShort': 'Доставка',
+  'nav.shipFull': 'Доставка и оплата',
   'nav.faq': 'FAQ',
+  'nav.menu': 'Меню',
+  'nav.close': 'Закрыть',
   'nav.cart': 'Корзина',
   'hero.offer': 'Свежая обжарка под ваш заказ.<br>Моносорта и авторские бленды ZRN.<br>250 г — от 310 ₴',
   'hero.s1': 'Вы выбираете',
@@ -1254,6 +1396,7 @@ ru: {
   'hero.s3': 'Упаковываем',
   'hero.s4': 'Отправляем',
   'hero.cta': 'Выбрать кофе',
+  'hero.h1': '<b>Свежеобжаренный кофе</b> в зёрнах с доставкой по Украине',
   'hero.brush': 'Мечтай · Люби · Твори',
   'trust.lead': 'Мы — <b>микроростерия</b>. Творческий подход к обжарке: в каждом сорте стремимся раскрыть весь его потенциал.',
   'trust.fact': 'Обжариваем после оформления заказа и отправляем в тот же или на следующий день — от вашего заказа до кофе на столе проходит минимум времени.',
@@ -1293,7 +1436,7 @@ ru: {
   'faq.q2': 'Зерно или молотый — что лучше?',
   'faq.a2': 'Зерно дольше держит аромат. Если есть мельница — берите зерно. Если нет — выберите помол под свой способ (турка, эспрессо, фильтр, френч-пресс), и мы смелем перед отправкой.',
   'faq.q3': 'Как долго кофе остаётся свежим?',
-  'faq.a3': 'Лучший вкус свежеобжаренного кофе — до 40 дней после обжарки при правильном хранении. Дату обжарки всегда указываем на пачке.',
+  'faq.a3': 'После обжарки кофе нужно отлежаться 3–5 дней (дегазация). Лучший вкус — примерно до 40 дней после обжарки при правильном хранении. Дату обжарки всегда указываем на пачке.',
   'faq.q4': 'Какая доставка и оплата?',
   'faq.a4': 'Новая Почта или Укрпочта. Оплата — перевод на карту или наложенный платёж. От 1200 ₴ доставка бесплатная.',
   'faq.q5': 'Сколько идёт доставка по Украине?',
@@ -1350,6 +1493,14 @@ ru: {
   'ck.title': 'Оформление заказа',
   'ck.name': 'Имя*',
   'ck.phone': 'Телефон*',
+  'ck.email': 'Email',
+  'ck.emailPh': 'name@example.com',
+  'ck.phoneErr': 'Укажите номер в формате +380XXXXXXXXX (9 цифр после +380)',
+  'ck.summary': 'Ваш заказ',
+  'ck.email': 'Email',
+  'ck.emailPh': 'name@example.com',
+  'ck.phoneErr': 'Вкажіть номер у форматі +380XXXXXXXXX (9 цифр після +380)',
+  'ck.summary': 'Ваше замовлення',
   'ck.delivery': 'Способ доставки',
   'ck.city': 'Город*',
   'ck.branch': 'Отделение / почтомат / адрес*',
@@ -1378,6 +1529,17 @@ ru: {
   'ck.pay.cod': 'Наложенный платёж',
   'blog.title': 'Блог ZRN',
   'blog.all': 'Все статьи',
+  'reorder.title': 'Повторить последний заказ?',
+  'reorder.btn': 'Добавить те же позиции',
+  'reorder.done': 'Добавлено в корзину',
+  'sub.title': 'Свежий кофе вовремя',
+  'sub.text': 'Оставьте email — напомним о свежей партии или новых сортах.',
+  'sub.btn': 'Подписаться',
+  'sub.ok': 'Спасибо! Вы в списке.',
+  'sub.err': 'Не удалось отправить. Попробуйте ещё раз.',
+  'ui.acid': 'Кислотность',
+  'ui.sweet': 'Сладость',
+  'ui.bitter': 'Горчинка',
   'ui.fresh': 'Обжариваем после заказа',
   'ui.choose': 'Выбрать',
   'ui.ideal': 'Идеально для:',
@@ -1519,13 +1681,13 @@ const BLOG_I18N = {
     k: {uk:'Про каву', ru:'О кофе'},
     title: {uk:'Чому дата обсмаження важливіша за назву сорту', ru:'Почему дата обжарки важнее названия сорта'},
     excerpt: {uk:'Свіжість визначає смак сильніше, ніж походження зерна.', ru:'Свежесть определяет вкус сильнее, чем происхождение зерна.'},
-    body: {uk:null, ru:'Кофе начинает терять аромат уже через несколько недель после обжарки. Лучшее раскрытие вкуса — с 4 по 21 день.\n\nМы указываем дату обжарки на каждой пачке и обжариваем под заказ, поэтому кофе попадает к вам практически на пике.\n\nСовет: не покупайте сразу большой запас — лучше меньше, но чаще.'}
+    body: {uk:null, ru:'После обжарки кофе нужно 3–5 дней на дегазацию — тогда вкус раскрывается полнее. Лучший вкус держится примерно до 40 дней при правильном хранении.\n\nМы указываем дату обжарки на каждой пачке и обжариваем под заказ, поэтому кофе попадает к вам свежим.\n\nХраните в герметичной непрозрачной таре вдали от тепла, света и влаги.'}
   },
   storage: {
     k: {uk:'Поради', ru:'Советы'},
     title: {uk:'Як правильно зберігати кавові зерна вдома', ru:'Как правильно хранить кофейные зёрна дома'},
     excerpt: {uk:'Три вороги свіжості: повітря, світло і вологість.', ru:'Три врага свежести: воздух, свет и влажность.'},
-    body: {uk:null, ru:'Держите кофе в герметичной непрозрачной таре, вдали от плиты и окна. Не в холодильнике — там он впитывает запахи и влагу.\n\nЕсли купили большой объём — отсыпьте на неделю в меньшую банку, а остальное плотно закройте.\n\nПри правильном хранении аромат держится на несколько недель дольше.'}
+    body: {uk:null, ru:'После обжарки кофе нужно 3–5 дней, чтобы «отлежаться» (вышел углекислый газ) — тогда вкус раскрывается полнее. Лучший вкус держится примерно до 40 дней при правильном хранении.\n\nДержите кофе в герметичной непрозрачной таре, вдали от плиты и окна. Не в холодильнике — там он впитывает запахи и влагу.\n\nЕсли купили большой объём — отсыпьте на неделю в меньшую банку, а остальное плотно закройте.'}
   }
 };
 
@@ -1641,15 +1803,31 @@ function applyStaticI18n(){
   document.documentElement.lang = currentLang === 'ru' ? 'ru' : 'uk';
 }
 
-function setLanguage(lang){
+function setLanguage(lang, opts){
   if(lang !== 'uk' && lang !== 'ru') lang = 'uk';
+  opts = opts || {};
   currentLang = lang;
   try{ localStorage.setItem('zrn_language', lang); }catch(e){}
+  try{ document.documentElement.lang = (lang === 'ru' ? 'ru' : 'uk'); }catch(e){}
   document.querySelectorAll('.lang-btn').forEach(btn=>{
     const on = btn.getAttribute('data-lang') === lang;
     btn.classList.toggle('active', on);
     btn.setAttribute('aria-pressed', on ? 'true' : 'false');
   });
+  // Separate crawlable URLs: / (uk) and /?lang=ru
+  if(!opts.skipUrl){
+    try{
+      var u = new URL(location.href);
+      if(lang === 'ru') u.searchParams.set('lang', 'ru');
+      else u.searchParams.delete('lang');
+      var next = u.pathname + u.search + u.hash;
+      if(next !== (location.pathname + location.search + location.hash)){
+        history.replaceState(null, '', next);
+      }
+      var can = document.querySelector('link[rel="canonical"]');
+      if(can) can.setAttribute('href', lang === 'ru' ? 'https://zrncoffee.pp.ua/?lang=ru' : 'https://zrncoffee.pp.ua/');
+    }catch(e){}
+  }
   applyStaticI18n();
   // re-render dynamic
   if(typeof renderGrid === 'function' && typeof PRODUCTS !== 'undefined'){
@@ -1659,10 +1837,12 @@ function setLanguage(lang){
   if(typeof renderCart === 'function') renderCart();
   if(typeof renderDeliveryPayment === 'function') renderDeliveryPayment();
   if(typeof renderBlogGrid === 'function') renderBlogGrid();
-  // refresh open product modal
+  // refresh open product modal (preserve weight/grind/qty)
   if(document.getElementById('modalOverlay')?.classList.contains('open')){
     const hash = location.hash.replace('#','');
-    if(hash && typeof openProduct === 'function') openProduct(hash);
+    let st = window._modalUIState || null;
+    if(!st && hash) st = {id: hash};
+    if(st && st.id && typeof openProduct === 'function') openProduct(st.id, st);
   }
   // refresh open blog post
   if(document.getElementById('blogOverlay')?.classList.contains('open')){
@@ -1678,10 +1858,17 @@ function setLanguage(lang){
 
 function initLanguage(){
   let lang = 'uk';
-  try{ lang = localStorage.getItem('zrn_language') || 'uk'; }catch(e){}
+  try{
+    var q = new URLSearchParams(location.search).get('lang');
+    if(q === 'ru' || q === 'uk') lang = q;
+    else lang = localStorage.getItem('zrn_language') || 'uk';
+  }catch(e){}
   if(lang !== 'ru' && lang !== 'uk') lang = 'uk';
   document.querySelectorAll('.lang-btn').forEach(btn=>{
-    btn.addEventListener('click', ()=> setLanguage(btn.getAttribute('data-lang')));
+    btn.addEventListener('click', function(e){
+      e.preventDefault();
+      setLanguage(btn.getAttribute('data-lang'));
+    });
   });
   setLanguage(lang);
 }
@@ -1718,16 +1905,21 @@ const BLENDS = [
    ============================================================ */
 const BLOG = [
   {id:'brew-guide', k:'Гайд', title:'Як обрати помел під свій спосіб заварювання', excerpt:'Коротко про те, чому помел вирішує половину смаку.', body:'Помел — це не дрібниця, а половина результату в чашці. Занадто дрібний для фільтра — гіркота і забивання. Занадто грубий для турки — водяниста кава.\n\nДля турки потрібен найдрібніший помел, майже пудра. Для еспресо — дрібний, але сипкий. Для крапельної кавоварки і фільтра — середній. Для френч-преса — найгрубіший, щоб уникнути осаду.\n\nСаме тому при замовленні ми питаємо спосіб заварювання і мелемо партію під нього перед відправкою.'},
-  {id:'freshness', k:'Про каву', title:'Чому дата обсмаження важливіша за назву сорту', excerpt:'Свіжість визначає смак сильніше, ніж походження зерна.', body:'Кава починає втрачати аромат вже за кілька тижнів після обсмаження. Найкраще розкриття смаку — з 4 по 21 день.\n\nМи вказуємо дату обсмаження на кожній пачці й обсмажуємо під замовлення, тому кава потрапляє до вас практично на піку.\n\nПорада: не купуйте одразу великий запас — краще менше, але частіше.'},
-  {id:'storage', k:'Поради', title:'Як правильно зберігати кавові зерна вдома', excerpt:'Три вороги свіжості: повітря, світло і вологість.', body:'Тримайте каву в герметичній непрозорій тарі, подалі від плити й вікна. Не в холодильнику — там вона вбирає запахи й вологу.\n\nЯкщо купили великий обсяг — відсипте на тиждень у меншу банку, а решту щільно закрийте.\n\nЗ правильним зберіганням аромат тримається на кілька тижнів довше.'},
+  {id:'freshness', k:'Про каву', title:'Чому дата обсмаження важливіша за назву сорту', excerpt:'Свіжість визначає смак сильніше, ніж походження зерна.', body:'Після обсмаження каві потрібно 3–5 днів на дегазацію — тоді смак розкривається повніше. Найкращий смак тримається приблизно до 40 днів при правильному зберіганні.\n\nМи вказуємо дату обсмаження на кожній пачці й обсмажуємо під замовлення, тому кава потрапляє до вас свіжою.\n\nЗберігайте в герметичній непрозорій тарі подалі від тепла, світла й вологи.'},
+  {id:'storage', k:'Поради', title:'Як правильно зберігати кавові зерна вдома', excerpt:'Три вороги свіжості: повітря, світло і вологість.', body:'Після обсмаження каві потрібно 3–5 днів, щоб «відлежатися» (вийшов вуглекислий газ) — тоді смак розкривається повніше. Найкращий смак тримається приблизно до 40 днів при правильному зберіганні.\n\nТримайте каву в герметичній непрозорій тарі, подалі від плити й вікна. Не в холодильнику — там вона вбирає запахи й вологу.\n\nЯкщо купили великий обсяг — відсипте на тиждень у меншу банку, а решту щільно закрийте.'},
 ];
 
 function scrollToSel(sel){
+  if(typeof closeMobileNav === 'function') closeMobileNav();
   if(typeof closeBlogOverlay === 'function') closeBlogOverlay();
   if(typeof closeModal === 'function') closeModal();
   if(typeof closeShipModal === 'function') closeShipModal();
-  const el = document.querySelector(sel);
-  if(el) el.scrollIntoView({behavior:'smooth'});
+  document.body.style.overflow = '';
+  var el = document.querySelector(sel);
+  if(!el) return;
+  setTimeout(function(){
+    el.scrollIntoView({behavior:'smooth', block:'start'});
+  }, 30);
 }
 
 /* ---------- scroll-spy: active nav by section ---------- */
@@ -1790,7 +1982,14 @@ function renderGrid(containerId, list){
       </div>
     </div>
   `).join('');
-  el.querySelectorAll('.card').forEach(c=>{ c.onclick=(e)=>{ if(e.target.classList.contains('add')) return; openProduct(c.dataset.open); }; });
+  el.querySelectorAll('.card').forEach(c=>{
+    c.setAttribute('tabindex','0');
+    c.setAttribute('role','button');
+    c.setAttribute('aria-label', c.querySelector('h3')?.textContent || c.dataset.open);
+    const go = ()=> openProduct(c.dataset.open);
+    c.onclick=(e)=>{ if(e.target.classList.contains('add')) return; go(); };
+    c.onkeydown=(e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); go(); } };
+  });
   el.querySelectorAll('.add').forEach(b=>{ b.onclick=(e)=>{ e.stopPropagation(); openProduct(b.dataset.id); }; });
   el.querySelectorAll('.card').forEach(card=> revealObserver.observe(card));
 }
@@ -1827,6 +2026,7 @@ function openShipModal(){
   const ov = document.getElementById('shipOverlay');
   if(!ov) return;
   ov.classList.add('open');
+  ov.setAttribute('aria-hidden','false');
   document.body.style.overflow = 'hidden';
 }
 function closeShipModal(){
@@ -1846,12 +2046,16 @@ function closeShipModal(){
 })();
 
 function openBlogOverlay(){
+  document.body.style.overflow = 'hidden';
+
   blogOverlay.classList.add('open');
   showBlogList();
   document.body.style.overflow = 'hidden';
   setActiveNav('blog');
 }
 function closeBlogOverlay(){
+  document.body.style.overflow = '';
+
   blogOverlay.classList.remove('open');
   if(typeof drawer !== 'undefined' && drawer && !drawer.classList.contains('open')){
     document.body.style.overflow = '';
@@ -1885,12 +2089,38 @@ function dotsHtml(level){
   return h;
 }
 
-function openProduct(id){
+
+const TASTE_PROFILE = {
+  tanzania:{acid:4,sweet:3,bitter:2},
+  brazilia:{acid:2,sweet:4,bitter:3},
+  ruanda:{acid:4,sweet:3,bitter:2},
+  costarica:{acid:5,sweet:4,bitter:2},
+  colombia:{acid:3,sweet:4,bitter:2},
+  elsalvador:{acid:4,sweet:4,bitter:2},
+  guatemala:{acid:4,sweet:3,bitter:2},
+  myth:{acid:2,sweet:3,bitter:4},
+  epic:{acid:2,sweet:3,bitter:5},
+  legend:{acid:2,sweet:4,bitter:3}
+};
+function tasteBarsHtml(p){
+  var tp = TASTE_PROFILE[p.id] || {acid:3,sweet:3,bitter:3};
+  return '<div class="taste-bars">'
+    + '<div class="taste-row"><span class="taste-label">' + t('ui.acid') + '</span><div class="taste-track"><div class="taste-fill" style="width:' + (tp.acid*20) + '%"></div></div></div>'
+    + '<div class="taste-row"><span class="taste-label">' + t('ui.sweet') + '</span><div class="taste-track"><div class="taste-fill" style="width:' + (tp.sweet*20) + '%"></div></div></div>'
+    + '<div class="taste-row"><span class="taste-label">' + t('ui.bitter') + '</span><div class="taste-track"><div class="taste-fill" style="width:' + (tp.bitter*20) + '%"></div></div></div>'
+    + '</div>';
+}
+
+function openProduct(id, restore){
   const p = ALL_PRODUCTS.find(x=>x.id===id);
   if(!p) return;
+  restore = restore || window._modalUIState || null;
   genericModal.style.setProperty('--accent', p.accent||'#a9792f');
+  genericModal.setAttribute('role','dialog');
+  genericModal.setAttribute('aria-modal','true');
+  genericModal.setAttribute('aria-label', p.name);
   genericModal.innerHTML = `
-    <div class="modal-top"><button class="modal-close" id="modalClose">×</button></div>
+    <div class="modal-top"><button type="button" class="modal-close" id="modalClose" aria-label="Close">×</button></div>
     <div class="modal-grid">
       <img src="${p.img}" alt="${p.name} — кава ZRN">
       <div class="modal-body">
@@ -1907,17 +2137,14 @@ function openProduct(id){
         <p class="desc"><strong>${t('ui.profile')}</strong> ${pt(p,'notes')}</p>
         ${p.brew?`<div class="brew-tags" style="margin:-4px 0 12px"><span class="brew-label">${t('ui.ideal')}</span>${p.brew.map(b=>`<span class="brew-tag">${dispBrew(b)}</span>`).join('')}</div>`:''}
         <p class="desc">${pt(p,'info')}</p>
-        ${p.story?`<div class="origin-story">
-          <div class="origin-story-head">${t('ui.about')}</div>
-          ${ptStory(p).map(par=>`<p>${par}</p>`).join('')}
-        </div>`:''}
+        ${tasteBarsHtml(p)}
         <div class="field">
           <label>${t('ui.weight')}</label>
-          <div class="pill-row" id="weightRow">${WEIGHTS.map((w,i)=>`<button class="pill ${i===0?'active':''}" data-w="${w}">${w} ${t('ui.g')}</button>`).join('')}</div>
+          <div class="pill-row" id="weightRow">${WEIGHTS.map((w,i)=>`<button type="button" class="pill ${i===0?'active':''}" data-w="${w}">${w} ${t('ui.g')}</button>`).join('')}</div>
         </div>
         <div class="field" style="margin-top:14px">
           <label>${t('ui.grind')}</label>
-          <div class="pill-row" id="grindRow">${GRINDS.map((g,i)=>`<button class="pill ${i===0?'active':''}" data-g="${g}">${dispGrind(g)}</button>`).join('')}</div>
+          <div class="pill-row" id="grindRow">${GRINDS.map((g,i)=>`<button type="button" class="pill ${i===0?'active':''}" data-g="${g}">${dispGrind(g)}</button>`).join('')}</div>
           <div class="pill-row" id="grindSubRow" style="display:none;margin-top:8px"></div>
           <div class="grind-tip" id="grindTip"></div>
         </div>
@@ -1932,9 +2159,13 @@ function openProduct(id){
         <div class="modal-footer">
           <span class="modal-price" id="modalPrice">${p.price250} ₴</span>
           <div class="modal-add-row">
-            <button class="modal-add" data-id="${p.id}">${t('ui.add')}</button>
+            <button type="button" class="modal-add" data-id="${p.id}">${t('ui.add')}</button>
           </div>
         </div>
+        ${p.story?`<div class="origin-story">
+          <div class="origin-story-head">${t('ui.about')}</div>
+          ${ptStory(p).map(par=>`<p>${par}</p>`).join('')}
+        </div>`:''}
       </div>
     </div>
   `;
@@ -1943,6 +2174,21 @@ function openProduct(id){
   let selectedGrindSub = GRIND_TYPES[2].label;
   let selectedWeight = WEIGHTS[0];
   let selectedQty = 1;
+  if(restore){
+    if(restore.weight) selectedWeight = Number(restore.weight);
+    if(restore.grindMain) selectedGrindMain = restore.grindMain;
+    if(restore.grindSub) selectedGrindSub = restore.grindSub;
+    if(restore.qty) selectedQty = Number(restore.qty)||1;
+  }
+  function saveModalUIState(){
+    window._modalUIState = {
+      id: p.id,
+      weight: selectedWeight,
+      grindMain: selectedGrindMain,
+      grindSub: selectedGrindSub,
+      qty: selectedQty
+    };
+  }
   const priceEl = genericModal.querySelector('#modalPrice');
   const qtyValueEl = genericModal.querySelector('#qtyValue');
 
@@ -1993,16 +2239,69 @@ function openProduct(id){
     btn.disabled = true;
     setTimeout(()=>{ btn.textContent = original; btn.disabled = false; }, 1300);
   };
+  // restore active pills
+  if(restore && restore.weight){
+    genericModal.querySelectorAll('#weightRow .pill').forEach(btn=>{
+      btn.classList.toggle('active', Number(btn.dataset.w)===Number(restore.weight));
+    });
+    if(priceEl) priceEl.textContent = (selectedWeight===500 ? p.price500 : p.price250) + ' ₴';
+  }
+  if(restore && restore.grindMain){
+    genericModal.querySelectorAll('#grindRow .pill').forEach(btn=>{
+      btn.classList.toggle('active', btn.dataset.g===restore.grindMain);
+    });
+    selectedGrindMain = restore.grindMain;
+    if(typeof renderGrindSub==='function') renderGrindSub();
+  }
+  if(qtyValueEl) qtyValueEl.textContent = selectedQty;
+  saveModalUIState();
+  // wrap handlers to persist state
+  genericModal.querySelectorAll('#weightRow .pill').forEach(btn=>{
+    const prev = btn.onclick;
+    btn.onclick = (e)=>{ if(prev) prev.call(btn,e); saveModalUIState(); };
+  });
+  genericModal.querySelectorAll('#grindRow .pill').forEach(btn=>{
+    const prev = btn.onclick;
+    btn.onclick = (e)=>{ if(prev) prev.call(btn,e); saveModalUIState(); };
+  });
+  const qm = genericModal.querySelector('#qtyMinus');
+  const qp = genericModal.querySelector('#qtyPlus');
+  if(qm){ const prev=qm.onclick; qm.onclick=(e)=>{ if(prev) prev.call(qm,e); saveModalUIState(); }; }
+  if(qp){ const prev=qp.onclick; qp.onclick=(e)=>{ if(prev) prev.call(qp,e); saveModalUIState(); }; }
+
   modalOverlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
   if(typeof stickyCartBar!=='undefined' && stickyCartBar) stickyCartBar.classList.remove('show');
-  history.replaceState(null,'','#'+id);
+  if(!window._zrnModalPushed){
+    history.pushState({zrnModal:true}, '', '#'+id);
+    window._zrnModalPushed = true;
+  } else {
+    history.replaceState({zrnModal:true}, '', '#'+id);
+  }
+  const closeBtn = genericModal.querySelector('#modalClose');
+  if(closeBtn) closeBtn.focus();
 }
 
 function closeModal(){
   modalOverlay.classList.remove('open');
-  history.replaceState(null,'',location.pathname);
+  document.body.style.overflow = '';
+  window._modalUIState = null;
+  if(window._zrnModalPushed){
+    window._zrnModalPushed = false;
+    history.replaceState(null, '', location.pathname + location.search);
+  }
   if(typeof updateStickyBar==='function') updateStickyBar();
 }
+window.addEventListener('popstate', function(){
+  var ov = document.getElementById('modalOverlay');
+  if(ov && ov.classList.contains('open')){
+    window._zrnModalPushed = false;
+    ov.classList.remove('open');
+    document.body.style.overflow = '';
+    window._modalUIState = null;
+    if(typeof updateStickyBar==='function') updateStickyBar();
+  }
+});
 modalOverlay.onclick = (e)=>{ if(e.target===modalOverlay) closeModal(); };
 blogOverlay.onclick = (e)=>{ if(e.target===blogOverlay) closeBlogOverlay(); };
 
@@ -2013,7 +2312,7 @@ const TG_CONTACT = 't.me/runik1983';
 let cart = {};
 try{ cart = JSON.parse(localStorage.getItem('zrn_cart')||'{}'); }catch(e){ cart = {}; }
 let delivery = 'np';
-let payment = 'card';
+let payment = 'cod';
 const FREE_SHIP_FROM = 1200;
 
 function saveCart(){ try{ localStorage.setItem('zrn_cart', JSON.stringify(cart)); }catch(e){} }
@@ -2038,7 +2337,7 @@ function renderDeliveryPayment(){
   if(payment==='На картку переказом' || payment==='На карту переводом') payment='card';
   if(payment==='Накладений платіж' || payment==='Наложенный платёж') payment='cod';
   if(delCodes.indexOf(delivery)<0) delivery='np';
-  if(payCodes.indexOf(payment)<0) payment='card';
+  if(payCodes.indexOf(payment)<0) payment='cod';
   const delLabels = delCodes.map(code=> t('ck.del.'+code));
   const payLabels = payCodes.map(code=> t('ck.pay.'+code));
   dOpts.innerHTML = delCodes.map((code,i)=>`<div class="ck-opt ${code===delivery?'active':''}" data-code="${code}">${delLabels[i]}</div>`).join('');
@@ -2048,6 +2347,7 @@ function renderDeliveryPayment(){
 }
 
 function renderCart(){
+  if(typeof showReorderBox==='function') showReorderBox();
   if(typeof updateStickyBar==='function') updateStickyBar();
   const items = Object.entries(cart);
   const cartItems = document.getElementById('cartItems');
@@ -2162,11 +2462,13 @@ function showDrawerView(view){
 }
 
 function prefillForm(){
+  renderOrderSummary();
   renderDeliveryPayment();
   let saved = {};
   try{ saved = JSON.parse(localStorage.getItem('zrn_checkout')||'{}'); }catch(e){ saved = {}; }
   document.getElementById('ofName').value = saved.name || '';
   document.getElementById('ofPhone').value = saved.phone || '+380';
+  const em = document.getElementById('ofEmail'); if(em) em.value = saved.email || '';
   document.getElementById('ofCity').value = saved.city || '';
   document.getElementById('ofBranch').value = saved.branch || '';
   if(saved.delivery){ delivery = saved.delivery; renderDeliveryPayment(); }
@@ -2211,6 +2513,15 @@ document.getElementById('orderForm').onsubmit = function(e){
     formError.style.display = 'block';
     return;
   }
+  if(!isValidUaPhone(phone)){
+    formError.textContent = t('ck.phoneErr');
+    formError.style.display = 'block';
+    const ph = document.getElementById('phoneHint');
+    if(ph){ ph.style.display='block'; ph.textContent = t('ck.phoneErr'); }
+    return;
+  }
+  const phoneNorm = normalizeUaPhone(phone);
+  const email = (document.getElementById('ofEmail')?.value || '').trim();
 
   const items = Object.entries(cart);
   if(items.length===0) return;
@@ -2232,7 +2543,8 @@ document.getElementById('orderForm').onsubmit = function(e){
 `Нове замовлення ${orderNumber}
 
 Ім'я: ${name}
-Телефон: ${phone}
+Телефон: ${phoneNorm}
+Email: ${email || '—'}
 Спосіб доставки: ${t('ck.del.'+delivery)}
 Місто: ${city}
 Відділення/поштомат/адреса: ${branch}
@@ -2255,7 +2567,8 @@ Telegram: ${TG_CONTACT}
     from_name: 'ZRN Coffee — сайт',
     order_number: orderNumber,
     name: name,
-    phone: phone,
+    phone: phoneNorm,
+    email: email || '—',
     delivery: t('ck.del.'+delivery),
     city: city,
     branch: branch,
@@ -2283,8 +2596,15 @@ Telegram: ${TG_CONTACT}
     submitBtn.disabled = false;
     submitBtn.textContent = t('ck.submit');
     if(res.success){
-      try{ localStorage.setItem('zrn_checkout', JSON.stringify({name, phone, delivery, city, branch})); }catch(err){}
+      try{ localStorage.setItem('zrn_checkout', JSON.stringify({name, phone: phoneNorm, email, delivery, city, branch})); }catch(err){}
       document.getElementById('confirmText').innerHTML = (callPref==='call' ? t('ck.okCall') : t('ck.okMsg')).replace('{n}', orderNumber);
+      try{
+        var lastItems = items.map(function(pair){
+          var parts = pair[0].split('|');
+          return {id:parts[0], grind:parts[1], weight:Number(parts[2]), qty:pair[1]};
+        });
+        localStorage.setItem('zrn_last_order', JSON.stringify({items:lastItems, at:Date.now()}));
+      }catch(err){}
       cart = {}; saveCart(); renderCart();
       showDrawerView(confirmView);
     } else {
@@ -2427,8 +2747,153 @@ ${text}
   });
 })();
 
+
+/* ---- a11y: ESC closes overlays ---- */
+document.addEventListener('keydown', function(e){
+  if(e.key !== 'Escape') return;
+  if(document.getElementById('mobileNav')?.classList.contains('open')) closeMobileNav();
+  else if(document.getElementById('shipOverlay')?.classList.contains('open')) closeShipModal();
+  else if(document.getElementById('blogOverlay')?.classList.contains('open')) closeBlogOverlay();
+  else if(document.getElementById('modalOverlay')?.classList.contains('open')) closeModal();
+  else if(document.getElementById('drawer')?.classList.contains('open')) closeDrawer();
+});
+
+function openMobileNav(){
+  const nav = document.getElementById('mobileNav');
+  const btn = document.getElementById('menuBtn');
+  if(!nav) return;
+  nav.hidden = false;
+  nav.classList.add('open');
+  if(btn) btn.setAttribute('aria-expanded','true');
+  document.body.style.overflow = 'hidden';
+}
+function closeMobileNav(){
+  const nav = document.getElementById('mobileNav');
+  const btn = document.getElementById('menuBtn');
+  if(!nav) return;
+  nav.classList.remove('open');
+  nav.hidden = true;
+  if(btn) btn.setAttribute('aria-expanded','false');
+  if(!document.getElementById('modalOverlay')?.classList.contains('open') &&
+     !document.getElementById('shipOverlay')?.classList.contains('open') &&
+     !document.getElementById('blogOverlay')?.classList.contains('open') &&
+     !document.getElementById('drawer')?.classList.contains('open')){
+    document.body.style.overflow = '';
+  }
+}
+(function(){
+  const btn = document.getElementById('menuBtn');
+  const close = document.getElementById('mobileNavClose');
+  const nav = document.getElementById('mobileNav');
+  if(btn) btn.addEventListener('click', openMobileNav);
+  if(close) close.addEventListener('click', closeMobileNav);
+  if(nav) nav.addEventListener('click', e=>{ if(e.target===nav) closeMobileNav(); });
+})();
+
+/* patch openShipModal / closeShipModal body scroll */
+(function(){
+  const _open = window.openShipModal;
+  const _close = window.closeShipModal;
+  // re-bind after functions defined - use event after load
+})();
+
+function isValidUaPhone(phone){
+  const digits = phone.replace(/\D/g,'');
+  // 380 + 9 digits = 12 total, or 0 + 9
+  if(digits.length===12 && digits.startsWith('380')) return true;
+  if(digits.length===10 && digits.startsWith('0')) return true;
+  if(digits.length===9) return true;
+  return false;
+}
+function normalizeUaPhone(phone){
+  let d = phone.replace(/\D/g,'');
+  if(d.length===9) d = '380'+d;
+  if(d.length===10 && d.startsWith('0')) d = '380'+d.slice(1);
+  if(d.length===12 && d.startsWith('380')) return '+'+d;
+  return phone.trim();
+}
+function renderOrderSummary(){
+  const box = document.getElementById('orderSummary');
+  if(!box) return;
+  const items = Object.entries(cart);
+  if(!items.length){ box.innerHTML=''; return; }
+  let total=0;
+  const rows = items.map(([key,qty])=>{
+    const [id,grind,w]=key.split('|');
+    const p = ALL_PRODUCTS.find(x=>x.id===id);
+    if(!p) return '';
+    const line = priceFor(p, Number(w))*qty;
+    total += line;
+    return `<div class="os-row"><span>${p.name} · ${w} г · ${qty} шт</span><b>${line} ₴</b></div>`;
+  }).join('');
+  box.innerHTML = `<div style="font-weight:600;margin-bottom:6px">${t('ck.summary')}</div>${rows}<div class="os-total"><span>${t('cart.total')}</span><span>${total} ₴</span></div>`;
+}
+
+
+
+function showReorderBox(){
+  var box = document.getElementById('reorderBox');
+  if(!box) return;
+  try{
+    var last = JSON.parse(localStorage.getItem('zrn_last_order')||'null');
+    if(last && last.items && last.items.length) box.classList.add('show');
+    else box.classList.remove('show');
+  }catch(e){ box.classList.remove('show'); }
+}
+(function(){
+  var btn = document.getElementById('reorderBtn');
+  if(!btn) return;
+  btn.addEventListener('click', function(){
+    try{
+      var last = JSON.parse(localStorage.getItem('zrn_last_order')||'null');
+      if(!last || !last.items) return;
+      last.items.forEach(function(it){
+        var key = it.id+'|'+it.grind+'|'+it.weight;
+        cart[key] = (cart[key]||0) + (it.qty||1);
+      });
+      saveCart();
+      renderCart();
+      btn.textContent = t('reorder.done');
+      setTimeout(function(){ btn.textContent = t('reorder.btn'); }, 1500);
+    }catch(e){}
+  });
+})();
+(function(){
+  var form = document.getElementById('subForm');
+  if(!form) return;
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var emailEl = document.getElementById('subEmail');
+    var email = emailEl ? emailEl.value.trim() : '';
+    var msg = document.getElementById('subMsg');
+    var btn = form.querySelector('button[type="submit"]');
+    if(!email) return;
+    if(btn) btn.disabled = true;
+    fetch('https://api.web3forms.com/submit', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body: JSON.stringify({
+        access_key: (typeof WEB3FORMS_KEY!=='undefined' ? WEB3FORMS_KEY : ''),
+        subject: 'Підписка ZRN Coffee',
+        from_name: 'ZRN — підписка',
+        email: email,
+        message: 'Нова підписка: ' + email
+      })
+    }).then(function(r){ return r.json(); }).then(function(res){
+      if(btn) btn.disabled = false;
+      if(msg){ msg.hidden = false; msg.textContent = res.success ? t('sub.ok') : t('sub.err'); }
+      if(res.success) form.reset();
+    }).catch(function(){
+      if(btn) btn.disabled = false;
+      if(msg){ msg.hidden = false; msg.textContent = t('sub.err'); }
+    });
+  });
+})();
+
 initLanguage();
 renderCart();
+if(typeof showReorderBox==='function') showReorderBox();
+
 </script>
 </body>
 </html>
