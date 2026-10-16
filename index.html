@@ -291,8 +291,6 @@ section{padding:56px 0;}
 @keyframes badgeShine{0%{background-position:160% 0;}60%{background-position:-60% 0;}100%{background-position:-60% 0;}}
 .badge-popular{background:linear-gradient(135deg,#7d5715,#6e4c14);}
 .badge-new{background:linear-gradient(135deg,#1f6f62,#17564c);}
-.badge-ending{background:linear-gradient(135deg,#a33a24,#8f2f1c); animation:badgePulse 1.8s ease-in-out infinite;}
-@keyframes badgePulse{0%,100%{box-shadow:0 4px 10px -4px rgba(0,0,0,.4), 0 0 0 0 rgba(193,67,42,.55);}50%{box-shadow:0 4px 10px -4px rgba(0,0,0,.4), 0 0 0 7px rgba(193,67,42,0);}}
 .card-body{padding:14px 16px 16px; display:flex; flex-direction:column; gap:5px; flex:1;}
 .card-body h3{font-size:1rem; font-weight:500;}
 .card-notes{color:var(--sub); font-size:.78rem; line-height:1.4;}
@@ -348,7 +346,8 @@ section{padding:56px 0;}
 .who-text p{color:var(--sub); margin-bottom:12px; font-size:.95rem; line-height:1.6;}
 .who-contact{margin-top:18px; font-size:.92rem;}
 .who-contact a{color:var(--gold-soft); text-decoration:none; font-weight:500;}
-.who-photo-placeholder{aspect-ratio:4/5; background:var(--card); border:1px dashed var(--line); border-radius:12px; display:flex; align-items:center; justify-content:center; color:var(--sub); font-size:.88rem; text-align:center; padding:20px;}
+.who-photo img{width:100%; height:auto; display:block; border-radius:12px; border:1px solid var(--line); box-shadow:0 10px 26px -14px rgba(33,26,17,.35);}
+.who-cap{margin-top:10px; font-size:.82rem; color:var(--sub); text-align:center;}
 
 /* ===== reviews ===== */
 .reviews{padding:56px 0;}
@@ -357,62 +356,16 @@ section{padding:56px 0;}
 .review-stars{color:var(--gold-soft); font-size:.95rem; margin-bottom:10px; letter-spacing:1px;}
 .review-card p{color:var(--ink); font-size:.92rem; line-height:1.55; margin-bottom:14px;}
 .review-author{font-size:.82rem; color:var(--sub);}
-.reviews-empty{
-  background:var(--card); border:1px solid var(--line); border-radius:12px;
-  padding:28px 26px; max-width:640px;
-}
-.reviews-empty p{color:var(--sub); font-size:.95rem; line-height:1.6; margin-bottom:10px;}
-.reviews-empty p:last-of-type{margin-bottom:0;}
-.reviews-empty .reviews-lead{
-  font-family:'Fraunces',Georgia,serif; font-style:italic; font-size:1.15rem;
-  color:var(--ink); margin-bottom:12px;
-}
-.review-form-wrap{
-  margin-top:22px; padding-top:20px; border-top:1px solid var(--line);
-}
-.review-form-wrap h3{font-size:1.05rem; margin-bottom:14px; color:var(--ink);}
-.rf-row{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;}
-@media(max-width:560px){.rf-row{grid-template-columns:1fr;}}
-.rf-field{margin-bottom:12px;}
-.rf-field label, .rf-field .rf-label{
-  display:block; font-size:.75rem; text-transform:uppercase; letter-spacing:.05em;
-  color:var(--sub); margin-bottom:7px;
-}
-.rf-field input, .rf-field select, .rf-field textarea{
-  width:100%; background:var(--bg); border:1px solid var(--line); color:var(--ink);
-  padding:11px 13px; border-radius:6px; font-size:16px; font-family:inherit;
-}
-.rf-field input:focus, .rf-field select:focus, .rf-field textarea:focus{
-  outline:none; border-color:var(--gold);
-}
-.rf-field textarea{resize:vertical; min-height:90px;}
-.rf-stars{display:flex; gap:6px; flex-wrap:wrap;}
-.rf-star{
-  width:40px; height:40px; border:1px solid var(--line); border-radius:8px;
-  background:transparent; color:var(--sub); font-size:1.1rem; cursor:pointer;
-  transition:border-color .2s, background .2s, color .2s;
-}
-.rf-star:hover, .rf-star.on{
-  border-color:var(--gold); color:var(--gold-soft); background:rgba(169,121,47,.1);
-}
-.rf-submit{
-  background:var(--dark); color:#f3ead9; border:none; padding:12px 20px;
-  border-radius:3px; font-weight:600; font-size:.88rem; cursor:pointer; margin-top:4px;
-}
-.rf-submit:hover{background:var(--gold-soft);}
-.rf-submit:disabled{opacity:.6; cursor:default;}
-.rf-note{font-size:.78rem; color:var(--sub); margin-top:10px; line-height:1.5;}
-.rf-error{
-  background:rgba(193,67,42,.09); color:#9c3b26; border:1px solid rgba(193,67,42,.3);
-  border-radius:6px; padding:9px 12px; font-size:.82rem; margin-bottom:12px; display:none;
-}
-.rf-success{
-  background:rgba(95,138,63,.12); color:#3d6b2e; border:1px solid rgba(95,138,63,.3);
-  border-radius:6px; padding:12px 14px; font-size:.9rem; margin-top:12px; display:none; line-height:1.5;
-}
-
+.reviews-grid[hidden]{display:none;}
+.reviews-grid{margin-bottom:20px;}
+.reviews-cta{display:flex; align-items:center; justify-content:space-between; gap:14px 24px; flex-wrap:wrap; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:18px 22px; max-width:720px;}
+.reviews-cta-text{font-family:'Fraunces',Georgia,serif; font-style:italic; font-size:1.05rem; color:var(--ink); line-height:1.4; flex:1 1 260px;}
+.reviews-cta-btn{display:inline-flex; align-items:center; min-height:44px; background:var(--dark); color:#f3ead9; text-decoration:none; padding:0 20px; border-radius:3px; font-weight:600; font-size:.88rem;}
+.reviews-cta-btn:hover{background:var(--gold-soft);}
+.form-guarantee{font-size:.78rem; color:var(--ink); margin:10px 0 4px; line-height:1.5; text-align:center;}
 .form-reassure{font-size:.76rem; color:var(--sub); margin:10px 0 14px; line-height:1.5; text-align:center;}
 .confirm-extra{font-size:.86rem; color:var(--sub); margin-top:8px;}
+.confirm-extra a{color:var(--gold-soft); font-weight:600;}
 
 /* ===== about / чому ми ===== */
 .about{display:grid; grid-template-columns:repeat(3,1fr); gap:30px;}
@@ -703,7 +656,6 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       "email": "zrncoffee@gmail.com",
       "address": {
         "@type": "PostalAddress",
-        "addressLocality": "Черкаси",
         "addressCountry": "UA"
       },
       "sameAs": [
@@ -831,7 +783,8 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
         <p class="who-contact" data-i18n-html="who.contact">Пишіть у <a href="https://t.me/runik1983" target="_blank">Telegram</a></p>
       </div>
       <div class="who-photo">
-        <div class="who-photo-placeholder" data-i18n-html="who.photo">Тут буде ваше фото<br>(поки можна залишити так)</div>
+        <img src="img/owner.webp" width="686" height="720" alt="Руслан — засновник мікроростерні ZRN" data-i18n-alt="who.alt" loading="lazy" decoding="async">
+        <p class="who-cap" data-i18n="who.cap">Руслан, засновник ZRN</p>
       </div>
     </div>
   </div>
@@ -844,60 +797,21 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
     <div class="why-grid">
       <div class="why-item"><h3 data-i18n="why.t1">Бережне ставлення до кожного клієнта</h3><p data-i18n="why.p1">Ми цінуємо довіру. Тому завжди на зв'язку, відповідаємо швидко, допомагаємо з вибором і чесно розповідаємо про кожен сорт. Ваш комфорт і задоволення — наш пріоритет.</p></div>
       <div class="why-item"><h3 data-i18n="why.t2">Свіжість без компромісів</h3><p data-i18n="why.p2">Обсмажуємо і відправляємо каву в день замовлення або наступного дня. Ви отримуєте максимально свіжий продукт, а не те, що місяцями лежало на складі.</p></div>
-      <div class="why-item"><h3 data-i18n="why.t3">Якісна зелена кава</h3><p data-i18n="why.p3">Працюємо тільки з перевіреними постачальниками. Купуємо зелене зерно з прозорим походженням, високим потенціалом і чистим смаком. Без посередників і сумнівних партій.</p></div>
+      <div class="why-item"><h3 data-i18n="why.t3">Якісна зелена кава</h3><p data-i18n="why.p3">Купуємо зелене зерно з прозорим походженням, високим потенціалом і чистим смаком.</p></div>
       <div class="why-item"><h3 data-i18n="why.t4">Завдання роастмастера — розкрити весь потенціал сорту</h3><p data-i18n="why.p4">Кожна обсмажка — це індивідуальний підхід. Ми не просто «проганяємо» зерно. Ми шукаємо оптимальну криву, температуру і час, щоб максимально розкрити характер саме цього сорту.</p></div>
       <div class="why-item"><h3 data-i18n="why.t5">Авторські бленди та творчий підхід</h3><p data-i18n="why.p5">Створюємо власні суміші, експериментуємо з профілями і постійно пробуємо нове. Кожна партія — це не конвеєр, а творчий процес.</p></div>
       <div class="why-item"><h3 data-i18n="why.t6">Маленькі порції обсмажки</h3><p data-i18n="why.p6">Обсмажуємо невеликими партіями. Це дозволяє контролювати якість на кожному етапі і гарантувати стабільний результат. Жодної «середньої» кави — тільки те, чим ми самі пишаємося.</p></div>
-      <div class="why-item"><h3 data-i18n="why.t7">Ми дорожимо своєю репутацією</h3><p data-i18n="why.p7">Нам важливіше, щоб ви поверталися знову і рекомендували нас друзям, ніж просто продати більше кілограмів. Тому кожна партія проходить дегустацію, а ми несемо повну відповідальність за смак і свіжість.</p></div>
+      <div class="why-item"><h3 data-i18n="why.t7">Ми дорожимо своєю репутацією</h3><p data-i18n="why.p7">Нам важливіше, щоб ви поверталися знову і рекомендували нас друзям, ніж просто продати більше кілограмів. Ми несемо повну відповідальність за смак і свіжість.</p></div>
     </div>
     <p class="why-closing" data-i18n-html="why.closing">Ми робимо каву для тих, хто відчуває різницю.<br><b>Приєднуйтеся.</b></p>
   </section>
 
   <section class="reviews" id="reviews">
     <div class="section-head"><h2 data-i18n="rev.title">Відгуки</h2></div>
-    <div class="reviews-empty">
-      <p class="reviews-lead" data-i18n="rev.lead">Ще збираємо перші відгуки.</p>
-      <p data-i18n="rev.text">Ми тільки починаємо і не вигадуємо зірки. Якщо вже пробували нашу каву — напишіть, як зайшла. Якщо ще ні — дайте шанс заслужити ваш відгук.</p>
-      <div class="review-form-wrap">
-        <h3 data-i18n="rev.formTitle">Залишити відгук</h3>
-        <div class="rf-error" id="rfError"></div>
-        <form id="reviewForm">
-          <div class="rf-row">
-            <div class="rf-field">
-              <label for="rfName" data-i18n="rev.name">Ім’я *</label>
-              <input type="text" id="rfName" name="name" required autocomplete="name" placeholder="Як до вас звертатись" data-i18n-placeholder="rev.namePh">
-            </div>
-            <div class="rf-field">
-              <label for="rfCity" data-i18n="rev.city">Місто</label>
-              <input type="text" id="rfCity" name="city" autocomplete="address-level2" placeholder="Наприклад, Київ" data-i18n-placeholder="rev.cityPh">
-            </div>
-          </div>
-          <div class="rf-field">
-            <label for="rfProduct" data-i18n="rev.product">Сорт / бленд (якщо пам’ятаєте)</label>
-            <select id="rfProduct" name="product">
-              <option value="" data-i18n="rev.productOpt">— не обов’язково —</option>
-            </select>
-          </div>
-          <div class="rf-field">
-            <div class="rf-label" id="rfRatingLabel" data-i18n="rev.rating">Оцінка *</div>
-            <div class="rf-stars" id="rfStars" role="group" aria-labelledby="rfRatingLabel">
-              <button type="button" class="rf-star" data-v="1" aria-label="1">★</button>
-              <button type="button" class="rf-star" data-v="2" aria-label="2">★</button>
-              <button type="button" class="rf-star" data-v="3" aria-label="3">★</button>
-              <button type="button" class="rf-star" data-v="4" aria-label="4">★</button>
-              <button type="button" class="rf-star" data-v="5" aria-label="5">★</button>
-            </div>
-            <input type="hidden" id="rfRating" name="rating" value="" required>
-          </div>
-          <div class="rf-field">
-            <label for="rfText" data-i18n="rev.your">Ваш відгук *</label>
-            <textarea id="rfText" name="text" required maxlength="800" placeholder="Що сподобалось, як заварювали, чи замовите ще…" data-i18n-placeholder="rev.textPh"></textarea>
-          </div>
-          <button type="submit" class="rf-submit" id="rfSubmit" data-i18n="rev.submit">Надіслати відгук</button>
-          <p class="rf-note" data-i18n="rev.note">Відгук прийде нам на пошту. Опублікуємо після перевірки — без вигаданих зірок.</p>
-        </form>
-        <div class="rf-success" id="rfSuccess" data-i18n="rev.success">Дякуємо! Відгук надіслано. Якщо все ок — з’явиться на сайті після перевірки.</div>
-      </div>
+    <div class="reviews-grid" id="reviewsGrid" hidden></div>
+    <div class="reviews-cta">
+      <p class="reviews-cta-text" data-i18n="rev.cta">Спробували нашу каву? Напишіть відгук у Telegram</p>
+      <a class="reviews-cta-btn" href="https://t.me/runik1983" target="_blank" rel="noopener" data-i18n="rev.ctaBtn">Написати відгук</a>
     </div>
   </section>
 
@@ -930,7 +844,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       </div>
       <div class="faq-item">
         <button type="button" class="faq-q" aria-expanded="false"><span data-i18n="faq.q7">Що, якщо кава не зайде?</span><span class="faq-icon">+</span></button>
-        <div class="faq-a" data-i18n="faq.a7">Напишіть мені. Розберемось: підкажемо інший сорт під ваш смак або спосіб заварювання. Мені важливіше, щоб ви пили те, що справді подобається.</div>
+        <div class="faq-a" data-i18n="faq.a7">Напишіть нам у Telegram протягом 14 днів: замінимо каву на інший сорт або повернемо гроші. Також підкажемо сорт під ваш смак чи спосіб заварювання.</div>
       </div>
     </div>
   </section>
@@ -942,7 +856,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
   <div class="wrap foot-row">
     <div>
       <div class="logo" style="margin-bottom:8px">ZRN</div>
-      <div style="font-size:.84rem;line-height:1.5" data-i18n-html="foot.tag">Мікроростерня · Черкаси<br>Обсмажуємо після замовлення</div>
+      <div style="font-size:.84rem;line-height:1.5" data-i18n-html="foot.tag">Мікроростерня<br>Обсмажуємо після замовлення</div>
       <div class="foot-contacts" style="margin-top:12px">
         <a href="https://t.me/runik1983" target="_blank">Telegram</a>
         <a href="mailto:zrncoffee@gmail.com" data-i18n="foot.mail">Написати на пошту</a>
@@ -985,6 +899,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
     <p id="empty" data-i18n="cart.empty">Кошик порожній</p>
     <div class="cart-total"><span data-i18n="cart.total">Разом</span><span id="cartTotal">0 ₴</span></div>
     <button class="checkout" id="toCheckoutBtn" data-i18n="cart.checkout">Оформити замовлення</button>
+    <p class="form-guarantee" data-i18n="ck.guarantee">Не сподобалась кава — замінимо на інший сорт або повернемо гроші протягом 14 днів. Напишіть нам.</p>
     <button class="btn-ghost" id="backToShop" data-i18n="cart.continue">Повернутися до покупок</button>
   </div>
 
@@ -1045,6 +960,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       <div id="formError" class="form-error" style="display:none"></div>
       <p class="form-reassure" data-i18n="ck.reassure">Ми відповімо протягом 1–2 годин у робочий час. Реквізити для оплати надішлемо після підтвердження.</p>
       <button type="submit" class="checkout" id="submitOrderBtn" data-i18n="ck.submit">Підтвердити замовлення</button>
+      <p class="form-guarantee" data-i18n="ck.guarantee">Не сподобалась кава — замінимо на інший сорт або повернемо гроші протягом 14 днів. Напишіть нам.</p>
     </form>
   </div>
 
@@ -1053,6 +969,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       <div class="confirm-icon">✓</div>
       <p id="confirmText"></p>
       <p class="confirm-extra" data-i18n="ck.confirmExtra">Ми відповімо вам протягом 1–2 годин у робочий час.</p>
+      <p class="confirm-extra" data-i18n-html="ck.reviewAsk">Коли спробуєте каву — напишіть відгук у <a href="https://t.me/runik1983" target="_blank" rel="noopener">Telegram</a>. Нам важлива ваша думка.</p>
       <button class="checkout" id="closeConfirmBtn" data-i18n="ck.close">Закрити</button>
     </div>
   </div>
@@ -1143,7 +1060,8 @@ uk: {
   'who.p2': 'За брендом стою я — Руслан Зеленський.',
   'who.p3': 'Я сам відповідаю за обсмаження кожної партії та за те, що ви отримаєте у пачці.',
   'who.contact': 'Пишіть у <a href="https://t.me/runik1983" target="_blank">Telegram</a>',
-  'who.photo': 'Тут буде ваше фото<br>(поки можна залишити так)',
+  'who.alt': 'Руслан — засновник мікроростерні ZRN',
+  'who.cap': 'Руслан, засновник ZRN',
   'catalog.title': 'Моносорти кави',
   'catalog.sub': 'Одне походження — один характер. Обсмажуємо малими партіями, щоб у чашці відчувався регіон, а не «просто кава».',
   'blends.title': 'Бленди ZRN',
@@ -1158,7 +1076,7 @@ uk: {
   'why.t2': 'Свіжість без компромісів',
   'why.p2': 'Обсмажуємо і відправляємо каву в день замовлення або наступного дня. Ви отримуєте максимально свіжий продукт, а не те, що місяцями лежало на складі.',
   'why.t3': 'Якісна зелена кава',
-  'why.p3': 'Працюємо тільки з перевіреними постачальниками. Купуємо зелене зерно з прозорим походженням, високим потенціалом і чистим смаком. Без посередників і сумнівних партій.',
+  'why.p3': 'Купуємо зелене зерно з прозорим походженням, високим потенціалом і чистим смаком.',
   'why.t4': 'Завдання роастмастера — розкрити весь потенціал сорту',
   'why.p4': 'Кожна обсмажка — це індивідуальний підхід. Ми не просто «проганяємо» зерно. Ми шукаємо оптимальну криву, температуру і час, щоб максимально розкрити характер саме цього сорту.',
   'why.t5': 'Авторські бленди та творчий підхід',
@@ -1166,7 +1084,7 @@ uk: {
   'why.t6': 'Маленькі порції обсмажки',
   'why.p6': 'Обсмажуємо невеликими партіями. Це дозволяє контролювати якість на кожному етапі і гарантувати стабільний результат. Жодної «середньої» кави — тільки те, чим ми самі пишаємося.',
   'why.t7': 'Ми дорожимо своєю репутацією',
-  'why.p7': 'Нам важливіше, щоб ви поверталися знову і рекомендували нас друзям, ніж просто продати більше кілограмів. Тому кожна партія проходить дегустацію, а ми несемо повну відповідальність за смак і свіжість.',
+  'why.p7': 'Нам важливіше, щоб ви поверталися знову і рекомендували нас друзям, ніж просто продати більше кілограмів. Ми несемо повну відповідальність за смак і свіжість.',
   'why.closing': 'Ми робимо каву для тих, хто відчуває різницю.<br><b>Приєднуйтеся.</b>',
   'faq.title': 'Часті запитання',
   'faq.q1': 'Коли обсмажуєте і відправляєте?',
@@ -1182,28 +1100,10 @@ uk: {
   'faq.q6': 'Як зберігати каву вдома?',
   'faq.a6': 'У герметичній непрозорій тарі, подалі від тепла, світла й вологи. Не в холодильнику — там кава вбирає запахи. Відсипайте на кілька днів у меншу банку, решту тримайте щільно закритою.',
   'faq.q7': 'Що, якщо кава не зайде?',
-  'faq.a7': 'Напишіть мені. Розберемось: підкажемо інший сорт під ваш смак або спосіб заварювання. Мені важливіше, щоб ви пили те, що справді подобається.',
+  'faq.a7': 'Напишіть нам у Telegram протягом 14 днів: замінимо каву на інший сорт або повернемо гроші. Також підкажемо сорт під ваш смак чи спосіб заварювання.',
   'rev.title': 'Відгуки',
-  'rev.lead': 'Ще збираємо перші відгуки.',
-  'rev.text': 'Ми тільки починаємо і не вигадуємо зірки. Якщо вже пробували нашу каву — напишіть, як зайшла. Якщо ще ні — дайте шанс заслужити ваш відгук.',
-  'rev.formTitle': 'Залишити відгук',
-  'rev.name': 'Ім’я *',
-  'rev.city': 'Місто',
-  'rev.product': 'Сорт / бленд (якщо пам’ятаєте)',
-  'rev.productOpt': '— не обов’язково —',
-  'rev.rating': 'Оцінка *',
-  'rev.your': 'Ваш відгук *',
-  'rev.namePh': 'Як до вас звертатись',
-  'rev.cityPh': 'Наприклад, Київ',
-  'rev.textPh': 'Що сподобалось, як заварювали, чи замовите ще…',
-  'rev.submit': 'Надіслати відгук',
-  'rev.sending': 'Надсилаємо…',
-  'rev.note': 'Відгук прийде нам на пошту. Опублікуємо після перевірки — без вигаданих зірок.',
-  'rev.success': 'Дякуємо! Відгук надіслано. Якщо все ок — з’явиться на сайті після перевірки.',
-  'rev.errFields': 'Будь ласка, вкажіть ім’я та текст відгуку.',
-  'rev.errRating': 'Оберіть оцінку зірочками.',
-  'rev.errSend': 'Не вдалося надіслати. Спробуйте ще раз або напишіть у Telegram: ',
-  'rev.errNet': 'Не вдалося надіслати. Перевірте з’єднання або напишіть у Telegram: ',
+  'rev.cta': 'Спробували нашу каву? Напишіть відгук у Telegram',
+  'rev.ctaBtn': 'Написати відгук',
   'ship.delTitle': 'Доставка',
   'ship.del1': 'Доставка по Україні',
   'ship.del2': 'Нова Пошта або Укрпошта.',
@@ -1211,7 +1111,7 @@ uk: {
   'ship.del4': 'Безкоштовна доставка — від 1400 ₴.',
   'ship.payTitle': 'Оплата',
   'ship.pay1': 'Картка або накладений платіж.',
-  'foot.tag': 'Мікроростерня · Черкаси<br>Обсмажуємо після замовлення',
+  'foot.tag': 'Мікроростерня<br>Обсмажуємо після замовлення',
   'foot.mail': 'Написати на пошту',
   'foot.orders': 'Приймання замовлень',
   'foot.ordersH': 'Пн–Нд · 9:00–20:00',
@@ -1254,7 +1154,9 @@ uk: {
   'ck.commentPh': 'Необов\'язково',
   'ck.payNote': 'Реквізити для оплати ми надішлемо вам у Telegram або Viber після підтвердження замовлення',
   'ck.reassure': 'Ми відповімо протягом 1–2 годин у робочий час. Реквізити для оплати надішлемо після підтвердження.',
+  'ck.guarantee': 'Не сподобалась кава — замінимо на інший сорт або повернемо гроші протягом 14 днів. Напишіть нам.',
   'ck.confirmExtra': 'Ми відповімо вам протягом 1–2 годин у робочий час.',
+  'ck.reviewAsk': 'Коли спробуєте каву — напишіть відгук у <a href="https://t.me/runik1983" target="_blank" rel="noopener">Telegram</a>. Нам важлива ваша думка.',
   'ck.errFields': 'Будь ласка, заповніть усі обов’язкові поля (позначені *).',
   'ck.errSend': 'Не вдалося відправити замовлення. Спробуйте ще раз або напишіть нам у Telegram: ',
   'ck.errNet': 'Не вдалося відправити замовлення. Перевірте з’єднання і спробуйте ще раз, або напишіть нам у Telegram: ',
@@ -1298,8 +1200,7 @@ uk: {
   'grind.ground': 'Мелена',
   'grind.tipBean': 'Цілі зерна — змелете самостійно під потрібний спосіб приготування.',
   'badge.popular': 'Популярне',
-  'badge.new': 'Новинка',
-  'badge.ending': 'Закінчується'
+  'badge.new': 'Новинка'
 },
 ru: {
   'meta.title': 'ZRN Coffee — свежеобжаренный кофе в зёрнах',
@@ -1333,7 +1234,8 @@ ru: {
   'who.p2': 'За брендом стою я — Руслан Зеленский.',
   'who.p3': 'Я сам отвечаю за обжарку каждой партии и за то, что вы получите в пачке.',
   'who.contact': 'Пишите в <a href="https://t.me/runik1983" target="_blank">Telegram</a>',
-  'who.photo': 'Здесь будет ваше фото<br>(пока можно оставить так)',
+  'who.alt': 'Руслан — основатель микрообжарочной ZRN',
+  'who.cap': 'Руслан, основатель ZRN',
   'catalog.title': 'Моносорты кофе',
   'catalog.sub': 'Одно происхождение — один характер. Обжариваем малыми партиями, чтобы в чашке чувствовался регион, а не «просто кофе».',
   'blends.title': 'Бленды ZRN',
@@ -1348,7 +1250,7 @@ ru: {
   'why.t2': 'Свежесть без компромиссов',
   'why.p2': 'Обжариваем и отправляем кофе в день заказа или на следующий день. Вы получаете максимально свежий продукт, а не то, что месяцами лежало на складе.',
   'why.t3': 'Качественный зелёный кофе',
-  'why.p3': 'Работаем только с проверенными поставщиками. Покупаем зелёное зерно с прозрачным происхождением, высоким потенциалом и чистым вкусом. Без посредников и сомнительных партий.',
+  'why.p3': 'Покупаем зелёное зерно с прозрачным происхождением, высоким потенциалом и чистым вкусом.',
   'why.t4': 'Задача роастмастера — раскрыть весь потенциал сорта',
   'why.p4': 'Каждая обжарка — индивидуальный подход. Мы не просто «прогоняем» зерно. Мы ищем оптимальную кривую, температуру и время, чтобы максимально раскрыть характер именно этого сорта.',
   'why.t5': 'Авторские бленды и творческий подход',
@@ -1356,7 +1258,7 @@ ru: {
   'why.t6': 'Маленькие порции обжарки',
   'why.p6': 'Обжариваем небольшими партиями. Это позволяет контролировать качество на каждом этапе и гарантировать стабильный результат. Никакого «среднего» кофе — только то, чем мы сами гордимся.',
   'why.t7': 'Мы дорожим своей репутацией',
-  'why.p7': 'Нам важнее, чтобы вы возвращались снова и рекомендовали нас друзьям, чем просто продать больше килограммов. Поэтому каждая партия проходит дегустацию, а мы несём полную ответственность за вкус и свежесть.',
+  'why.p7': 'Нам важнее, чтобы вы возвращались снова и рекомендовали нас друзьям, чем просто продать больше килограммов. Мы несём полную ответственность за вкус и свежесть.',
   'why.closing': 'Мы делаем кофе для тех, кто чувствует разницу.<br><b>Присоединяйтесь.</b>',
   'faq.title': 'Частые вопросы',
   'faq.q1': 'Когда обжариваете и отправляете?',
@@ -1372,28 +1274,10 @@ ru: {
   'faq.q6': 'Как хранить кофе дома?',
   'faq.a6': 'В герметичной непрозрачной таре, вдали от тепла, света и влаги. Не в холодильнике — там кофе впитывает запахи. Отсыпайте на несколько дней в меньшую банку, остальное держите плотно закрытым.',
   'faq.q7': 'Что, если кофе не зайдёт?',
-  'faq.a7': 'Напишите мне. Разберёмся: подскажем другой сорт под ваш вкус или способ заваривания. Мне важнее, чтобы вы пили то, что действительно нравится.',
+  'faq.a7': 'Напишите нам в Telegram в течение 14 дней: заменим кофе на другой сорт или вернём деньги. Также подскажем сорт под ваш вкус или способ заваривания.',
   'rev.title': 'Отзывы',
-  'rev.lead': 'Ещё собираем первые отзывы.',
-  'rev.text': 'Мы только начинаем и не выдумываем звёзды. Если уже пробовали наш кофе — напишите, как зашёл. Если ещё нет — дайте шанс заслужить ваш отзыв.',
-  'rev.formTitle': 'Оставить отзыв',
-  'rev.name': 'Имя *',
-  'rev.city': 'Город',
-  'rev.product': 'Сорт / бленд (если помните)',
-  'rev.productOpt': '— не обязательно —',
-  'rev.rating': 'Оценка *',
-  'rev.your': 'Ваш отзыв *',
-  'rev.namePh': 'Как к вам обращаться',
-  'rev.cityPh': 'Например, Киев',
-  'rev.textPh': 'Что понравилось, как заваривали, закажете ли ещё…',
-  'rev.submit': 'Отправить отзыв',
-  'rev.sending': 'Отправляем…',
-  'rev.note': 'Отзыв придёт нам на почту. Опубликуем после проверки — без выдуманных звёзд.',
-  'rev.success': 'Спасибо! Отзыв отправлен. Если всё ок — появится на сайте после проверки.',
-  'rev.errFields': 'Пожалуйста, укажите имя и текст отзыва.',
-  'rev.errRating': 'Выберите оценку звёздочками.',
-  'rev.errSend': 'Не удалось отправить. Попробуйте ещё раз или напишите в Telegram: ',
-  'rev.errNet': 'Не удалось отправить. Проверьте соединение или напишите в Telegram: ',
+  'rev.cta': 'Попробовали наш кофе? Напишите отзыв в Telegram',
+  'rev.ctaBtn': 'Написать отзыв',
   'ship.delTitle': 'Доставка',
   'ship.del1': 'Доставка по Украине',
   'ship.del2': 'Новая Почта или Укрпочта.',
@@ -1401,7 +1285,7 @@ ru: {
   'ship.del4': 'Бесплатная доставка — от 1400 ₴.',
   'ship.payTitle': 'Оплата',
   'ship.pay1': 'Карта или наложенный платёж.',
-  'foot.tag': 'Микроростерия · Черкассы<br>Обжариваем после заказа',
+  'foot.tag': 'Микроростерия<br>Обжариваем после заказа',
   'foot.mail': 'Написать на почту',
   'foot.orders': 'Приём заказов',
   'foot.ordersH': 'Пн–Вс · 9:00–20:00',
@@ -1444,7 +1328,9 @@ ru: {
   'ck.commentPh': 'Необязательно',
   'ck.payNote': 'Реквизиты для оплаты мы пришлём вам в Telegram или Viber после подтверждения заказа',
   'ck.reassure': 'Мы ответим в течение 1–2 часов в рабочее время. Реквизиты для оплаты пришлём после подтверждения.',
+  'ck.guarantee': 'Не понравился кофе — заменим на другой сорт или вернём деньги в течение 14 дней. Напишите нам.',
   'ck.confirmExtra': 'Мы ответим вам в течение 1–2 часов в рабочее время.',
+  'ck.reviewAsk': 'Когда попробуете кофе — напишите отзыв в <a href="https://t.me/runik1983" target="_blank" rel="noopener">Telegram</a>. Нам важно ваше мнение.',
   'ck.errFields': 'Пожалуйста, заполните все обязательные поля (отмечены *).',
   'ck.errSend': 'Не удалось отправить заказ. Попробуйте ещё раз или напишите нам в Telegram: ',
   'ck.errNet': 'Не удалось отправить заказ. Проверьте соединение и попробуйте ещё раз, или напишите нам в Telegram: ',
@@ -1488,8 +1374,7 @@ ru: {
   'grind.ground': 'Молотый',
   'grind.tipBean': 'Целые зёрна — смелете самостоятельно под нужный способ приготовления.',
   'badge.popular': 'Популярное',
-  'badge.new': 'Новинка',
-  'badge.ending': 'Заканчивается'
+  'badge.new': 'Новинка'
 }
 };
 
@@ -1660,7 +1545,6 @@ function dispBrew(b){
 function dispBadge(b){
   if(b==='Популярне') return t('badge.popular');
   if(b==='Новинка') return t('badge.new');
-  if(b==='Закінчується') return t('badge.ending');
   return b;
 }
 function dispRoast(r){
@@ -1690,6 +1574,10 @@ function applyStaticI18n(){
     const key = el.getAttribute('data-i18n-placeholder');
     if(!key) return;
     el.setAttribute('placeholder', t(key));
+  });
+  document.querySelectorAll('[data-i18n-alt]').forEach(el=>{
+    const key = el.getAttribute('data-i18n-alt');
+    if(key) el.setAttribute('alt', t(key));
   });
   document.querySelectorAll('[data-i18n-aria]').forEach(el=>{
     const key = el.getAttribute('data-i18n-aria');
@@ -1796,9 +1684,9 @@ const PRODUCTS = [
   {id:'costarica', img:'img/zrn-kava-costa-rica-tarrazu-shb.webp', alt:'Кава Costa Rica Tarrazu SHB ZRN — свіжа обсмажка', accent:'#c1652f', name:'Costa Rica Tarrazu SHB', region:'Tarrazu, 1600–1900 м', variety:'Catuai, Caturra, Obata', processing:'Washed', roastLevel:3, roastLabel:'Середнє', notes:'Тропічні фрукти, мед, цитрусова цедра, щільне тіло', info:'Tarrazu SHB — строго високогірне зерно. Catuai, Caturra й Obata в washed-обробці дають чистий, соковитий профіль із помітним тілом.', story:['Таррасу — найвідоміший кавовий регіон Коста-Ріки. SHB (Strictly Hard Bean) означає вирощування вище 1200 м: зерно дозріває повільніше й стає щільнішим.', 'Washed-обробка підкреслює прозорість чашки: тропічні фрукти, мед і цитрусова цедра на щільному тілі.'], brew:['Фільтр','Еспресо','Автомат'], price200:305, price500:705},
   {id:'colombia', img:'img/zrn-kava-colombia-supremo.webp', alt:'Кава Colombia Supremo ZRN — свіжа обсмажка, 100% арабіка', accent:'#7a5a9e', badge:'Популярне', badgeType:'popular', name:'Colombia Supremo', region:'Huila, 1200–2000 м', variety:'Castillo, Caturra', processing:'Washed', roastLevel:3, roastLabel:'Середнє', notes:'Карамель, молочний шоколад, червоне яблуко', info:'Supremo — відбір за розміром зерна. Castillo і Caturra з Уїли в washed-обробці дають класичний колумбійський баланс: солодкість, м’яка кислота, впевнене тіло.', story:['Уїла на південному заході Колумбії — один із найцінніших кавових регіонів країни: вулканічні ґрунти й висота формують щільне, солодке зерно.', 'Категорія Supremo відбирає найбільше зерно. У чашці — карамель, молочний шоколад і червоне яблуко без різкої кислотності.'], brew:['Еспресо','Фільтр','Автомат','Турка'], price200:290, price500:670},
   {id:'elsalvador', img:'img/zrn-kava-el-salvador-shg.webp', alt:'Кава El Salvador SHG ZRN — свіжа обсмажка, 100% арабіка', accent:'#2f8f82', name:'El Salvador SHG', region:'Chalatenango, 1400–1600 м', variety:'Bourbon, Caturra', processing:'Washed', roastLevel:3, roastLabel:'Середнє', notes:'Какао, сухофрукти, карамель, кремове тіло', info:'SHG — високогірне зерно. Старі дерева Bourbon і Caturra в washed-обробці дають солодку, «округлу» чашку з какао й сухофруктами.', story:['Сальвадор зберіг масиви старих дерев Bourbon — багато плантацій не замінювали на високоврожайні гібриди.', 'SHG і washed: какао, сухофрукти й карамель на кремовому тілі — зручний щоденний профіль.'], brew:['Еспресо','Автомат','Турка'], price200:290, price500:670},
-  {id:'guatemala', img:'img/zrn-kava-guatemala-huehuetenango.webp', alt:'Кава Guatemala Huehuetenango ZRN — свіжа обсмажка', accent:'#5f8a3f', badge:'Закінчується', badgeType:'ending', name:'Guatemala Huehuetenango', region:'Huehuetenango, 1500–2000 м', variety:'Bourbon, Caturra', processing:'Washed', roastLevel:3, roastLabel:'Середнє', notes:'Шоколад, смажений горіх, червоне яблуко, м’яка кислота', info:'Huehuetenango — високий регіон без активних вулканів, захищений хребтами. Bourbon і Caturra washed дають шоколадно-горіховий профіль із чистою кислотністю.', story:['Уеуетенанго на північному заході Гватемали захищений гірськими хребтами від холодних мас — кава росте високо, але без ризику заморозків.', 'Bourbon і Caturra в washed-обробці: шоколад, смажений горіх і червоне яблуко — спокійна, «вечірня» чашка.'], brew:['Еспресо','Автомат','Турка','Фільтр'], price200:295, price500:680},
+  {id:'guatemala', img:'img/zrn-kava-guatemala-huehuetenango.webp', alt:'Кава Guatemala Huehuetenango ZRN — свіжа обсмажка', accent:'#5f8a3f', name:'Guatemala Huehuetenango', region:'Huehuetenango, 1500–2000 м', variety:'Bourbon, Caturra', processing:'Washed', roastLevel:3, roastLabel:'Середнє', notes:'Шоколад, смажений горіх, червоне яблуко, м’яка кислота', info:'Huehuetenango — високий регіон без активних вулканів, захищений хребтами. Bourbon і Caturra washed дають шоколадно-горіховий профіль із чистою кислотністю.', story:['Уеуетенанго на північному заході Гватемали захищений гірськими хребтами від холодних мас — кава росте високо, але без ризику заморозків.', 'Bourbon і Caturra в washed-обробці: шоколад, смажений горіх і червоне яблуко — спокійна, «вечірня» чашка.'], brew:['Еспресо','Автомат','Турка','Фільтр'], price200:295, price500:680},
 {id:'ethiopia', img:'img/zrn-kava-ethiopia-sidamo.webp', alt:'Кава Ethiopia Sidamo Kurume ZRN — свіжа обсмажка, квітковий профіль', accent:'#c9a227', badge:'Новинка', badgeType:'new', name:'Ethiopia Sidamo', region:'Sidamo (Sidama), 1600–2200 м', variety:'Kurume', processing:'Washed', roastLevel:3, roastLabel:'Середнє', notes:'Жасмин, бергамот, білий виноград, мед', info:'Washed Kurume з високого Сидамо. Середнє обсмаження зберігає квітковість і чисту цитрусову кислотність — легка, прозора чашка для фільтра.', story:['Сидамо (Сидама) на півдні Ефіопії — історична батьківщина арабіки. Високі плато й садові насадження дають профіль, який важко сплутати з іншими регіонами.', 'Kurume — місцевий дрібнозерний різновид. У washed-обробці розкривається жасмином, бергамотом і білим виноградом: елегантна чашка без зайвої ваги.'], brew:['Фільтр','Автомат','Гейзер'], price200:270, price500:620},
-{id:'papua', img:'img/zrn-kava-papua-new-guinea-psc.webp', alt:'Кава Papua New Guinea PSC ZRN — свіжа обсмажка, 100% арабіка', accent:'#c9a04a', badge:'Новинка', badgeType:'new', name:'Papua New Guinea PSC', region:'Papua New Guinea, 1400–1800 м', variety:'Arusha, Blue Mountain', processing:'Washed', roastLevel:2, roastLabel:'Світло-середнє', notes:'Пряні трави, папайя, тростинний цукор, чисте післясмак', info:'PSC — відібране зерно дрібних фермерів. Arusha і Blue Mountain, washed, світло-середнє обсмаження: пряність і фруктовість без гіркоти.', story:['Папуа Нова Гвінея — вулканічні схили й сімейні ділянки. PSC (Premium Smallholder Coffee) означає контроль якості на рівні дрібних господарств.', 'Світло-середнє обсмаження залишає пряні трави, папайю й тростинний цукор — незвична, але дуже чиста чашка.'], brew:['Фільтр','Автомат','Гейзер'], price200:295, price500:680},
+{id:'papua', img:'img/zrn-kava-papua-new-guinea-psc.webp', alt:'Кава Papua New Guinea PSC ZRN — свіжа обсмажка, 100% арабіка', accent:'#c9a04a', name:'Papua New Guinea PSC', region:'Papua New Guinea, 1400–1800 м', variety:'Arusha, Blue Mountain', processing:'Washed', roastLevel:2, roastLabel:'Світло-середнє', notes:'Пряні трави, папайя, тростинний цукор, чисте післясмак', info:'PSC — відібране зерно дрібних фермерів. Arusha і Blue Mountain, washed, світло-середнє обсмаження: пряність і фруктовість без гіркоти.', story:['Папуа Нова Гвінея — вулканічні схили й сімейні ділянки. PSC (Premium Smallholder Coffee) означає контроль якості на рівні дрібних господарств.', 'Світло-середнє обсмаження залишає пряні трави, папайю й тростинний цукор — незвична, але дуже чиста чашка.'], brew:['Фільтр','Автомат','Гейзер'], price200:295, price500:680},
 
 ];
 
@@ -1806,7 +1694,7 @@ const BLENDS = [
   {id:'myth', img:'img/zrn-kava-myth-craft-edition.webp', alt:'Кава Myth Craft Edition ZRN — бленд 50% арабіка / 50% робуста', accent:'#8a5a34', kicker:'Craft Edition', name:'Myth', region:'Гватемала, Індонезія', variety:'Bourbon, Caturra, Lampung', ratio:'50% арабіка (Гватемала) · 50% робуста (Індонезія)', processing:'Washed + natural', roastLevel:2, roastLabel:'Світло-середнє', notes:'Темний шоколад, карамель, легка пряність, щільне тіло', info:'Баланс гватемальської арабіки та індонезійської робусти. Світло-середнє обсмаження тримає шоколад і карамель, тіло залишається щільним — зручно для еспресо й турки.', story:['Myth зібраний для тих, хто хоче щільну чашку без «пересмаженої» гіркоти.', 'Світло-середнє обсмаження: темний шоколад, карамель і легка пряність — стабільний щоденний еспресо.'], brew:['Еспресо','Турка','Гейзер','Автомат'], price200:260, price500:600},
   {id:'epic', img:'img/zrn-kava-epic-harmony-roast.webp', alt:'Кава Epic Harmony Roast ZRN — 100% арабіка, Коста-Ріка та Папуа Нова Гвінея', accent:'#9c9488', kicker:'Harmony Roast', name:'Epic', region:'Коста Ріка, Папуа Нова Гвінея', variety:'Catuai, Obata, Arusha, Blue Mountain', ratio:'50% арабіка (Коста-Ріка) · 50% арабіка (Папуа)', processing:'Washed', roastLevel:2, roastLabel:'Світло-середнє', notes:'Цитрус, мед, тропічні фрукти, м’яке тіло', info:'100% арабіка: Коста-Ріка та Папуа Нова Гвінея. Світло-середнє обсмаження зберігає цитрус і мед — гармонійна чашка на кожен день.', story:['Epic поєднує щільність коста-риканського високогір’я й фруктовість папуанського зерна.', 'Світло-середнє обсмаження: цитрус, мед і тропічні фрукти без важкої гіркоти.'], brew:['Фільтр','Автомат','Еспресо'], price200:295, price500:690},
   {id:'legend', img:'img/zrn-kava-legend-specialty-selection.webp', alt:'Кава Legend Specialty Selection ZRN — 100% арабіка, Гватемала та Сальвадор', accent:'#c1432a', badge:'Популярне', badgeType:'popular', kicker:'Specialty Selection', name:'Legend', region:'Гватемала, Сальвадор', variety:'Bourbon, Caturra', ratio:'50% арабіка (Гватемала) · 50% арабіка (Сальвадор)', processing:'Washed', roastLevel:3, roastLabel:'Середнє', notes:'Червоні ягоди, какао, карамель, збалансоване тіло', info:'100% арабіка з Гватемали та Сальвадору (Bourbon, Caturra). Середнє обсмаження збирає ягоди, какао й карамель у рівну, «преміальну» чашку.', story:['Legend — два центральноамериканські класики в одній пачці: гватемальський і сальвадорський Bourbon/Caturra.', 'Середнє обсмаження: червоні ягоди, какао й карамель — коли хочеться чистої арабіки з характером.'], brew:['Еспресо','Фільтр','Автомат'], price200:305, price500:710},
-  {id:'poetry', img:'img/zrn-kava-poetry-signature-blend.webp', alt:'Кава Poetry Signature Blend ZRN — 70% арабіка / 30% робуста', accent:'#3a5a8c', badge:'Новинка', badgeType:'new', kicker:'Signature Blend', name:'Poetry', region:'Колумбія, Ефіопія, Індонезія', variety:'Castillo, Caturra, Heirloom, Lampung', ratio:'40% Colombia Supremo · 30% Ефіопія · 30% робуста (Індонезія)', processing:'Washed + natural', roastLevel:2, roastLabel:'Світло-середнє', notes:'Квіти, цитрус, темний шоколад, оксамитове тіло', info:'Колумбія, Ефіопія та Індонезія в одному бленді. Світло-середнє обсмаження тримає квітковість і цитрус, робуста додає оксамитового тіла.', story:['Poetry збирає три регіони: квітковість ефіопського Heirloom, щільність колумбійського Castillo/Caturra й глибину Lampung.', 'Світло-середнє обсмаження: квіти, цитрус і темний шоколад на оксамитовому тілі.'], brew:['Еспресо','Автомат','Фільтр','Турка'], price200:300, price500:695},
+  {id:'poetry', img:'img/zrn-kava-poetry-signature-blend.webp', alt:'Кава Poetry Signature Blend ZRN — 70% арабіка / 30% робуста', accent:'#3a5a8c', kicker:'Signature Blend', name:'Poetry', region:'Колумбія, Ефіопія, Індонезія', variety:'Castillo, Caturra, Heirloom, Lampung', ratio:'40% Colombia Supremo · 30% Ефіопія · 30% робуста (Індонезія)', processing:'Washed + natural', roastLevel:2, roastLabel:'Світло-середнє', notes:'Квіти, цитрус, темний шоколад, оксамитове тіло', info:'Колумбія, Ефіопія та Індонезія в одному бленді. Світло-середнє обсмаження тримає квітковість і цитрус, робуста додає оксамитового тіла.', story:['Poetry збирає три регіони: квітковість ефіопського Heirloom, щільність колумбійського Castillo/Caturra й глибину Lampung.', 'Світло-середнє обсмаження: квіти, цитрус і темний шоколад на оксамитовому тілі.'], brew:['Еспресо','Автомат','Фільтр','Турка'], price200:300, price500:695},
 ];
 
 /* ============================================================
@@ -2654,114 +2542,26 @@ document.querySelectorAll('#faqList .faq-q').forEach(btn=>{
 });
 
 
-/* ---------- відгуки (Web3Forms) ---------- */
-(function(){
-  const form = document.getElementById('reviewForm');
-  if(!form) return;
-  const sel = document.getElementById('rfProduct');
-  if(sel && typeof ALL_PRODUCTS !== 'undefined'){
-    ALL_PRODUCTS.forEach(p=>{
-      const opt = document.createElement('option');
-      opt.value = p.name;
-      opt.textContent = p.name;
-      sel.appendChild(opt);
-    });
-  }
-  let rating = 0;
-  const stars = document.querySelectorAll('#rfStars .rf-star');
-  const ratingInput = document.getElementById('rfRating');
-  function paintStars(n){
-    stars.forEach(btn=>{
-      const v = Number(btn.dataset.v);
-      btn.classList.toggle('on', v <= n);
-    });
-  }
-  stars.forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      rating = Number(btn.dataset.v);
-      ratingInput.value = String(rating);
-      paintStars(rating);
-    });
-    btn.addEventListener('mouseenter', ()=> paintStars(Number(btn.dataset.v)));
-    btn.addEventListener('mouseleave', ()=> paintStars(rating));
+/* ---------- відгуки: реальні відгуки додавайте сюди ----------
+   Формат: {name:'Ім’я', city:'Місто', rating:5, product:'Назва кави', text:'Текст відгуку'}
+   Поки масив порожній — блок із відгуками прихований. */
+const REVIEWS = [];
+(function renderReviews(){
+  const box = document.getElementById('reviewsGrid');
+  if(!box) return;
+  if(!REVIEWS.length){ box.hidden = true; return; }
+  REVIEWS.forEach(r=>{
+    const card = document.createElement('div'); card.className = 'review-card';
+    const st = document.createElement('div'); st.className = 'review-stars';
+    const n = Math.max(1, Math.min(5, Number(r.rating)||5));
+    st.textContent = '★'.repeat(n) + '☆'.repeat(5-n);
+    st.setAttribute('aria-label', n + '/5');
+    const tx = document.createElement('p'); tx.textContent = r.text || '';
+    const au = document.createElement('div'); au.className = 'review-author';
+    au.textContent = [r.name, r.city, r.product].filter(Boolean).join(' · ');
+    card.append(st, tx, au); box.appendChild(card);
   });
-  form.addEventListener('submit', function(e){
-    e.preventDefault();
-    const err = document.getElementById('rfError');
-    const ok = document.getElementById('rfSuccess');
-    err.style.display = 'none';
-    ok.style.display = 'none';
-    const name = document.getElementById('rfName').value.trim();
-    const city = document.getElementById('rfCity').value.trim();
-    const product = document.getElementById('rfProduct').value;
-    const text = document.getElementById('rfText').value.trim();
-    if(!name || !text){
-      err.textContent = t('rev.errFields');
-      err.style.display = 'block';
-      return;
-    }
-    if(!rating){
-      err.textContent = t('rev.errRating');
-      err.style.display = 'block';
-      return;
-    }
-    const dateStr = new Date().toLocaleString('uk-UA', {dateStyle:'medium', timeStyle:'short'});
-    const starsStr = '★'.repeat(rating) + '☆'.repeat(5 - rating);
-    const message =
-`Новий відгук з сайту ZRN
-
-Оцінка: ${starsStr} (${rating}/5)
-Ім'я: ${name}
-Місто: ${city || '—'}
-Сорт: ${product || '—'}
-
-Текст:
-${text}
-
-Дата: ${dateStr}`;
-    const payload = {
-      access_key: WEB3FORMS_KEY,
-      subject: `Відгук ZRN — ${rating}/5 — ${name}`,
-      from_name: 'ZRN Coffee — відгук',
-      name: name,
-      city: city || '—',
-      product: product || '—',
-      rating: rating + '/5',
-      review: text,
-      date: dateStr,
-      message: message
-    };
-    const btn = document.getElementById('rfSubmit');
-    btn.disabled = true;
-    btn.textContent = t('rev.sending');
-    fetch('https://api.web3forms.com/submit', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json','Accept':'application/json'},
-      body: JSON.stringify(payload)
-    })
-    .then(r=>r.json())
-    .then(res=>{
-      btn.disabled = false;
-      btn.textContent = t('rev.submit');
-      if(res.success){
-        form.reset();
-        rating = 0;
-        ratingInput.value = '';
-        paintStars(0);
-        form.style.display = 'none';
-        ok.style.display = 'block';
-      } else {
-        err.textContent = t('rev.errSend') + TG_CONTACT;
-        err.style.display = 'block';
-      }
-    })
-    .catch(()=>{
-      btn.disabled = false;
-      btn.textContent = t('rev.submit');
-      err.textContent = t('rev.errNet') + TG_CONTACT;
-      err.style.display = 'block';
-    });
-  });
+  box.hidden = false;
 })();
 
 
