@@ -2215,6 +2215,9 @@ blogOverlay.onclick = (e)=>{ if(e.target===blogOverlay) closeBlogOverlay(); };
 /* ---------- кошик (зберігається в браузері між візитами) ---------- */
 const WEB3FORMS_KEY = '2bb53a08-cd92-4679-bf33-541f5a776b8a';
 const TG_CONTACT = 't.me/runik1983';
+/* Дублювання замовлень у Google Таблицю (Apps Script, URL закінчується на /exec).
+   Порожньо — запит пропускається. */
+const ORDER_SHEET_URL = 'https://script.google.com/macros/s/AKfycbxWAf8jVIdgq2Cs0YnjczFzvAgiHxoB-Xt7Rz-V3pwdx5XkbrUoDITER-noSKNmnDwr/exec';
 
 const CART_KEY = 'zrn_cart_v2';
 const CART_WEIGHTS = [200, 500];
@@ -2542,16 +2545,54 @@ Telegram: ${TG_CONTACT}
   submitBtn.disabled = true;
   submitBtn.textContent = t('ck.sending');
 
-  fetch('https://api.web3forms.com/submit', {
+  /* 1) Web3Forms (ніколи не reject: повертає true/false) */
+  const w3Req = fetch('https://api.web3forms.com/submit', {
     method: 'POST',
     headers: {'Content-Type':'application/json','Accept':'application/json'},
     body: JSON.stringify(payload)
   })
   .then(r=>r.json())
-  .then(res=>{
+  .then(res=>!!(res && res.success))
+  .catch(()=>false);
+
+  /* 2) Google Таблиця (ніколи не reject; пропускається, якщо URL порожній або це спам) */
+  const sheetReq = (function(){
+    if(!ORDER_SHEET_URL || payload.botcheck) return Promise.resolve(false);
+    const sheetPayload = {
+      date: dateStr,
+      orderNumber: orderNumber,
+      name: name,
+      phone: phoneNorm,
+      contactMethod: contactLabel,
+      contactHandle: contactHandle || '',
+      delivery: t('ck.del.'+delivery),
+      city: city,
+      branch: branch,
+      payment: t('ck.pay.'+payment),
+      items: itemLines,
+      total: total,
+      comment: comment || ''
+    };
+    const ctrl = (typeof AbortController!=='undefined') ? new AbortController() : null;
+    const timer = ctrl ? setTimeout(()=>ctrl.abort(), 15000) : null;
+    return fetch(ORDER_SHEET_URL, {
+      method: 'POST',
+      headers: {'Content-Type':'text/plain;charset=utf-8'}, /* без preflight */
+      body: JSON.stringify(sheetPayload),
+      signal: ctrl ? ctrl.signal : undefined
+    })
+    .then(r=>r.json())
+    .then(res=>!!(res && res.ok))
+    .catch(()=>false)
+    .then(ok=>{ if(timer) clearTimeout(timer); return ok; });
+  })();
+
+  /* Замовлення прийнято, якщо спрацював Web3Forms АБО запис у таблицю */
+  Promise.all([w3Req, sheetReq]).then(function(r){
+    const accepted = r[0] || r[1];
     submitBtn.disabled = false;
     submitBtn.textContent = t('ck.submit');
-    if(res.success){
+    if(accepted){
       try{ localStorage.setItem('zrn_checkout', JSON.stringify({name, phone: phoneNorm, email, delivery, city, branch})); }catch(err){}
       document.getElementById('confirmText').innerHTML = (contactMethod==='call' ? t('ck.okCall') : t('ck.okMsg')).replace('{n}', orderNumber);
       try{
@@ -2567,12 +2608,6 @@ Telegram: ${TG_CONTACT}
       formError.textContent = t('ck.errSend') + TG_CONTACT;
       formError.style.display = 'block';
     }
-  })
-  .catch(()=>{
-    submitBtn.disabled = false;
-    submitBtn.textContent = t('ck.submit');
-    formError.textContent = t('ck.errNet') + TG_CONTACT;
-    formError.style.display = 'block';
   });
 };
 
