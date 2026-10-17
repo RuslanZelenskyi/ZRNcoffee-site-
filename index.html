@@ -648,6 +648,15 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
     transition-duration:.01ms !important;
   }
 }
+
+/* ---------- Нова Пошта: підказки міста та відділення ---------- */
+.f-field.np-wrap{position:relative;}
+.np-list{position:absolute; left:0; right:0; top:100%; z-index:30; margin:4px 0 0; padding:4px 0; list-style:none; max-height:260px; overflow-y:auto; background:var(--card); border:1px solid var(--line); border-radius:10px; box-shadow:0 8px 24px rgba(42,34,23,.18);}
+.np-list[hidden]{display:none;}
+.np-list li{padding:11px 14px; min-height:44px; display:flex; align-items:center; font-size:.95rem; line-height:1.3; color:var(--ink); cursor:pointer;}
+.np-list li:hover, .np-list li.on{background:rgba(169,121,47,.14);}
+.np-list li.np-msg{color:var(--sub); cursor:default; font-size:.9rem;}
+.np-list li.np-msg:hover{background:none;}
 </style>
 <script type="application/ld+json">
 {
@@ -1195,6 +1204,10 @@ uk: {
   'ck.errNet': 'Не вдалося відправити замовлення. Перевірте з’єднання і спробуйте ще раз, або напишіть нам у Telegram: ',
   'ck.okCall': 'Замовлення <b>{n}</b> прийнято.<br>Ми вам зателефонуємо найближчим часом.',
   'ck.okMsg': 'Замовлення <b>{n}</b> прийнято.<br>Ми напишемо вам у Telegram або Viber.',
+  'ck.npLoading': 'Шукаємо…',
+  'ck.npEmpty': 'Нічого не знайдено — можна ввести вручну',
+  'ck.npErr': 'Не вдалося завантажити список — введіть вручну',
+  'ck.npCityFirst': 'Спочатку оберіть місто зі списку',
   'ck.del.np': 'Нова Пошта',
   'ck.del.ukr': 'Укрпошта',
   'ck.pay.card': 'На картку переказом',
@@ -1369,6 +1382,10 @@ ru: {
   'ck.errNet': 'Не удалось отправить заказ. Проверьте соединение и попробуйте ещё раз, или напишите нам в Telegram: ',
   'ck.okCall': 'Заказ <b>{n}</b> принят.<br>Мы вам перезвоним в ближайшее время.',
   'ck.okMsg': 'Заказ <b>{n}</b> принят.<br>Мы напишем вам в Telegram или Viber.',
+  'ck.npLoading': 'Ищем…',
+  'ck.npEmpty': 'Ничего не найдено — можно ввести вручную',
+  'ck.npErr': 'Не удалось загрузить список — введите вручную',
+  'ck.npCityFirst': 'Сначала выберите город из списка',
   'ck.del.np': 'Новая Почта',
   'ck.del.ukr': 'Укрпочта',
   'ck.pay.card': 'На карту переводом',
@@ -2424,6 +2441,7 @@ function prefillForm(){
   document.getElementById('ofPhone').value = saved.phone || '+380';
   const em = document.getElementById('ofEmail'); if(em) em.value = saved.email || '';
   document.getElementById('ofCity').value = saved.city || '';
+  delete document.getElementById('ofCity').dataset.npRef;
   document.getElementById('ofBranch').value = saved.branch || '';
   if(saved.delivery){ delivery = saved.delivery; renderDeliveryPayment(); }
   document.getElementById('formError').style.display = 'none';
@@ -2610,6 +2628,90 @@ Telegram: ${TG_CONTACT}
     }
   });
 };
+
+
+/* ---------- Нова Пошта: вибір міста та відділення ----------
+   Працює через Apps Script (ORDER_SHEET_URL): ключ API Нової пошти зберігається там, не на сторінці.
+   Якщо ORDER_SHEET_URL порожній або доставка не «Нова Пошта» — поля лишаються звичайними текстовими. */
+(function(){
+  const cityEl = document.getElementById('ofCity');
+  const branchEl = document.getElementById('ofBranch');
+  if(!cityEl || !branchEl) return;
+
+  function npCall(params){
+    const q = new URLSearchParams(params);
+    q.set('lang', (typeof currentLang!=='undefined' && currentLang==='ru') ? 'ru' : 'uk');
+    return fetch(ORDER_SHEET_URL + (ORDER_SHEET_URL.indexOf('?')<0?'?':'&') + q.toString())
+      .then(r=>r.json())
+      .then(j=>{ if(!j || !j.ok) throw new Error('np'); return j.items || []; });
+  }
+
+  function attach(input, getItems, onPick, enabled){
+    const wrap = input.closest('.f-field');
+    wrap.classList.add('np-wrap');
+    const list = document.createElement('ul');
+    list.className = 'np-list'; list.hidden = true; list.setAttribute('role','listbox');
+    wrap.appendChild(list);
+    let timer = null, seq = 0, active = -1;
+
+    function hide(){ list.hidden = true; active = -1; }
+    function msg(text){ list.innerHTML = ''; const li = document.createElement('li'); li.className='np-msg'; li.textContent = text; list.appendChild(li); list.hidden = false; }
+    function show(items){
+      list.innerHTML = ''; active = -1;
+      if(!items.length){ msg(t('ck.npEmpty')); return; }
+      items.forEach(it=>{
+        const li = document.createElement('li');
+        li.setAttribute('role','option'); li.textContent = it.name;
+        li.addEventListener('mousedown', ev=>{ ev.preventDefault(); pick(it); });
+        li.addEventListener('touchend', ev=>{ ev.preventDefault(); pick(it); });
+        list.appendChild(li);
+      });
+      list.hidden = false;
+    }
+    function pick(it){ input.value = it.name; hide(); onPick(it); }
+    function run(){
+      if(!enabled()) { hide(); return; }
+      const my = ++seq;
+      const pre = getItems.pre ? getItems.pre() : null;
+      if(pre){ msg(pre); return; }
+      msg(t('ck.npLoading'));
+      getItems(input.value.trim()).then(items=>{ if(my===seq) show(items); })
+        .catch(()=>{ if(my===seq) msg(t('ck.npErr')); });
+    }
+    input.addEventListener('input', ()=>{ clearTimeout(timer); timer = setTimeout(run, 300); });
+    input.addEventListener('focus', ()=>{ if(enabled() && (input.id!=='ofCity' || input.value.trim().length>=2)) run(); });
+    input.addEventListener('blur', ()=> setTimeout(hide, 150));
+    input.addEventListener('keydown', ev=>{
+      const lis = list.querySelectorAll('li[role="option"]');
+      if(list.hidden || !lis.length) return;
+      if(ev.key==='ArrowDown' || ev.key==='ArrowUp'){
+        ev.preventDefault();
+        active = (active + (ev.key==='ArrowDown'?1:-1) + lis.length) % lis.length;
+        lis.forEach((l,i)=>l.classList.toggle('on', i===active));
+        lis[active].scrollIntoView({block:'nearest'});
+      } else if(ev.key==='Enter' && active>=0){
+        ev.preventDefault(); lis[active].dispatchEvent(new MouseEvent('mousedown',{cancelable:true}));
+      } else if(ev.key==='Escape'){ hide(); }
+    });
+  }
+
+  const on = ()=> !!ORDER_SHEET_URL && delivery==='np';
+
+  // Місто
+  const cityItems = function(q){
+    if(q.length<2) return Promise.resolve([]);
+    return npCall({np:'cities', q:q}).then(a=>a.map(x=>({name:x.name, ref:x.ref})));
+  };
+  attach(cityEl, cityItems, it=>{ cityEl.dataset.npRef = it.ref; branchEl.value = ''; }, on);
+  cityEl.addEventListener('input', ()=>{ delete cityEl.dataset.npRef; });
+
+  // Відділення / поштомат
+  const branchItems = function(q){
+    return npCall({np:'wh', city:cityEl.dataset.npRef, q:q}).then(a=>a.map(x=>({name:x.name})));
+  };
+  branchItems.pre = function(){ return cityEl.dataset.npRef ? null : t('ck.npCityFirst'); };
+  attach(branchEl, branchItems, ()=>{}, on);
+})();
 
 /* ---------- FAQ accordion ---------- */
 document.querySelectorAll('#faqList .faq-q').forEach(btn=>{
