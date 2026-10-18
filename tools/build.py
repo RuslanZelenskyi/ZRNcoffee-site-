@@ -357,7 +357,14 @@ class Site:
                 buy_href = ('/?buy=' if lang == 'uk' else '/?lang=ru&amp;buy=') + p['id']
                 sect = 'blends' if p['type'] == 'blend' else 'catalog'
                 offers = [{'@type': 'Offer', 'name': f"{w} {u['g']}", 'priceCurrency': 'UAH', 'price': str(pr),
-                           'availability': 'https://schema.org/InStock', 'itemCondition': 'https://schema.org/NewCondition', 'url': canonical}
+                           'availability': 'https://schema.org/InStock', 'itemCondition': 'https://schema.org/NewCondition', 'url': canonical,
+                           'shippingDetails': {'@type': 'OfferShippingDetails',
+                                               'shippingDestination': {'@type': 'DefinedRegion', 'addressCountry': 'UA'},
+                                               'deliveryTime': {'@type': 'ShippingDeliveryTime',
+                                                                'handlingTime': {'@type': 'QuantitativeValue', 'minValue': 0, 'maxValue': 1, 'unitCode': 'DAY'}}},
+                           'hasMerchantReturnPolicy': {'@type': 'MerchantReturnPolicy', 'applicableCountry': 'UA',
+                                                       'returnPolicyCategory': 'https://schema.org/MerchantReturnFiniteReturnWindow',
+                                                       'merchantReturnDays': 14}}
                           for w, pr in ((200, p['price200']), (500, p['price500']))]
                 ld_prod = {'@context': 'https://schema.org', '@type': 'Product', 'name': name, 'sku': p['id'], 'image': img,
                            'description': self.short(f"{notes}. {p['info'][lang]}", 300), 'category': 'Coffee', 'url': canonical,
