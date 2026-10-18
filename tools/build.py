@@ -97,7 +97,7 @@ def js_block(cat):
     blend = [p for p in prods if p['type'] == 'blend']
 
     def base(p):
-        o = {'id': p['id'], 'img': p['img'], 'alt': p['alt'], 'accent': p['accent']}
+        o = {'id': p['id'], 'img': '/' + p['img'], 'alt': p['alt'], 'accent': p['accent']}
         if p.get('badge'):
             o['badge'] = p['badge']
             o['badgeType'] = p['badgeType']
@@ -162,13 +162,6 @@ def noscript_block(cat):
     return (f'\n  <h3>Моносорти</h3>\n  <ul>{lis(mono)}\n  </ul>\n  <h3>Бленди</h3>\n  <ul>{lis(blend)}\n  </ul>\n  ')
 
 
-def footer_links(cat):
-    links = ''.join(f'<a href="/coffee/{p["id"]}/" data-seo="coffee/{p["id"]}/">{E(p["name"])}</a>' for p in cat['products'])
-    posts = ''.join(f'\n    <a href="/blog/{a["id"]}/" data-seo="blog/{a["id"]}/" onclick="openBlogPost(\'{a["id"]}\');return false;" '
-                    f'data-seo-post="{a["id"]}">{E(a["title"]["uk"])}</a>' for a in cat['posts'])
-    return f'\n    {links}{posts}\n    '
-
-
 def build_index(cat):
     s = open(INDEX, encoding='utf-8').read()
     s = replace_between(s, '/*CATALOG:START', '/*CATALOG:END*/', '', 'CATALOG')  # перевірка наявності
@@ -176,7 +169,6 @@ def build_index(cat):
     b = s.index('/*CATALOG:END*/') + len('/*CATALOG:END*/')
     s = s[:a] + js_block(cat) + s[b:]
     s = replace_between(s, '<!--CAT:NOSCRIPT:START-->', '<!--CAT:NOSCRIPT:END-->', noscript_block(cat), 'CAT:NOSCRIPT')
-    s = replace_between(s, '<!--CAT:FOOTLINKS:START-->', '<!--CAT:FOOTLINKS:END-->', footer_links(cat), 'CAT:FOOTLINKS')
     open(INDEX, 'w', encoding='utf-8').write(s)
     return s
 
@@ -199,7 +191,7 @@ def ui_texts(index_src):
 
 # ------------------------------------------------------------------ сторінки
 UI = {
-    'uk': dict(lang='uk', loc='uk_UA', catalog='Моносорти', blends='Бленди', blog='Блог', blogTitle='Блог ZRN', buy='Замовити',
+    'uk': dict(lang='uk', loc='uk_UA', catalog='Моносорти', blends='Бленди', blog='Блог', blogTitle='Блог ZRN', buy='Обрати вагу і замовити',
                g='г', about='Про цей сорт', specs='Характеристики', region='Регіон', alt_h='Висота вирощування', alt_u='м над рівнем моря',
                variety='Різновид', process='Обробка', roast='Обсмаження', comp='Склад', brew='Як заварювати', notes='Смак',
                taste_h='Смак', taste_note='Оцінка обсмажувальника за шкалою від 1 до 5.',
@@ -212,7 +204,7 @@ UI = {
                brewNote='Це стартові рецепти — підлаштуйте їх під свій смак: гірчить → грубіший помел, кисло → дрібніший.',
                blogDesc='Статті про каву від мікроростерні ZRN: помел, свіжість, зберігання та заварювання.',
                blogIdx='Блог ZRN — про каву, помел і свіжість | ZRN Coffee', author='Руслан Зеленський'),
-    'ru': dict(lang='ru', loc='ru_RU', catalog='Моносорты', blends='Бленды', blog='Блог', blogTitle='Блог ZRN', buy='Заказать',
+    'ru': dict(lang='ru', loc='ru_RU', catalog='Моносорты', blends='Бленды', blog='Блог', blogTitle='Блог ZRN', buy='Выбрать вес и заказать',
                g='г', about='Об этом сорте', specs='Характеристики', region='Регион', alt_h='Высота выращивания', alt_u='м над уровнем моря',
                variety='Разновидность', process='Обработка', roast='Обжарка', comp='Состав', brew='Как заваривать', notes='Вкус',
                taste_h='Вкус', taste_note='Оценка обжарщика по шкале от 1 до 5.',
@@ -362,6 +354,7 @@ class Site:
                 canonical = self.p_url(lang, p['id'])
                 alts = {'uk': self.p_url('uk', p['id']), 'ru': self.p_url('ru', p['id']), 'x-default': self.p_url('uk', p['id'])}
                 shop = '/' if lang == 'uk' else '/?lang=ru'
+                buy_href = ('/?buy=' if lang == 'uk' else '/?lang=ru&amp;buy=') + p['id']
                 sect = 'blends' if p['type'] == 'blend' else 'catalog'
                 offers = [{'@type': 'Offer', 'name': f"{w} {u['g']}", 'priceCurrency': 'UAH', 'price': str(pr),
                            'availability': 'https://schema.org/InStock', 'itemCondition': 'https://schema.org/NewCondition', 'url': canonical}
@@ -415,7 +408,7 @@ class Site:
         <div><b>200 {u['g']}</b><span>{p['price200']} ₴</span><small>{round(p['price200'] / 2)} ₴ {u['per100']}</small></div>
         <div><b>500 {u['g']}</b><span>{p['price500']} ₴</span><small>{round(p['price500'] / 5)} ₴ {u['per100']}</small></div>
       </div>
-      <a class="btn" href="{shop}#{p['id']}">{u['buy']}</a>
+      <a class="btn" href="{buy_href}" rel="nofollow">{u['buy']}</a>
       <p class="fresh">{u['fresh']}</p>
     </div>
   </div>
