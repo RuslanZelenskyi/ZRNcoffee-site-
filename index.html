@@ -301,6 +301,10 @@ section{padding:56px 0;}
 .badge-new{background:linear-gradient(135deg,#1f6f62,#17564c);}
 .card-body{padding:14px 16px 16px; display:flex; flex-direction:column; gap:5px; flex:1;}
 .card-body h3{font-size:1rem; font-weight:500;}
+.card-body h3 a{color:inherit; text-decoration:none;}
+.foot-seo{display:flex; flex-wrap:wrap; gap:0 18px; padding-top:14px; padding-bottom:18px; font-size:.84rem;}
+.foot-seo a{display:inline-flex; align-items:center; min-height:44px; color:var(--sub);}
+.foot-seo a:hover{color:var(--gold-soft);}
 .card-notes{color:var(--sub); font-size:.78rem; line-height:1.4;}
 .card-weight{color:var(--sub); font-size:.75rem; margin-top:2px;}
 .card-ratio{font-size:.75rem; letter-spacing:.04em; text-transform:uppercase; color:var(--gold-soft); margin-bottom:3px;}
@@ -318,7 +322,7 @@ section{padding:56px 0;}
 
 
 .taste-bars{margin:12px 0 14px;display:flex;flex-direction:column;gap:7px;}
-.taste-row{display:grid;grid-template-columns:78px 1fr;gap:10px;align-items:center;}
+.taste-row{display:grid;grid-template-columns:104px 1fr;gap:10px;align-items:center;}
 .taste-label{font-size:.75rem;letter-spacing:.04em;text-transform:uppercase;color:var(--sub);font-weight:600;}
 .taste-track{height:5px;background:rgba(42,34,23,.09);border-radius:99px;overflow:hidden;}
 .taste-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gold-soft),var(--gold-bright));}
@@ -388,6 +392,44 @@ section{padding:56px 0;}
 .why-item p{color:var(--sub); font-size:.88rem; line-height:1.6;}
 .why-closing{font-family:'Fraunces',serif; font-style:italic; font-size:clamp(1.1rem,2.4vw,1.35rem); color:var(--ink); text-align:center; margin-top:40px; line-height:1.6;}
 .why-closing b{font-style:normal; font-weight:600; color:var(--gold-soft);}
+
+
+/* ---------- модалка сорта: розділи ---------- */
+.price-meta{font-size:.78rem; color:var(--sub); margin-top:8px; min-height:1.1em;}
+.m-acc{border-top:1px solid var(--line);}
+.m-acc:last-of-type{border-bottom:1px solid var(--line);}
+.m-acc summary{display:flex; align-items:center; justify-content:space-between; gap:12px; min-height:48px; cursor:pointer; list-style:none; font-size:.82rem; font-weight:600; letter-spacing:.05em; text-transform:uppercase; color:var(--ink);}
+.m-acc summary::-webkit-details-marker{display:none;}
+.m-acc summary::after{content:'+'; font-size:1.2rem; font-weight:400; color:var(--gold-soft); line-height:1;}
+.m-acc[open] summary::after{content:'−';}
+.m-acc summary:focus-visible, .brew-pick:focus-visible, .sim-card:focus-visible, .m-share:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+.m-acc-in{padding:0 0 14px;}
+.m-acc-in .taste-bars{margin:2px 0 8px;}
+.m-note{font-size:.8rem; line-height:1.5; color:var(--sub); margin:8px 0 0;}
+.m-note-strong{color:var(--ink); background:rgba(169,121,47,.08); border-left:3px solid var(--gold); padding:8px 10px; border-radius:0 8px 8px 0; margin:12px 0 0;}
+.roast-inline{display:inline-flex; margin:0 0 0 8px; vertical-align:middle;}
+.roast-ends{display:flex; justify-content:space-between; max-width:140px; font-size:.7rem; color:var(--sub); margin-top:3px;}
+.roast-ends i{font-style:normal;}
+.brew-card{padding:10px 0; border-bottom:1px dashed var(--line);}
+.brew-card:last-of-type{border-bottom:0;}
+.brew-card-h{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:3px;}
+.brew-card-h b{font-size:.9rem;}
+.brew-card p{font-size:.85rem; line-height:1.5; color:var(--sub); margin:0;}
+.brew-pick{background:transparent; border:1px solid var(--gold); color:var(--gold-soft); border-radius:999px; padding:0 12px; min-height:36px; font-size:.75rem; font-weight:600; cursor:pointer; white-space:nowrap;}
+.brew-pick:hover{background:rgba(169,121,47,.12);}
+.m-list{list-style:none; display:grid; gap:8px; font-size:.86rem; line-height:1.5; color:var(--sub);}
+.m-list li{padding-left:18px; position:relative;}
+.m-list li::before{content:'✓'; position:absolute; left:0; color:var(--gold-soft); font-weight:700;}
+.m-similar{margin:16px 0 4px;}
+.m-sim-h{font-size:.75rem; text-transform:uppercase; letter-spacing:.06em; color:var(--gold-soft); font-weight:600; margin-bottom:8px;}
+.sim-row{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:8px;}
+.sim-card{display:flex; flex-direction:column; gap:3px; text-align:left; background:var(--card); border:1px solid var(--line); border-radius:10px; padding:10px 12px; cursor:pointer; font-family:inherit; color:var(--ink); min-height:44px;}
+.sim-card:hover{border-color:var(--gold);}
+.sim-name{font-weight:600; font-size:.86rem;}
+.sim-notes{font-size:.75rem; color:var(--sub); line-height:1.35;}
+.sim-price{font-size:.78rem; color:var(--gold-soft); margin-top:2px;}
+.m-share{margin:14px 0 6px; background:transparent; border:1px solid var(--line); color:var(--ink); border-radius:10px; min-height:44px; padding:0 16px; font-size:.84rem; font-weight:500; cursor:pointer; font-family:inherit; width:100%;}
+.m-share:hover{background:rgba(42,34,23,.05);}
 
 /* ===== blog (окреме вікно) ===== */
 .blog-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px;}
@@ -513,7 +555,9 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
   .modal-body .brew-tags{order:4;}
   .modal-body .modal-lead{order:5;}
   .modal-body .taste-bars{order:6;}
-  .modal-body .modal-story{order:7;}
+  .modal-body .m-acc{order:6;}
+  .modal-body .m-similar{order:7;}
+  .modal-body .m-share{order:8;}
   .modal-buy .modal-footer{order:9; position:sticky; bottom:0; z-index:3; margin:8px -18px 0; padding:10px 18px calc(10px + env(safe-area-inset-bottom)); background:var(--card); border-top:1px solid var(--line); box-shadow:0 -6px 14px -8px rgba(33,26,17,.25); gap:10px;}
 }
 .modal-grid img{width:100%; aspect-ratio:1/1; object-fit:cover; object-position:center; border-radius:8px; display:block; background:#211a11; box-shadow:0 0 0 2px color-mix(in srgb, var(--accent,#a9792f) 55%, transparent);}
@@ -701,7 +745,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       <a data-nav="why" href="#why" onclick="scrollToSel('#why');return false;" data-i18n="nav.whyShort">Чому ми</a>
       <a data-nav="ship" href="#ship" onclick="openShipModal();return false;" data-i18n="nav.shipShort">Доставка</a>
       <a data-nav="faq" href="#faq" onclick="scrollToSel('#faq');return false;" data-i18n="nav.faq">FAQ</a>
-      <a data-nav="blog" href="#blog" onclick="openBlogOverlay();return false;" data-i18n="nav.blog">Блог</a>
+      <a data-nav="blog" href="/blog/" data-seo="blog/" onclick="openBlogOverlay();return false;" data-i18n="nav.blog">Блог</a>
     </nav>
     <div class="hd-right">
     <button type="button" class="menu-btn" id="menuBtn" aria-label="Меню" aria-expanded="false" aria-controls="mobileNav">
@@ -731,7 +775,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
     <a class="mn-link" data-nav="why" href="#why" onclick="closeMobileNav();scrollToSel('#why');return false;" data-i18n="nav.whyFull">Чому ми?</a>
     <a class="mn-link" data-nav="ship" href="#ship" onclick="closeMobileNav();openShipModal();return false;" data-i18n="nav.shipFull">Доставка та оплата</a>
     <a class="mn-link" data-nav="faq" href="#faq" onclick="closeMobileNav();scrollToSel('#faq');return false;" data-i18n="nav.faq">FAQ</a>
-    <a class="mn-link" data-nav="blog" href="#blog" onclick="closeMobileNav();openBlogOverlay();return false;" data-i18n="nav.blog">Блог</a>
+    <a class="mn-link" data-nav="blog" href="/blog/" data-seo="blog/" onclick="closeMobileNav();openBlogOverlay();return false;" data-i18n="nav.blog">Блог</a>
   </div>
 </div>
 
@@ -764,28 +808,31 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
   </div>
 </div>
 
-<!-- noscript: ціни дублюють масиви PRODUCTS/BLENDS — оновлюйте разом -->
+<!-- noscript: список сортів генерується tools/build.py з catalog.json -->
 <noscript>
 <div class="wrap" style="padding-top:28px;padding-bottom:28px">
   <h2>ZRN Coffee — свіжообсмажена кава</h2>
   <p>Для замовлення на сайті потрібен JavaScript. Без нього напишіть нам у Telegram: <a href="https://t.me/runik1983">t.me/runik1983</a></p>
+  <!--CAT:NOSCRIPT:START-->
   <h3>Моносорти</h3>
   <ul>
-      <li>Costa Rica Tarrazu SHB — 200 г: 305 ₴, 500 г: 705 ₴</li>
-      <li>Colombia Supremo — 200 г: 290 ₴, 500 г: 670 ₴</li>
-      <li>El Salvador SHG — 200 г: 290 ₴, 500 г: 670 ₴</li>
-      <li>Guatemala Huehuetenango — 200 г: 295 ₴, 500 г: 680 ₴</li>
-      <li>Ethiopia Sidamo — 200 г: 270 ₴, 500 г: 620 ₴</li>
-      <li>Papua New Guinea PSC — 200 г: 295 ₴, 500 г: 680 ₴</li>
+      <li><a href="/coffee/costarica/">Costa Rica Tarrazu SHB</a> — 200 г: 305 ₴, 500 г: 705 ₴</li>
+      <li><a href="/coffee/colombia/">Colombia Supremo</a> — 200 г: 290 ₴, 500 г: 670 ₴</li>
+      <li><a href="/coffee/elsalvador/">El Salvador SHG</a> — 200 г: 290 ₴, 500 г: 670 ₴</li>
+      <li><a href="/coffee/guatemala/">Guatemala Huehuetenango</a> — 200 г: 295 ₴, 500 г: 680 ₴</li>
+      <li><a href="/coffee/ethiopia/">Ethiopia Sidamo</a> — 200 г: 270 ₴, 500 г: 620 ₴</li>
+      <li><a href="/coffee/papua/">Papua New Guinea PSC</a> — 200 г: 295 ₴, 500 г: 680 ₴</li>
   </ul>
   <h3>Бленди</h3>
   <ul>
-      <li>Myth — 200 г: 260 ₴, 500 г: 600 ₴</li>
-      <li>Epic — 200 г: 295 ₴, 500 г: 690 ₴</li>
-      <li>Legend — 200 г: 305 ₴, 500 г: 710 ₴</li>
-      <li>Poetry — 200 г: 300 ₴, 500 г: 695 ₴</li>
+      <li><a href="/coffee/myth/">Myth</a> — 200 г: 260 ₴, 500 г: 600 ₴</li>
+      <li><a href="/coffee/epic/">Epic</a> — 200 г: 295 ₴, 500 г: 690 ₴</li>
+      <li><a href="/coffee/legend/">Legend</a> — 200 г: 305 ₴, 500 г: 710 ₴</li>
+      <li><a href="/coffee/poetry/">Poetry</a> — 200 г: 300 ₴, 500 г: 695 ₴</li>
   </ul>
+  <!--CAT:NOSCRIPT:END-->
   <p>Обсмажуємо після замовлення. Доставка Новою Поштою або Укрпоштою. Безкоштовна доставка від 1400 ₴.</p>
+  <p><a href="/blog/">Блог</a></p>
   <p>Пошта: <a href="mailto:zrncoffee@gmail.com">zrncoffee@gmail.com</a></p>
 </div>
 </noscript>
@@ -902,7 +949,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       <div class="foot-contacts" style="margin-top:12px">
         <a href="https://t.me/runik1983" target="_blank">Telegram</a>
         <a href="mailto:zrncoffee@gmail.com" data-i18n="foot.mail">Написати на пошту</a>
-        <a href="#" onclick="openBlogOverlay();return false;" data-i18n="nav.blog">Блог</a>
+        <a href="/blog/" data-seo="blog/" onclick="openBlogOverlay();return false;" data-i18n="nav.blog">Блог</a>
       </div>
     </div>
     <div class="foot-schedule">
@@ -919,6 +966,14 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       </div>
     </div>
   </div>
+  <nav class="foot-seo wrap" aria-label="Каталог і блог">
+    <!--CAT:FOOTLINKS:START-->
+    <a href="/coffee/costarica/" data-seo="coffee/costarica/">Costa Rica Tarrazu SHB</a><a href="/coffee/colombia/" data-seo="coffee/colombia/">Colombia Supremo</a><a href="/coffee/elsalvador/" data-seo="coffee/elsalvador/">El Salvador SHG</a><a href="/coffee/guatemala/" data-seo="coffee/guatemala/">Guatemala Huehuetenango</a><a href="/coffee/ethiopia/" data-seo="coffee/ethiopia/">Ethiopia Sidamo</a><a href="/coffee/papua/" data-seo="coffee/papua/">Papua New Guinea PSC</a><a href="/coffee/myth/" data-seo="coffee/myth/">Myth</a><a href="/coffee/epic/" data-seo="coffee/epic/">Epic</a><a href="/coffee/legend/" data-seo="coffee/legend/">Legend</a><a href="/coffee/poetry/" data-seo="coffee/poetry/">Poetry</a>
+    <a href="/blog/brew-guide/" data-seo="blog/brew-guide/" onclick="openBlogPost('brew-guide');return false;" data-seo-post="brew-guide">Як обрати помел під свій спосіб заварювання</a>
+    <a href="/blog/freshness/" data-seo="blog/freshness/" onclick="openBlogPost('freshness');return false;" data-seo-post="freshness">Чому дата обсмаження важливіша за назву сорту</a>
+    <a href="/blog/storage/" data-seo="blog/storage/" onclick="openBlogPost('storage');return false;" data-seo-post="storage">Як правильно зберігати кавові зерна вдома</a>
+    <!--CAT:FOOTLINKS:END-->
+  </nav>
 </footer>
 
 <div id="stickyCartBar" class="sticky-cart-bar">
@@ -1431,105 +1486,810 @@ ru: {
 let currentLang = 'uk';
 
 
+/*CATALOG:START — блок генерується tools/build.py з catalog.json. Не правте вручну: зміни вносьте в catalog.json*/
 const PRODUCT_I18N = {
-  costarica: {
-    notes: {uk:'Тропічні фрукти, мед, цитрусова цедра, щільне тіло', ru:'Тропические фрукты, мёд, цитрусовая цедра, плотное тело'},
-    info: {uk:'Tarrazu SHB — строго високогірне зерно. Catuai, Caturra й Obata в washed-обробці дають чистий, соковитий профіль із помітним тілом.', ru:'Tarrazu SHB — строго высокогорное зерно. Catuai, Caturra и Obata в washed-обработке дают чистый, сочный профиль с заметным телом.'},
-    roastLabel: {uk:'Середнє', ru:'Средняя'},
-    variety: {uk:'Catuai, Caturra, Obata', ru:'Catuai, Caturra, Obata'},
-    story: {uk:['Таррасу — найвідоміший кавовий регіон Коста-Ріки. SHB (Strictly Hard Bean) означає вирощування вище 1200 м: зерно дозріває повільніше й стає щільнішим.', 'Washed-обробка підкреслює прозорість чашки: тропічні фрукти, мед і цитрусова цедра на щільному тілі.'], ru:['Таррасу — самый известный кофейный регион Коста-Рики. SHB означает выращивание выше 1200 м.', 'Washed-обработка подчёркивает прозрачность чашки: тропические фрукты, мёд и цитрусовая цедра.']}
+ "costarica": {
+  "notes": {
+   "uk": "Тропічні фрукти, мед, цитрусова цедра, щільне тіло",
+   "ru": "Тропические фрукты, мёд, цитрусовая цедра, плотное тело"
   },
-  colombia: {
-    notes: {uk:'Карамель, молочний шоколад, червоне яблуко', ru:'Карамель, молочный шоколад, красное яблоко'},
-    info: {uk:'Supremo — відбір за розміром зерна. Castillo і Caturra з Уїли в washed-обробці дають класичний колумбійський баланс: солодкість, м’яка кислота, впевнене тіло.', ru:'Supremo — отбор по размеру зерна. Castillo и Caturra из Уилы в washed-обработке дают классический колумбийский баланс: сладость, мягкая кислота, уверенное тело.'},
-    roastLabel: {uk:'Середнє', ru:'Средняя'},
-    variety: {uk:'Castillo, Caturra', ru:'Castillo, Caturra'},
-    story: {uk:['Уїла на південному заході Колумбії — один із найцінніших кавових регіонів країни: вулканічні ґрунти й висота формують щільне, солодке зерно.', 'Категорія Supremo відбирає найбільше зерно. У чашці — карамель, молочний шоколад і червоне яблуко без різкої кислотності.'], ru:['Уила на юго-западе Колумбии — один из самых ценных кофейных регионов страны.', 'Категория Supremo отбирает самое крупное зерно. В чашке — карамель, молочный шоколад и красное яблоко.']}
+  "info": {
+   "uk": "Tarrazu SHB — строго високогірне зерно. Catuai, Caturra й Obata в washed-обробці дають чистий, соковитий профіль із помітним тілом.",
+   "ru": "Tarrazu SHB — строго высокогорное зерно. Catuai, Caturra и Obata в washed-обработке дают чистый, сочный профиль с заметным телом."
   },
-  elsalvador: {
-    notes: {uk:'Какао, сухофрукти, карамель, кремове тіло', ru:'Какао, сухофрукты, карамель, кремовое тело'},
-    info: {uk:'SHG — високогірне зерно. Старі дерева Bourbon і Caturra в washed-обробці дають солодку, «округлу» чашку з какао й сухофруктами.', ru:'SHG — высокогорное зерно. Старые деревья Bourbon и Caturra в washed-обработке дают сладкую, «округлую» чашку с какао и сухофруктами.'},
-    roastLabel: {uk:'Середнє', ru:'Средняя'},
-    variety: {uk:'Bourbon, Caturra', ru:'Bourbon, Caturra'},
-    story: {uk:['Сальвадор зберіг масиви старих дерев Bourbon — багато плантацій не замінювали на високоврожайні гібриди.', 'SHG і washed: какао, сухофрукти й карамель на кремовому тілі — зручний щоденний профіль.'], ru:['Сальвадор сохранил массивы старых деревьев Bourbon.', 'SHG и washed: какао, сухофрукты и карамель на кремовом теле.']}
+  "roastLabel": {
+   "uk": "Середнє",
+   "ru": "Средняя"
   },
-  guatemala: {
-    notes: {uk:'Шоколад, смажений горіх, червоне яблуко, м’яка кислота', ru:'Шоколад, жареный орех, красное яблоко, мягкая кислота'},
-    info: {uk:'Huehuetenango — високий регіон без активних вулканів, захищений хребтами. Bourbon і Caturra washed дають шоколадно-горіховий профіль із чистою кислотністю.', ru:'Huehuetenango — высокий регион без активных вулканов. Bourbon и Caturra washed дают шоколадно-ореховый профиль с чистой кислотностью.'},
-    roastLabel: {uk:'Середнє', ru:'Средняя'},
-    variety: {uk:'Bourbon, Caturra', ru:'Bourbon, Caturra'},
-    story: {uk:['Уеуетенанго на північному заході Гватемали захищений гірськими хребтами від холодних мас — кава росте високо, але без ризику заморозків.', 'Bourbon і Caturra в washed-обробці: шоколад, смажений горіх і червоне яблуко — спокійна, «вечірня» чашка.'], ru:['Уэуэтенанго на северо-западе Гватемалы защищён горными хребтами от холодных масс.', 'Bourbon и Caturra в washed-обработке: шоколад, жареный орех и красное яблоко.']}
+  "variety": {
+   "uk": "Catuai, Caturra, Obata",
+   "ru": "Catuai, Caturra, Obata"
   },
-    
-  ethiopia: {
-    notes: {uk:'Жасмин, бергамот, білий виноград, мед', ru:'Жасмин, бергамот, белый виноград, мёд'},
-    info: {uk:'Washed Kurume з високого Сидамо. Середнє обсмаження зберігає квітковість і чисту цитрусову кислотність — легка, прозора чашка для фільтра.', ru:'Washed Kurume с высокого Сидамо. Средняя обжарка сохраняет цветочность и чистую цитрусовую кислотность — лёгкая, прозрачная чашка для фильтра.'},
-    roastLabel: {uk:'Середнє', ru:'Средняя'},
-    variety: {uk:'Kurume', ru:'Kurume'},
-    story: {uk:['Сидамо (Сидама) на півдні Ефіопії — історична батьківщина арабіки. Високі плато й садові насадження дають профіль, який важко сплутати з іншими регіонами.', 'Kurume — місцевий дрібнозерний різновид. У washed-обробці розкривається жасмином, бергамотом і білим виноградом: елегантна чашка без зайвої ваги.'], ru:['Сидамо (Сидама) на юге Эфиопии — историческая родина арабики. Высокие плато и садовые посадки дают профиль, который трудно спутать с другими регионами.', 'Kurume — местный мелкозерный сорт. В washed-обработке раскрывается жасмином, бергамотом и белым виноградом.']}
+  "story": {
+   "uk": [
+    "Таррасу — найвідоміший кавовий регіон Коста-Ріки. SHB (Strictly Hard Bean) означає вирощування вище 1200 м: зерно дозріває повільніше й стає щільнішим.",
+    "Washed-обробка підкреслює прозорість чашки: тропічні фрукти, мед і цитрусова цедра на щільному тілі."
+   ],
+   "ru": [
+    "Таррасу — самый известный кофейный регион Коста-Рики. SHB означает выращивание выше 1200 м.",
+    "Washed-обработка подчёркивает прозрачность чашки: тропические фрукты, мёд и цитрусовая цедра."
+   ]
   },
-
-  papua: {
-    notes: {uk:'Пряні трави, папайя, тростинний цукор, чисте післясмак', ru:'Пряные травы, папайя, тростниковый сахар, чистое послевкусие'},
-    info: {uk:'PSC — відібране зерно дрібних фермерів. Arusha і Blue Mountain, washed, світло-середнє обсмаження: пряність і фруктовість без гіркоти.', ru:'PSC — отобранное зерно мелких фермеров. Arusha и Blue Mountain, washed, светло-средняя обжарка: пряность и фруктовость без горечи.'},
-    roastLabel: {uk:'Світло-середнє', ru:'Светло-средняя'},
-    variety: {uk:'Arusha, Blue Mountain', ru:'Arusha, Blue Mountain'},
-    story: {uk:['Папуа Нова Гвінея — вулканічні схили й сімейні ділянки. PSC (Premium Smallholder Coffee) означає контроль якості на рівні дрібних господарств.', 'Світло-середнє обсмаження залишає пряні трави, папайю й тростинний цукор — незвична, але дуже чиста чашка.'], ru:['Папуа — Новая Гвинея — вулканические склоны и семейные участки. PSC означает контроль качества у мелких хозяйств.', 'Светло-средняя обжарка оставляет пряные травы, папайю и тростниковый сахар.']}
-  },
-  myth: {
-    ratio: {uk:'50% арабіка (Гватемала) · 50% робуста (Індонезія)', ru:'50% арабика (Гватемала) · 50% робуста (Индонезия)'},
-    notes: {uk:'Темний шоколад, карамель, легка пряність, щільне тіло', ru:'Тёмный шоколад, карамель, лёгкая пряность, плотное тело'},
-    info: {uk:'Баланс гватемальської арабіки та індонезійської робусти. Світло-середнє обсмаження тримає шоколад і карамель, тіло залишається щільним — зручно для еспресо й турки.', ru:'Баланс гватемальской арабики и индонезийской робусты. Светло-средняя обжарка держит шоколад и карамель, тело остаётся плотным.'},
-    roastLabel: {uk:'Світло-середнє', ru:'Светло-средняя'},
-    variety: {uk:'Bourbon, Caturra, Lampung', ru:'Bourbon, Caturra, Lampung'},
-    story: {uk:['Myth зібраний для тих, хто хоче щільну чашку без «пересмаженої» гіркоти.', 'Світло-середнє обсмаження: темний шоколад, карамель і легка пряність — стабільний щоденний еспресо.'], ru:['Myth собран для тех, кто хочет плотную чашку без «пережаренной» горечи.', 'Светло-средняя обжарка: тёмный шоколад, карамель и лёгкая пряность.']}
-  },
-  epic: {
-    ratio: {uk:'50% арабіка (Коста-Ріка) · 50% арабіка (Папуа)', ru:'50% арабика (Коста-Рика) · 50% арабика (Папуа)'},
-    notes: {uk:'Цитрус, мед, тропічні фрукти, м’яке тіло', ru:'Цитрус, мёд, тропические фрукты, мягкое тело'},
-    info: {uk:'100% арабіка: Коста-Ріка та Папуа Нова Гвінея. Світло-середнє обсмаження зберігає цитрус і мед — гармонійна чашка на кожен день.', ru:'100% арабика: Коста-Рика и Папуа — Новая Гвинея. Светло-средняя обжарка сохраняет цитрус и мёд.'},
-    roastLabel: {uk:'Світло-середнє', ru:'Светло-средняя'},
-    variety: {uk:'Catuai, Obata, Arusha, Blue Mountain', ru:'Catuai, Obata, Arusha, Blue Mountain'},
-    story: {uk:['Epic поєднує щільність коста-риканського високогір’я й фруктовість папуанського зерна.', 'Світло-середнє обсмаження: цитрус, мед і тропічні фрукти без важкої гіркоти.'], ru:['Epic соединяет плотность коста-риканского высокогорья и фруктовость папуанского зерна.', 'Светло-средняя обжарка: цитрус, мёд и тропические фрукты.']}
-  },
-  legend: {
-    ratio: {uk:'50% арабіка (Гватемала) · 50% арабіка (Сальвадор)', ru:'50% арабика (Гватемала) · 50% арабика (Сальвадор)'},
-    notes: {uk:'Червоні ягоди, какао, карамель, збалансоване тіло', ru:'Красные ягоды, какао, карамель, сбалансированное тело'},
-    info: {uk:'100% арабіка з Гватемали та Сальвадору (Bourbon, Caturra). Середнє обсмаження збирає ягоди, какао й карамель у рівну, «преміальну» чашку.', ru:'100% арабика из Гватемалы и Сальвадора (Bourbon, Caturra). Средняя обжарка собирает ягоды, какао и карамель.'},
-    roastLabel: {uk:'Середнє', ru:'Средняя'},
-    variety: {uk:'Bourbon, Caturra', ru:'Bourbon, Caturra'},
-    story: {uk:['Legend — два центральноамериканські класики в одній пачці: гватемальський і сальвадорський Bourbon/Caturra.', 'Середнє обсмаження: червоні ягоди, какао й карамель — коли хочеться чистої арабіки з характером.'], ru:['Legend — два центральноамериканских классика в одной пачке.', 'Средняя обжарка: красные ягоды, какао и карамель.']}
-  },
-  poetry: {
-    ratio: {uk:'40% Colombia Supremo · 30% Ефіопія · 30% робуста (Індонезія)', ru:'40% Colombia Supremo · 30% Эфиопия · 30% робуста (Индонезия)'},
-    notes: {uk:'Квіти, цитрус, темний шоколад, оксамитове тіло', ru:'Цветы, цитрус, тёмный шоколад, бархатное тело'},
-    info: {uk:'Колумбія, Ефіопія та Індонезія в одному бленді. Світло-середнє обсмаження тримає квітковість і цитрус, робуста додає оксамитового тіла.', ru:'Колумбия, Эфиопия и Индонезия в одном бленде. Светло-средняя обжарка держит цветочность и цитрус, робуста добавляет бархатного тела.'},
-    roastLabel: {uk:'Світло-середнє', ru:'Светло-средняя'},
-    variety: {uk:'Castillo, Caturra, Heirloom, Lampung', ru:'Castillo, Caturra, Heirloom, Lampung'},
-    story: {uk:['Poetry збирає три регіони: квітковість ефіопського Heirloom, щільність колумбійського Castillo/Caturra й глибину Lampung.', 'Світло-середнє обсмаження: квіти, цитрус і темний шоколад на оксамитовому тілі.'], ru:['Poetry собирает три региона: цветочность эфиопского Heirloom, плотность колумбийской арабики и глубину Lampung.', 'Светло-средняя обжарка: цветы, цитрус и тёмный шоколад.']}
+  "region": {
+   "uk": "Tarrazu, 1600–1900 м",
+   "ru": "Tarrazu, 1600–1900 м"
   }
+ },
+ "colombia": {
+  "notes": {
+   "uk": "Карамель, молочний шоколад, червоне яблуко",
+   "ru": "Карамель, молочный шоколад, красное яблоко"
+  },
+  "info": {
+   "uk": "Supremo — відбір за розміром зерна. Castillo і Caturra з Уїли в washed-обробці дають класичний колумбійський баланс: солодкість, м’яка кислота, впевнене тіло.",
+   "ru": "Supremo — отбор по размеру зерна. Castillo и Caturra из Уилы в washed-обработке дают классический колумбийский баланс: сладость, мягкая кислота, уверенное тело."
+  },
+  "roastLabel": {
+   "uk": "Середнє",
+   "ru": "Средняя"
+  },
+  "variety": {
+   "uk": "Castillo, Caturra",
+   "ru": "Castillo, Caturra"
+  },
+  "story": {
+   "uk": [
+    "Уїла на південному заході Колумбії — один із найцінніших кавових регіонів країни: вулканічні ґрунти й висота формують щільне, солодке зерно.",
+    "Категорія Supremo відбирає найбільше зерно. У чашці — карамель, молочний шоколад і червоне яблуко без різкої кислотності."
+   ],
+   "ru": [
+    "Уила на юго-западе Колумбии — один из самых ценных кофейных регионов страны.",
+    "Категория Supremo отбирает самое крупное зерно. В чашке — карамель, молочный шоколад и красное яблоко."
+   ]
+  },
+  "region": {
+   "uk": "Huila, 1200–2000 м",
+   "ru": "Huila, 1200–2000 м"
+  }
+ },
+ "elsalvador": {
+  "notes": {
+   "uk": "Какао, сухофрукти, карамель, кремове тіло",
+   "ru": "Какао, сухофрукты, карамель, кремовое тело"
+  },
+  "info": {
+   "uk": "SHG — високогірне зерно. Старі дерева Bourbon і Caturra в washed-обробці дають солодку, «округлу» чашку з какао й сухофруктами.",
+   "ru": "SHG — высокогорное зерно. Старые деревья Bourbon и Caturra в washed-обработке дают сладкую, «округлую» чашку с какао и сухофруктами."
+  },
+  "roastLabel": {
+   "uk": "Середнє",
+   "ru": "Средняя"
+  },
+  "variety": {
+   "uk": "Bourbon, Caturra",
+   "ru": "Bourbon, Caturra"
+  },
+  "story": {
+   "uk": [
+    "Сальвадор зберіг масиви старих дерев Bourbon — багато плантацій не замінювали на високоврожайні гібриди.",
+    "SHG і washed: какао, сухофрукти й карамель на кремовому тілі — зручний щоденний профіль."
+   ],
+   "ru": [
+    "Сальвадор сохранил массивы старых деревьев Bourbon.",
+    "SHG и washed: какао, сухофрукты и карамель на кремовом теле."
+   ]
+  },
+  "region": {
+   "uk": "Chalatenango, 1400–1600 м",
+   "ru": "Chalatenango, 1400–1600 м"
+  }
+ },
+ "guatemala": {
+  "notes": {
+   "uk": "Шоколад, смажений горіх, червоне яблуко, м’яка кислота",
+   "ru": "Шоколад, жареный орех, красное яблоко, мягкая кислота"
+  },
+  "info": {
+   "uk": "Huehuetenango — високий регіон без активних вулканів, захищений хребтами. Bourbon і Caturra washed дають шоколадно-горіховий профіль із чистою кислотністю.",
+   "ru": "Huehuetenango — высокий регион без активных вулканов. Bourbon и Caturra washed дают шоколадно-ореховый профиль с чистой кислотностью."
+  },
+  "roastLabel": {
+   "uk": "Середнє",
+   "ru": "Средняя"
+  },
+  "variety": {
+   "uk": "Bourbon, Caturra",
+   "ru": "Bourbon, Caturra"
+  },
+  "story": {
+   "uk": [
+    "Уеуетенанго на північному заході Гватемали захищений гірськими хребтами від холодних мас — кава росте високо, але без ризику заморозків.",
+    "Bourbon і Caturra в washed-обробці: шоколад, смажений горіх і червоне яблуко — спокійна, «вечірня» чашка."
+   ],
+   "ru": [
+    "Уэуэтенанго на северо-западе Гватемалы защищён горными хребтами от холодных масс.",
+    "Bourbon и Caturra в washed-обработке: шоколад, жареный орех и красное яблоко."
+   ]
+  },
+  "region": {
+   "uk": "Huehuetenango, 1500–2000 м",
+   "ru": "Huehuetenango, 1500–2000 м"
+  }
+ },
+ "ethiopia": {
+  "notes": {
+   "uk": "Жасмин, бергамот, білий виноград, мед",
+   "ru": "Жасмин, бергамот, белый виноград, мёд"
+  },
+  "info": {
+   "uk": "Washed Kurume з високого Сидамо. Середнє обсмаження зберігає квітковість і чисту цитрусову кислотність — легка, прозора чашка для фільтра.",
+   "ru": "Washed Kurume с высокого Сидамо. Средняя обжарка сохраняет цветочность и чистую цитрусовую кислотность — лёгкая, прозрачная чашка для фильтра."
+  },
+  "roastLabel": {
+   "uk": "Середнє",
+   "ru": "Средняя"
+  },
+  "variety": {
+   "uk": "Kurume",
+   "ru": "Kurume"
+  },
+  "story": {
+   "uk": [
+    "Сидамо (Сидама) на півдні Ефіопії — історична батьківщина арабіки. Високі плато й садові насадження дають профіль, який важко сплутати з іншими регіонами.",
+    "Kurume — місцевий дрібнозерний різновид. У washed-обробці розкривається жасмином, бергамотом і білим виноградом: елегантна чашка без зайвої ваги."
+   ],
+   "ru": [
+    "Сидамо (Сидама) на юге Эфиопии — историческая родина арабики. Высокие плато и садовые посадки дают профиль, который трудно спутать с другими регионами.",
+    "Kurume — местный мелкозерный сорт. В washed-обработке раскрывается жасмином, бергамотом и белым виноградом."
+   ]
+  },
+  "region": {
+   "uk": "Sidamo (Sidama), 1600–2200 м",
+   "ru": "Sidamo (Sidama), 1600–2200 м"
+  }
+ },
+ "papua": {
+  "notes": {
+   "uk": "Пряні трави, папайя, тростинний цукор, чисте післясмак",
+   "ru": "Пряные травы, папайя, тростниковый сахар, чистое послевкусие"
+  },
+  "info": {
+   "uk": "PSC — відібране зерно дрібних фермерів. Arusha і Blue Mountain, washed, світло-середнє обсмаження: пряність і фруктовість без гіркоти.",
+   "ru": "PSC — отобранное зерно мелких фермеров. Arusha и Blue Mountain, washed, светло-средняя обжарка: пряность и фруктовость без горечи."
+  },
+  "roastLabel": {
+   "uk": "Світло-середнє",
+   "ru": "Светло-средняя"
+  },
+  "variety": {
+   "uk": "Arusha, Blue Mountain",
+   "ru": "Arusha, Blue Mountain"
+  },
+  "story": {
+   "uk": [
+    "Папуа Нова Гвінея — вулканічні схили й сімейні ділянки. PSC (Premium Smallholder Coffee) означає контроль якості на рівні дрібних господарств.",
+    "Світло-середнє обсмаження залишає пряні трави, папайю й тростинний цукор — незвична, але дуже чиста чашка."
+   ],
+   "ru": [
+    "Папуа — Новая Гвинея — вулканические склоны и семейные участки. PSC означает контроль качества у мелких хозяйств.",
+    "Светло-средняя обжарка оставляет пряные травы, папайю и тростниковый сахар."
+   ]
+  },
+  "region": {
+   "uk": "Papua New Guinea, 1400–1800 м",
+   "ru": "Papua New Guinea, 1400–1800 м"
+  }
+ },
+ "myth": {
+  "ratio": {
+   "uk": "50% арабіка (Гватемала) · 50% робуста (Індонезія)",
+   "ru": "50% арабика (Гватемала) · 50% робуста (Индонезия)"
+  },
+  "notes": {
+   "uk": "Темний шоколад, карамель, легка пряність, щільне тіло",
+   "ru": "Тёмный шоколад, карамель, лёгкая пряность, плотное тело"
+  },
+  "info": {
+   "uk": "Баланс гватемальської арабіки та індонезійської робусти. Світло-середнє обсмаження тримає шоколад і карамель, тіло залишається щільним — зручно для еспресо й турки.",
+   "ru": "Баланс гватемальской арабики и индонезийской робусты. Светло-средняя обжарка держит шоколад и карамель, тело остаётся плотным."
+  },
+  "roastLabel": {
+   "uk": "Світло-середнє",
+   "ru": "Светло-средняя"
+  },
+  "variety": {
+   "uk": "Bourbon, Caturra, Lampung",
+   "ru": "Bourbon, Caturra, Lampung"
+  },
+  "story": {
+   "uk": [
+    "Myth зібраний для тих, хто хоче щільну чашку без «пересмаженої» гіркоти.",
+    "Світло-середнє обсмаження: темний шоколад, карамель і легка пряність — стабільний щоденний еспресо."
+   ],
+   "ru": [
+    "Myth собран для тех, кто хочет плотную чашку без «пережаренной» горечи.",
+    "Светло-средняя обжарка: тёмный шоколад, карамель и лёгкая пряность."
+   ]
+  },
+  "region": {
+   "uk": "Гватемала, Індонезія",
+   "ru": "Гватемала, Индонезия"
+  }
+ },
+ "epic": {
+  "ratio": {
+   "uk": "50% арабіка (Коста-Ріка) · 50% арабіка (Папуа)",
+   "ru": "50% арабика (Коста-Рика) · 50% арабика (Папуа)"
+  },
+  "notes": {
+   "uk": "Цитрус, мед, тропічні фрукти, м’яке тіло",
+   "ru": "Цитрус, мёд, тропические фрукты, мягкое тело"
+  },
+  "info": {
+   "uk": "100% арабіка: Коста-Ріка та Папуа Нова Гвінея. Світло-середнє обсмаження зберігає цитрус і мед — гармонійна чашка на кожен день.",
+   "ru": "100% арабика: Коста-Рика и Папуа — Новая Гвинея. Светло-средняя обжарка сохраняет цитрус и мёд."
+  },
+  "roastLabel": {
+   "uk": "Світло-середнє",
+   "ru": "Светло-средняя"
+  },
+  "variety": {
+   "uk": "Catuai, Obata, Arusha, Blue Mountain",
+   "ru": "Catuai, Obata, Arusha, Blue Mountain"
+  },
+  "story": {
+   "uk": [
+    "Epic поєднує щільність коста-риканського високогір’я й фруктовість папуанського зерна.",
+    "Світло-середнє обсмаження: цитрус, мед і тропічні фрукти без важкої гіркоти."
+   ],
+   "ru": [
+    "Epic соединяет плотность коста-риканского высокогорья и фруктовость папуанского зерна.",
+    "Светло-средняя обжарка: цитрус, мёд и тропические фрукты."
+   ]
+  },
+  "region": {
+   "uk": "Коста Ріка, Папуа Нова Гвінея",
+   "ru": "Коста-Рика, Папуа — Новая Гвинея"
+  }
+ },
+ "legend": {
+  "ratio": {
+   "uk": "50% арабіка (Гватемала) · 50% арабіка (Сальвадор)",
+   "ru": "50% арабика (Гватемала) · 50% арабика (Сальвадор)"
+  },
+  "notes": {
+   "uk": "Червоні ягоди, какао, карамель, збалансоване тіло",
+   "ru": "Красные ягоды, какао, карамель, сбалансированное тело"
+  },
+  "info": {
+   "uk": "100% арабіка з Гватемали та Сальвадору (Bourbon, Caturra). Середнє обсмаження збирає ягоди, какао й карамель у рівну, «преміальну» чашку.",
+   "ru": "100% арабика из Гватемалы и Сальвадора (Bourbon, Caturra). Средняя обжарка собирает ягоды, какао и карамель."
+  },
+  "roastLabel": {
+   "uk": "Середнє",
+   "ru": "Средняя"
+  },
+  "variety": {
+   "uk": "Bourbon, Caturra",
+   "ru": "Bourbon, Caturra"
+  },
+  "story": {
+   "uk": [
+    "Legend — два центральноамериканські класики в одній пачці: гватемальський і сальвадорський Bourbon/Caturra.",
+    "Середнє обсмаження: червоні ягоди, какао й карамель — коли хочеться чистої арабіки з характером."
+   ],
+   "ru": [
+    "Legend — два центральноамериканских классика в одной пачке.",
+    "Средняя обжарка: красные ягоды, какао и карамель."
+   ]
+  },
+  "region": {
+   "uk": "Гватемала, Сальвадор",
+   "ru": "Гватемала, Сальвадор"
+  }
+ },
+ "poetry": {
+  "ratio": {
+   "uk": "40% Colombia Supremo · 30% Ефіопія · 30% робуста (Індонезія)",
+   "ru": "40% Colombia Supremo · 30% Эфиопия · 30% робуста (Индонезия)"
+  },
+  "notes": {
+   "uk": "Квіти, цитрус, темний шоколад, оксамитове тіло",
+   "ru": "Цветы, цитрус, тёмный шоколад, бархатное тело"
+  },
+  "info": {
+   "uk": "Колумбія, Ефіопія та Індонезія в одному бленді. Світло-середнє обсмаження тримає квітковість і цитрус, робуста додає оксамитового тіла.",
+   "ru": "Колумбия, Эфиопия и Индонезия в одном бленде. Светло-средняя обжарка держит цветочность и цитрус, робуста добавляет бархатного тела."
+  },
+  "roastLabel": {
+   "uk": "Світло-середнє",
+   "ru": "Светло-средняя"
+  },
+  "variety": {
+   "uk": "Castillo, Caturra, Heirloom, Lampung",
+   "ru": "Castillo, Caturra, Heirloom, Lampung"
+  },
+  "story": {
+   "uk": [
+    "Poetry збирає три регіони: квітковість ефіопського Heirloom, щільність колумбійського Castillo/Caturra й глибину Lampung.",
+    "Світло-середнє обсмаження: квіти, цитрус і темний шоколад на оксамитовому тілі."
+   ],
+   "ru": [
+    "Poetry собирает три региона: цветочность эфиопского Heirloom, плотность колумбийской арабики и глубину Lampung.",
+    "Светло-средняя обжарка: цветы, цитрус и тёмный шоколад."
+   ]
+  },
+  "region": {
+   "uk": "Колумбія, Ефіопія, Індонезія",
+   "ru": "Колумбия, Эфиопия, Индонезия"
+  }
+ }
 };
-
 const BLOG_I18N = {
-  'brew-guide': {
-    k: {uk:'Гайд', ru:'Гайд'},
-    title: {uk:'Як обрати помел під свій спосіб заварювання', ru:'Как выбрать помол под свой способ заваривания'},
-    excerpt: {uk:'Коротко про те, чому помел вирішує половину смаку.', ru:'Коротко о том, почему помол решает половину вкуса.'},
-    body: {uk:null, ru:'Помол — это не мелочь, а половина результата в чашке. Слишком мелкий для фильтра — горечь и забивание. Слишком крупный для турки — водянистый кофе.\n\nДля турки нужен самый мелкий помол, почти пудра. Для эспрессо — мелкий, но сыпучий. Для капельной кофеварки и фильтра — средний. Для френч-пресса — самый крупный, чтобы избежать осадка.\n\nИменно поэтому при заказе мы спрашиваем способ заваривания и мелем партию под него перед отправкой.'}
+ "brew-guide": {
+  "k": {
+   "uk": "Гайд",
+   "ru": "Гайд"
   },
-  freshness: {
-    k: {uk:'Про каву', ru:'О кофе'},
-    title: {uk:'Чому дата обсмаження важливіша за назву сорту', ru:'Почему дата обжарки важнее названия сорта'},
-    excerpt: {uk:'Свіжість визначає смак сильніше, ніж походження зерна.', ru:'Свежесть определяет вкус сильнее, чем происхождение зерна.'},
-    body: {uk:null, ru:'После обжарки кофе нужно 3–5 дней на дегазацию — тогда вкус раскрывается полнее. Лучший вкус держится примерно до 40 дней при правильном хранении.\n\nМы указываем дату обжарки на каждой пачке и обжариваем под заказ, поэтому кофе попадает к вам свежим.\n\nХраните в герметичной непрозрачной таре вдали от тепла, света и влаги.'}
+  "title": {
+   "uk": "Як обрати помел під свій спосіб заварювання",
+   "ru": "Как выбрать помол под свой способ заваривания"
   },
-  storage: {
-    k: {uk:'Поради', ru:'Советы'},
-    title: {uk:'Як правильно зберігати кавові зерна вдома', ru:'Как правильно хранить кофейные зёрна дома'},
-    excerpt: {uk:'Три вороги свіжості: повітря, світло і вологість.', ru:'Три врага свежести: воздух, свет и влажность.'},
-    body: {uk:null, ru:'После обжарки кофе нужно 3–5 дней, чтобы «отлежаться» (вышел углекислый газ) — тогда вкус раскрывается полнее. Лучший вкус держится примерно до 40 дней при правильном хранении.\n\nДержите кофе в герметичной непрозрачной таре, вдали от плиты и окна. Не в холодильнике — там он впитывает запахи и влагу.\n\nЕсли купили большой объём — отсыпьте на неделю в меньшую банку, а остальное плотно закройте.'}
+  "excerpt": {
+   "uk": "Коротко про те, чому помел вирішує половину смаку.",
+   "ru": "Коротко о том, почему помол решает половину вкуса."
+  },
+  "body": {
+   "uk": null,
+   "ru": "Помол — это не мелочь, а половина результата в чашке. Слишком мелкий для фильтра — горечь и забивание. Слишком крупный для турки — водянистый кофе.\n\nДля турки нужен самый мелкий помол, почти пудра. Для эспрессо — мелкий, но сыпучий. Для капельной кофеварки и фильтра — средний. Для френч-пресса — самый крупный, чтобы избежать осадка.\n\nИменно поэтому при заказе мы спрашиваем способ заваривания и мелем партию под него перед отправкой."
   }
+ },
+ "freshness": {
+  "k": {
+   "uk": "Про каву",
+   "ru": "О кофе"
+  },
+  "title": {
+   "uk": "Чому дата обсмаження важливіша за назву сорту",
+   "ru": "Почему дата обжарки важнее названия сорта"
+  },
+  "excerpt": {
+   "uk": "Свіжість визначає смак сильніше, ніж походження зерна.",
+   "ru": "Свежесть определяет вкус сильнее, чем происхождение зерна."
+  },
+  "body": {
+   "uk": null,
+   "ru": "После обжарки кофе нужно 3–5 дней на дегазацию — тогда вкус раскрывается полнее. Лучший вкус держится примерно до 40 дней при правильном хранении.\n\nМы указываем дату обжарки на каждой пачке и обжариваем под заказ, поэтому кофе попадает к вам свежим.\n\nХраните в герметичной непрозрачной таре вдали от тепла, света и влаги."
+  }
+ },
+ "storage": {
+  "k": {
+   "uk": "Поради",
+   "ru": "Советы"
+  },
+  "title": {
+   "uk": "Як правильно зберігати кавові зерна вдома",
+   "ru": "Как правильно хранить кофейные зёрна дома"
+  },
+  "excerpt": {
+   "uk": "Три вороги свіжості: повітря, світло і вологість.",
+   "ru": "Три врага свежести: воздух, свет и влажность."
+  },
+  "body": {
+   "uk": null,
+   "ru": "После обжарки кофе нужно 3–5 дней, чтобы «отлежаться» (вышел углекислый газ) — тогда вкус раскрывается полнее. Лучший вкус держится примерно до 40 дней при правильном хранении.\n\nДержите кофе в герметичной непрозрачной таре, вдали от плиты и окна. Не в холодильнике — там он впитывает запахи и влагу.\n\nЕсли купили большой объём — отсыпьте на неделю в меньшую банку, а остальное плотно закройте."
+  }
+ }
 };
+const PRODUCTS = [
+ {
+  "id": "costarica",
+  "img": "img/zrn-kava-costa-rica-tarrazu-shb.webp",
+  "alt": "Кава Costa Rica Tarrazu SHB ZRN — свіжа обсмажка",
+  "accent": "#c1652f",
+  "name": "Costa Rica Tarrazu SHB",
+  "region": "Tarrazu, 1600–1900 м",
+  "variety": "Catuai, Caturra, Obata",
+  "processing": "Washed",
+  "roastLevel": 3,
+  "roastLabel": "Середнє",
+  "notes": "Тропічні фрукти, мед, цитрусова цедра, щільне тіло",
+  "info": "Tarrazu SHB — строго високогірне зерно. Catuai, Caturra й Obata в washed-обробці дають чистий, соковитий профіль із помітним тілом.",
+  "story": [
+   "Таррасу — найвідоміший кавовий регіон Коста-Ріки. SHB (Strictly Hard Bean) означає вирощування вище 1200 м: зерно дозріває повільніше й стає щільнішим.",
+   "Washed-обробка підкреслює прозорість чашки: тропічні фрукти, мед і цитрусова цедра на щільному тілі."
+  ],
+  "brew": [
+   "Фільтр",
+   "Еспресо",
+   "Автомат"
+  ],
+  "price200": 305,
+  "price500": 705
+ },
+ {
+  "id": "colombia",
+  "img": "img/zrn-kava-colombia-supremo.webp",
+  "alt": "Кава Colombia Supremo ZRN — свіжа обсмажка, 100% арабіка",
+  "accent": "#7a5a9e",
+  "badge": "Популярне",
+  "badgeType": "popular",
+  "name": "Colombia Supremo",
+  "region": "Huila, 1200–2000 м",
+  "variety": "Castillo, Caturra",
+  "processing": "Washed",
+  "roastLevel": 3,
+  "roastLabel": "Середнє",
+  "notes": "Карамель, молочний шоколад, червоне яблуко",
+  "info": "Supremo — відбір за розміром зерна. Castillo і Caturra з Уїли в washed-обробці дають класичний колумбійський баланс: солодкість, м’яка кислота, впевнене тіло.",
+  "story": [
+   "Уїла на південному заході Колумбії — один із найцінніших кавових регіонів країни: вулканічні ґрунти й висота формують щільне, солодке зерно.",
+   "Категорія Supremo відбирає найбільше зерно. У чашці — карамель, молочний шоколад і червоне яблуко без різкої кислотності."
+  ],
+  "brew": [
+   "Еспресо",
+   "Фільтр",
+   "Автомат",
+   "Турка"
+  ],
+  "price200": 290,
+  "price500": 670
+ },
+ {
+  "id": "elsalvador",
+  "img": "img/zrn-kava-el-salvador-shg.webp",
+  "alt": "Кава El Salvador SHG ZRN — свіжа обсмажка, 100% арабіка",
+  "accent": "#2f8f82",
+  "name": "El Salvador SHG",
+  "region": "Chalatenango, 1400–1600 м",
+  "variety": "Bourbon, Caturra",
+  "processing": "Washed",
+  "roastLevel": 3,
+  "roastLabel": "Середнє",
+  "notes": "Какао, сухофрукти, карамель, кремове тіло",
+  "info": "SHG — високогірне зерно. Старі дерева Bourbon і Caturra в washed-обробці дають солодку, «округлу» чашку з какао й сухофруктами.",
+  "story": [
+   "Сальвадор зберіг масиви старих дерев Bourbon — багато плантацій не замінювали на високоврожайні гібриди.",
+   "SHG і washed: какао, сухофрукти й карамель на кремовому тілі — зручний щоденний профіль."
+  ],
+  "brew": [
+   "Еспресо",
+   "Автомат",
+   "Турка"
+  ],
+  "price200": 290,
+  "price500": 670
+ },
+ {
+  "id": "guatemala",
+  "img": "img/zrn-kava-guatemala-huehuetenango.webp",
+  "alt": "Кава Guatemala Huehuetenango ZRN — свіжа обсмажка",
+  "accent": "#5f8a3f",
+  "name": "Guatemala Huehuetenango",
+  "region": "Huehuetenango, 1500–2000 м",
+  "variety": "Bourbon, Caturra",
+  "processing": "Washed",
+  "roastLevel": 3,
+  "roastLabel": "Середнє",
+  "notes": "Шоколад, смажений горіх, червоне яблуко, м’яка кислота",
+  "info": "Huehuetenango — високий регіон без активних вулканів, захищений хребтами. Bourbon і Caturra washed дають шоколадно-горіховий профіль із чистою кислотністю.",
+  "story": [
+   "Уеуетенанго на північному заході Гватемали захищений гірськими хребтами від холодних мас — кава росте високо, але без ризику заморозків.",
+   "Bourbon і Caturra в washed-обробці: шоколад, смажений горіх і червоне яблуко — спокійна, «вечірня» чашка."
+  ],
+  "brew": [
+   "Еспресо",
+   "Автомат",
+   "Турка",
+   "Фільтр"
+  ],
+  "price200": 295,
+  "price500": 680
+ },
+ {
+  "id": "ethiopia",
+  "img": "img/zrn-kava-ethiopia-sidamo.webp",
+  "alt": "Кава Ethiopia Sidamo Kurume ZRN — свіжа обсмажка, квітковий профіль",
+  "accent": "#c9a227",
+  "badge": "Новинка",
+  "badgeType": "new",
+  "name": "Ethiopia Sidamo",
+  "region": "Sidamo (Sidama), 1600–2200 м",
+  "variety": "Kurume",
+  "processing": "Washed",
+  "roastLevel": 3,
+  "roastLabel": "Середнє",
+  "notes": "Жасмин, бергамот, білий виноград, мед",
+  "info": "Washed Kurume з високого Сидамо. Середнє обсмаження зберігає квітковість і чисту цитрусову кислотність — легка, прозора чашка для фільтра.",
+  "story": [
+   "Сидамо (Сидама) на півдні Ефіопії — історична батьківщина арабіки. Високі плато й садові насадження дають профіль, який важко сплутати з іншими регіонами.",
+   "Kurume — місцевий дрібнозерний різновид. У washed-обробці розкривається жасмином, бергамотом і білим виноградом: елегантна чашка без зайвої ваги."
+  ],
+  "brew": [
+   "Фільтр",
+   "Автомат",
+   "Гейзер"
+  ],
+  "price200": 270,
+  "price500": 620
+ },
+ {
+  "id": "papua",
+  "img": "img/zrn-kava-papua-new-guinea-psc.webp",
+  "alt": "Кава Papua New Guinea PSC ZRN — свіжа обсмажка, 100% арабіка",
+  "accent": "#c9a04a",
+  "name": "Papua New Guinea PSC",
+  "region": "Papua New Guinea, 1400–1800 м",
+  "variety": "Arusha, Blue Mountain",
+  "processing": "Washed",
+  "roastLevel": 2,
+  "roastLabel": "Світло-середнє",
+  "notes": "Пряні трави, папайя, тростинний цукор, чисте післясмак",
+  "info": "PSC — відібране зерно дрібних фермерів. Arusha і Blue Mountain, washed, світло-середнє обсмаження: пряність і фруктовість без гіркоти.",
+  "story": [
+   "Папуа Нова Гвінея — вулканічні схили й сімейні ділянки. PSC (Premium Smallholder Coffee) означає контроль якості на рівні дрібних господарств.",
+   "Світло-середнє обсмаження залишає пряні трави, папайю й тростинний цукор — незвична, але дуже чиста чашка."
+  ],
+  "brew": [
+   "Фільтр",
+   "Автомат",
+   "Гейзер"
+  ],
+  "price200": 295,
+  "price500": 680
+ }
+];
+const BLENDS = [
+ {
+  "id": "myth",
+  "img": "img/zrn-kava-myth-craft-edition.webp",
+  "alt": "Кава Myth Craft Edition ZRN — бленд 50% арабіка / 50% робуста",
+  "accent": "#8a5a34",
+  "kicker": "Craft Edition",
+  "name": "Myth",
+  "region": "Гватемала, Індонезія",
+  "variety": "Bourbon, Caturra, Lampung",
+  "ratio": "50% арабіка (Гватемала) · 50% робуста (Індонезія)",
+  "processing": "Washed + natural",
+  "roastLevel": 2,
+  "roastLabel": "Світло-середнє",
+  "notes": "Темний шоколад, карамель, легка пряність, щільне тіло",
+  "info": "Баланс гватемальської арабіки та індонезійської робусти. Світло-середнє обсмаження тримає шоколад і карамель, тіло залишається щільним — зручно для еспресо й турки.",
+  "story": [
+   "Myth зібраний для тих, хто хоче щільну чашку без «пересмаженої» гіркоти.",
+   "Світло-середнє обсмаження: темний шоколад, карамель і легка пряність — стабільний щоденний еспресо."
+  ],
+  "brew": [
+   "Еспресо",
+   "Турка",
+   "Гейзер",
+   "Автомат"
+  ],
+  "price200": 260,
+  "price500": 600
+ },
+ {
+  "id": "epic",
+  "img": "img/zrn-kava-epic-harmony-roast.webp",
+  "alt": "Кава Epic Harmony Roast ZRN — 100% арабіка, Коста-Ріка та Папуа Нова Гвінея",
+  "accent": "#9c9488",
+  "kicker": "Harmony Roast",
+  "name": "Epic",
+  "region": "Коста Ріка, Папуа Нова Гвінея",
+  "variety": "Catuai, Obata, Arusha, Blue Mountain",
+  "ratio": "50% арабіка (Коста-Ріка) · 50% арабіка (Папуа)",
+  "processing": "Washed",
+  "roastLevel": 2,
+  "roastLabel": "Світло-середнє",
+  "notes": "Цитрус, мед, тропічні фрукти, м’яке тіло",
+  "info": "100% арабіка: Коста-Ріка та Папуа Нова Гвінея. Світло-середнє обсмаження зберігає цитрус і мед — гармонійна чашка на кожен день.",
+  "story": [
+   "Epic поєднує щільність коста-риканського високогір’я й фруктовість папуанського зерна.",
+   "Світло-середнє обсмаження: цитрус, мед і тропічні фрукти без важкої гіркоти."
+  ],
+  "brew": [
+   "Фільтр",
+   "Автомат",
+   "Еспресо"
+  ],
+  "price200": 295,
+  "price500": 690
+ },
+ {
+  "id": "legend",
+  "img": "img/zrn-kava-legend-specialty-selection.webp",
+  "alt": "Кава Legend Specialty Selection ZRN — 100% арабіка, Гватемала та Сальвадор",
+  "accent": "#c1432a",
+  "badge": "Популярне",
+  "badgeType": "popular",
+  "kicker": "Specialty Selection",
+  "name": "Legend",
+  "region": "Гватемала, Сальвадор",
+  "variety": "Bourbon, Caturra",
+  "ratio": "50% арабіка (Гватемала) · 50% арабіка (Сальвадор)",
+  "processing": "Washed",
+  "roastLevel": 3,
+  "roastLabel": "Середнє",
+  "notes": "Червоні ягоди, какао, карамель, збалансоване тіло",
+  "info": "100% арабіка з Гватемали та Сальвадору (Bourbon, Caturra). Середнє обсмаження збирає ягоди, какао й карамель у рівну, «преміальну» чашку.",
+  "story": [
+   "Legend — два центральноамериканські класики в одній пачці: гватемальський і сальвадорський Bourbon/Caturra.",
+   "Середнє обсмаження: червоні ягоди, какао й карамель — коли хочеться чистої арабіки з характером."
+  ],
+  "brew": [
+   "Еспресо",
+   "Фільтр",
+   "Автомат"
+  ],
+  "price200": 305,
+  "price500": 710
+ },
+ {
+  "id": "poetry",
+  "img": "img/zrn-kava-poetry-signature-blend.webp",
+  "alt": "Кава Poetry Signature Blend ZRN — 70% арабіка / 30% робуста",
+  "accent": "#3a5a8c",
+  "kicker": "Signature Blend",
+  "name": "Poetry",
+  "region": "Колумбія, Ефіопія, Індонезія",
+  "variety": "Castillo, Caturra, Heirloom, Lampung",
+  "ratio": "40% Colombia Supremo · 30% Ефіопія · 30% робуста (Індонезія)",
+  "processing": "Washed + natural",
+  "roastLevel": 2,
+  "roastLabel": "Світло-середнє",
+  "notes": "Квіти, цитрус, темний шоколад, оксамитове тіло",
+  "info": "Колумбія, Ефіопія та Індонезія в одному бленді. Світло-середнє обсмаження тримає квітковість і цитрус, робуста додає оксамитового тіла.",
+  "story": [
+   "Poetry збирає три регіони: квітковість ефіопського Heirloom, щільність колумбійського Castillo/Caturra й глибину Lampung.",
+   "Світло-середнє обсмаження: квіти, цитрус і темний шоколад на оксамитовому тілі."
+  ],
+  "brew": [
+   "Еспресо",
+   "Автомат",
+   "Фільтр",
+   "Турка"
+  ],
+  "price200": 300,
+  "price500": 695
+ }
+];
+const BLOG = [
+ {
+  "id": "brew-guide",
+  "k": "Гайд",
+  "title": "Як обрати помел під свій спосіб заварювання",
+  "excerpt": "Коротко про те, чому помел вирішує половину смаку.",
+  "body": "Помел — це не дрібниця, а половина результату в чашці. Занадто дрібний для фільтра — гіркота і забивання. Занадто грубий для турки — водяниста кава.\n\nДля турки потрібен найдрібніший помел, майже пудра. Для еспресо — дрібний, але сипкий. Для крапельної кавоварки і фільтра — середній. Для френч-преса — найгрубіший, щоб уникнути осаду.\n\nСаме тому при замовленні ми питаємо спосіб заварювання і мелемо партію під нього перед відправкою."
+ },
+ {
+  "id": "freshness",
+  "k": "Про каву",
+  "title": "Чому дата обсмаження важливіша за назву сорту",
+  "excerpt": "Свіжість визначає смак сильніше, ніж походження зерна.",
+  "body": "Після обсмаження каві потрібно 3–5 днів на дегазацію — тоді смак розкривається повніше. Найкращий смак тримається приблизно до 40 днів при правильному зберіганні.\n\nМи вказуємо дату обсмаження на кожній пачці й обсмажуємо під замовлення, тому кава потрапляє до вас свіжою.\n\nЗберігайте в герметичній непрозорій тарі подалі від тепла, світла й вологи."
+ },
+ {
+  "id": "storage",
+  "k": "Поради",
+  "title": "Як правильно зберігати кавові зерна вдома",
+  "excerpt": "Три вороги свіжості: повітря, світло і вологість.",
+  "body": "Після обсмаження каві потрібно 3–5 днів, щоб «відлежатися» (вийшов вуглекислий газ) — тоді смак розкривається повніше. Найкращий смак тримається приблизно до 40 днів при правильному зберіганні.\n\nТримайте каву в герметичній непрозорій тарі, подалі від плити й вікна. Не в холодильнику — там вона вбирає запахи й вологу.\n\nЯкщо купили великий обсяг — відсипте на тиждень у меншу банку, а решту щільно закрийте."
+ }
+];
+const TASTE_PROFILE = {
+ "costarica": {
+  "acid": 4,
+  "sweet": 4,
+  "bitter": 2,
+  "body": 4
+ },
+ "colombia": {
+  "acid": 3,
+  "sweet": 4,
+  "bitter": 2,
+  "body": 3
+ },
+ "elsalvador": {
+  "acid": 3,
+  "sweet": 5,
+  "bitter": 2,
+  "body": 3
+ },
+ "guatemala": {
+  "acid": 3,
+  "sweet": 4,
+  "bitter": 2,
+  "body": 3
+ },
+ "ethiopia": {
+  "acid": 5,
+  "sweet": 3,
+  "bitter": 1,
+  "body": 2
+ },
+ "papua": {
+  "acid": 4,
+  "sweet": 4,
+  "bitter": 1,
+  "body": 3
+ },
+ "myth": {
+  "acid": 2,
+  "sweet": 3,
+  "bitter": 3,
+  "body": 5
+ },
+ "epic": {
+  "acid": 4,
+  "sweet": 4,
+  "bitter": 1,
+  "body": 3
+ },
+ "legend": {
+  "acid": 3,
+  "sweet": 4,
+  "bitter": 2,
+  "body": 3
+ },
+ "poetry": {
+  "acid": 3,
+  "sweet": 4,
+  "bitter": 2,
+  "body": 4
+ }
+};
+const BREW_GUIDE = {
+ "Еспресо": {
+  "grind": "Еспресо",
+  "uk": "Ріжок: 18 г кави → 36 г напою за 25–30 с, вода 92–94 °C.",
+  "ru": "Рожок: 18 г кофе → 36 г напитка за 25–30 с, вода 92–94 °C."
+ },
+ "Фільтр": {
+  "grind": "Фільтр / V60",
+  "uk": "Співвідношення 1:16 (наприклад, 15 г кави на 240 мл води), вода 92–96 °C, загальний час 2:30–3:30.",
+  "ru": "Соотношение 1:16 (например, 15 г кофе на 240 мл воды), вода 92–96 °C, общее время 2:30–3:30."
+ },
+ "Турка": {
+  "grind": "Турка",
+  "uk": "Близько 7 г кави на 70 мл холодної води. Нагрівайте повільно і зніміть, коли підніметься піна — не кип’ятіть.",
+  "ru": "Около 7 г кофе на 70 мл холодной воды. Нагревайте медленно и снимите, когда поднимется пена — не кипятите."
+ },
+ "Гейзер": {
+  "grind": "Гейзерна",
+  "uk": "Налийте воду до клапана, засипте каву без трамбування, середній вогонь. Зніміть, коли напій почне булькати.",
+  "ru": "Налейте воду до клапана, засыпьте кофе без трамбовки, средний огонь. Снимите, когда напиток начнёт булькать."
+ },
+ "Френч-прес": {
+  "grind": "Френч-прес",
+  "uk": "Співвідношення 1:15, вода близько 93 °C, настоювання 4 хв, потім повільно опустіть поршень.",
+  "ru": "Соотношение 1:15, вода около 93 °C, настаивание 4 мин, затем медленно опустите поршень."
+ },
+ "Автомат": {
+  "grind": null,
+  "uk": "Налаштуйте помел під свою машину. Гірчить — зробіть грубіше, кисло — дрібніше.",
+  "ru": "Настройте помол под свою машину. Горчит — сделайте грубее, кисло — мельче."
+ },
+ "З молоком": {
+  "grind": "Еспресо",
+  "uk": "Приготуйте міцну основу, як для еспресо, і додайте гаряче молоко.",
+  "ru": "Приготовьте крепкую основу, как для эспрессо, и добавьте горячее молоко."
+ }
+};
+const PROCESS_INFO = {
+ "washed": {
+  "uk": "Мита обробка: м’якоть ягоди видаляють до сушіння. Зазвичай дає чистішу, «прозору» чашку з виразною кислотністю.",
+  "ru": "Мытая обработка: мякоть ягоды удаляют до сушки. Обычно даёт более чистую, «прозрачную» чашку с выразительной кислотностью."
+ },
+ "natural": {
+  "uk": "Натуральна (суха) обробка: ягоду сушать цілою. Зазвичай додає солодкості та фруктовості, тіло повніше.",
+  "ru": "Натуральная (сухая) обработка: ягоду сушат целой. Обычно добавляет сладости и фруктовости, тело полнее."
+ },
+ "both": {
+  "uk": "У складі є зерно митої та натуральної обробки: перша додає чистоти, друга — солодкості й тіла.",
+  "ru": "В составе есть зерно мытой и натуральной обработки: первая добавляет чистоты, вторая — сладости и тела."
+ }
+};
+/*CATALOG:END*/
 
 /* Fix ptStory to use PRODUCT_I18N story correctly when uk is null */
 function ptStory(p){
@@ -1693,6 +2453,8 @@ function setLanguage(lang, opts){
     }catch(e){}
   }
   applyStaticI18n();
+  document.querySelectorAll('a[data-seo]').forEach(a=>{ a.setAttribute('href', (lang==='ru'?'/ru/':'/') + a.getAttribute('data-seo')); });
+  document.querySelectorAll('a[data-seo-post]').forEach(a=>{ const po = (typeof BLOG!=='undefined') && BLOG.find(x=>x.id===a.getAttribute('data-seo-post')); if(po) a.textContent = bt(po,'title'); });
   // re-render dynamic
   if(typeof renderGrid === 'function' && typeof PRODUCTS !== 'undefined'){
     renderGrid('grid', PRODUCTS);
@@ -1748,32 +2510,9 @@ const GRIND_TYPES = [
 ];
 function grindTipBean(){ return t('grind.tipBean'); }
 
-const PRODUCTS = [
-  {id:'costarica', img:'img/zrn-kava-costa-rica-tarrazu-shb.webp', alt:'Кава Costa Rica Tarrazu SHB ZRN — свіжа обсмажка', accent:'#c1652f', name:'Costa Rica Tarrazu SHB', region:'Tarrazu, 1600–1900 м', variety:'Catuai, Caturra, Obata', processing:'Washed', roastLevel:3, roastLabel:'Середнє', notes:'Тропічні фрукти, мед, цитрусова цедра, щільне тіло', info:'Tarrazu SHB — строго високогірне зерно. Catuai, Caturra й Obata в washed-обробці дають чистий, соковитий профіль із помітним тілом.', story:['Таррасу — найвідоміший кавовий регіон Коста-Ріки. SHB (Strictly Hard Bean) означає вирощування вище 1200 м: зерно дозріває повільніше й стає щільнішим.', 'Washed-обробка підкреслює прозорість чашки: тропічні фрукти, мед і цитрусова цедра на щільному тілі.'], brew:['Фільтр','Еспресо','Автомат'], price200:305, price500:705},
-  {id:'colombia', img:'img/zrn-kava-colombia-supremo.webp', alt:'Кава Colombia Supremo ZRN — свіжа обсмажка, 100% арабіка', accent:'#7a5a9e', badge:'Популярне', badgeType:'popular', name:'Colombia Supremo', region:'Huila, 1200–2000 м', variety:'Castillo, Caturra', processing:'Washed', roastLevel:3, roastLabel:'Середнє', notes:'Карамель, молочний шоколад, червоне яблуко', info:'Supremo — відбір за розміром зерна. Castillo і Caturra з Уїли в washed-обробці дають класичний колумбійський баланс: солодкість, м’яка кислота, впевнене тіло.', story:['Уїла на південному заході Колумбії — один із найцінніших кавових регіонів країни: вулканічні ґрунти й висота формують щільне, солодке зерно.', 'Категорія Supremo відбирає найбільше зерно. У чашці — карамель, молочний шоколад і червоне яблуко без різкої кислотності.'], brew:['Еспресо','Фільтр','Автомат','Турка'], price200:290, price500:670},
-  {id:'elsalvador', img:'img/zrn-kava-el-salvador-shg.webp', alt:'Кава El Salvador SHG ZRN — свіжа обсмажка, 100% арабіка', accent:'#2f8f82', name:'El Salvador SHG', region:'Chalatenango, 1400–1600 м', variety:'Bourbon, Caturra', processing:'Washed', roastLevel:3, roastLabel:'Середнє', notes:'Какао, сухофрукти, карамель, кремове тіло', info:'SHG — високогірне зерно. Старі дерева Bourbon і Caturra в washed-обробці дають солодку, «округлу» чашку з какао й сухофруктами.', story:['Сальвадор зберіг масиви старих дерев Bourbon — багато плантацій не замінювали на високоврожайні гібриди.', 'SHG і washed: какао, сухофрукти й карамель на кремовому тілі — зручний щоденний профіль.'], brew:['Еспресо','Автомат','Турка'], price200:290, price500:670},
-  {id:'guatemala', img:'img/zrn-kava-guatemala-huehuetenango.webp', alt:'Кава Guatemala Huehuetenango ZRN — свіжа обсмажка', accent:'#5f8a3f', name:'Guatemala Huehuetenango', region:'Huehuetenango, 1500–2000 м', variety:'Bourbon, Caturra', processing:'Washed', roastLevel:3, roastLabel:'Середнє', notes:'Шоколад, смажений горіх, червоне яблуко, м’яка кислота', info:'Huehuetenango — високий регіон без активних вулканів, захищений хребтами. Bourbon і Caturra washed дають шоколадно-горіховий профіль із чистою кислотністю.', story:['Уеуетенанго на північному заході Гватемали захищений гірськими хребтами від холодних мас — кава росте високо, але без ризику заморозків.', 'Bourbon і Caturra в washed-обробці: шоколад, смажений горіх і червоне яблуко — спокійна, «вечірня» чашка.'], brew:['Еспресо','Автомат','Турка','Фільтр'], price200:295, price500:680},
-{id:'ethiopia', img:'img/zrn-kava-ethiopia-sidamo.webp', alt:'Кава Ethiopia Sidamo Kurume ZRN — свіжа обсмажка, квітковий профіль', accent:'#c9a227', badge:'Новинка', badgeType:'new', name:'Ethiopia Sidamo', region:'Sidamo (Sidama), 1600–2200 м', variety:'Kurume', processing:'Washed', roastLevel:3, roastLabel:'Середнє', notes:'Жасмин, бергамот, білий виноград, мед', info:'Washed Kurume з високого Сидамо. Середнє обсмаження зберігає квітковість і чисту цитрусову кислотність — легка, прозора чашка для фільтра.', story:['Сидамо (Сидама) на півдні Ефіопії — історична батьківщина арабіки. Високі плато й садові насадження дають профіль, який важко сплутати з іншими регіонами.', 'Kurume — місцевий дрібнозерний різновид. У washed-обробці розкривається жасмином, бергамотом і білим виноградом: елегантна чашка без зайвої ваги.'], brew:['Фільтр','Автомат','Гейзер'], price200:270, price500:620},
-{id:'papua', img:'img/zrn-kava-papua-new-guinea-psc.webp', alt:'Кава Papua New Guinea PSC ZRN — свіжа обсмажка, 100% арабіка', accent:'#c9a04a', name:'Papua New Guinea PSC', region:'Papua New Guinea, 1400–1800 м', variety:'Arusha, Blue Mountain', processing:'Washed', roastLevel:2, roastLabel:'Світло-середнє', notes:'Пряні трави, папайя, тростинний цукор, чисте післясмак', info:'PSC — відібране зерно дрібних фермерів. Arusha і Blue Mountain, washed, світло-середнє обсмаження: пряність і фруктовість без гіркоти.', story:['Папуа Нова Гвінея — вулканічні схили й сімейні ділянки. PSC (Premium Smallholder Coffee) означає контроль якості на рівні дрібних господарств.', 'Світло-середнє обсмаження залишає пряні трави, папайю й тростинний цукор — незвична, але дуже чиста чашка.'], brew:['Фільтр','Автомат','Гейзер'], price200:295, price500:680},
-
-];
-
-const BLENDS = [
-  {id:'myth', img:'img/zrn-kava-myth-craft-edition.webp', alt:'Кава Myth Craft Edition ZRN — бленд 50% арабіка / 50% робуста', accent:'#8a5a34', kicker:'Craft Edition', name:'Myth', region:'Гватемала, Індонезія', variety:'Bourbon, Caturra, Lampung', ratio:'50% арабіка (Гватемала) · 50% робуста (Індонезія)', processing:'Washed + natural', roastLevel:2, roastLabel:'Світло-середнє', notes:'Темний шоколад, карамель, легка пряність, щільне тіло', info:'Баланс гватемальської арабіки та індонезійської робусти. Світло-середнє обсмаження тримає шоколад і карамель, тіло залишається щільним — зручно для еспресо й турки.', story:['Myth зібраний для тих, хто хоче щільну чашку без «пересмаженої» гіркоти.', 'Світло-середнє обсмаження: темний шоколад, карамель і легка пряність — стабільний щоденний еспресо.'], brew:['Еспресо','Турка','Гейзер','Автомат'], price200:260, price500:600},
-  {id:'epic', img:'img/zrn-kava-epic-harmony-roast.webp', alt:'Кава Epic Harmony Roast ZRN — 100% арабіка, Коста-Ріка та Папуа Нова Гвінея', accent:'#9c9488', kicker:'Harmony Roast', name:'Epic', region:'Коста Ріка, Папуа Нова Гвінея', variety:'Catuai, Obata, Arusha, Blue Mountain', ratio:'50% арабіка (Коста-Ріка) · 50% арабіка (Папуа)', processing:'Washed', roastLevel:2, roastLabel:'Світло-середнє', notes:'Цитрус, мед, тропічні фрукти, м’яке тіло', info:'100% арабіка: Коста-Ріка та Папуа Нова Гвінея. Світло-середнє обсмаження зберігає цитрус і мед — гармонійна чашка на кожен день.', story:['Epic поєднує щільність коста-риканського високогір’я й фруктовість папуанського зерна.', 'Світло-середнє обсмаження: цитрус, мед і тропічні фрукти без важкої гіркоти.'], brew:['Фільтр','Автомат','Еспресо'], price200:295, price500:690},
-  {id:'legend', img:'img/zrn-kava-legend-specialty-selection.webp', alt:'Кава Legend Specialty Selection ZRN — 100% арабіка, Гватемала та Сальвадор', accent:'#c1432a', badge:'Популярне', badgeType:'popular', kicker:'Specialty Selection', name:'Legend', region:'Гватемала, Сальвадор', variety:'Bourbon, Caturra', ratio:'50% арабіка (Гватемала) · 50% арабіка (Сальвадор)', processing:'Washed', roastLevel:3, roastLabel:'Середнє', notes:'Червоні ягоди, какао, карамель, збалансоване тіло', info:'100% арабіка з Гватемали та Сальвадору (Bourbon, Caturra). Середнє обсмаження збирає ягоди, какао й карамель у рівну, «преміальну» чашку.', story:['Legend — два центральноамериканські класики в одній пачці: гватемальський і сальвадорський Bourbon/Caturra.', 'Середнє обсмаження: червоні ягоди, какао й карамель — коли хочеться чистої арабіки з характером.'], brew:['Еспресо','Фільтр','Автомат'], price200:305, price500:710},
-  {id:'poetry', img:'img/zrn-kava-poetry-signature-blend.webp', alt:'Кава Poetry Signature Blend ZRN — 70% арабіка / 30% робуста', accent:'#3a5a8c', kicker:'Signature Blend', name:'Poetry', region:'Колумбія, Ефіопія, Індонезія', variety:'Castillo, Caturra, Heirloom, Lampung', ratio:'40% Colombia Supremo · 30% Ефіопія · 30% робуста (Індонезія)', processing:'Washed + natural', roastLevel:2, roastLabel:'Світло-середнє', notes:'Квіти, цитрус, темний шоколад, оксамитове тіло', info:'Колумбія, Ефіопія та Індонезія в одному бленді. Світло-середнє обсмаження тримає квітковість і цитрус, робуста додає оксамитового тіла.', story:['Poetry збирає три регіони: квітковість ефіопського Heirloom, щільність колумбійського Castillo/Caturra й глибину Lampung.', 'Світло-середнє обсмаження: квіти, цитрус і темний шоколад на оксамитовому тілі.'], brew:['Еспресо','Автомат','Фільтр','Турка'], price200:300, price500:695},
-];
-
 /* ============================================================
    БЛОГ
    ============================================================ */
-const BLOG = [
-  {id:'brew-guide', k:'Гайд', title:'Як обрати помел під свій спосіб заварювання', excerpt:'Коротко про те, чому помел вирішує половину смаку.', body:'Помел — це не дрібниця, а половина результату в чашці. Занадто дрібний для фільтра — гіркота і забивання. Занадто грубий для турки — водяниста кава.\n\nДля турки потрібен найдрібніший помел, майже пудра. Для еспресо — дрібний, але сипкий. Для крапельної кавоварки і фільтра — середній. Для френч-преса — найгрубіший, щоб уникнути осаду.\n\nСаме тому при замовленні ми питаємо спосіб заварювання і мелемо партію під нього перед відправкою.'},
-  {id:'freshness', k:'Про каву', title:'Чому дата обсмаження важливіша за назву сорту', excerpt:'Свіжість визначає смак сильніше, ніж походження зерна.', body:'Після обсмаження каві потрібно 3–5 днів на дегазацію — тоді смак розкривається повніше. Найкращий смак тримається приблизно до 40 днів при правильному зберіганні.\n\nМи вказуємо дату обсмаження на кожній пачці й обсмажуємо під замовлення, тому кава потрапляє до вас свіжою.\n\nЗберігайте в герметичній непрозорій тарі подалі від тепла, світла й вологи.'},
-  {id:'storage', k:'Поради', title:'Як правильно зберігати кавові зерна вдома', excerpt:'Три вороги свіжості: повітря, світло і вологість.', body:'Після обсмаження каві потрібно 3–5 днів, щоб «відлежатися» (вийшов вуглекислий газ) — тоді смак розкривається повніше. Найкращий смак тримається приблизно до 40 днів при правильному зберіганні.\n\nТримайте каву в герметичній непрозорій тарі, подалі від плити й вікна. Не в холодильнику — там вона вбирає запахи й вологу.\n\nЯкщо купили великий обсяг — відсипте на тиждень у меншу банку, а решту щільно закрийте.'},
-];
-
 function scrollToSel(sel){
   if(typeof closeMobileNav === 'function') closeMobileNav();
   if(typeof closeBlogOverlay === 'function') closeBlogOverlay();
@@ -1833,7 +2572,7 @@ const ALL_PRODUCTS = [...PRODUCTS, ...BLENDS];
       '@type': 'ItemList',
       name: 'Каталог кави ZRN',
       itemListElement: ALL_PRODUCTS.map((p, i) => {
-        const url = SITE + '#' + p.id;
+        const url = SITE + 'coffee/' + p.id + '/';
         return {
           '@type': 'ListItem',
           position: i + 1,
@@ -1873,7 +2612,7 @@ function renderGrid(containerId, list){
       <div class="card-body">
         ${p.ratio?`<div class="card-ratio">${p.ratio}</div>`:''}
         ${p.kicker?`<div class="blend-kicker">${p.kicker}</div>`:''}
-        <h3>${p.name}</h3>
+        <h3><a class="card-link" href="${currentLang==='ru'?'/ru':''}/coffee/${p.id}/" data-seo="coffee/${p.id}/" onclick="event.preventDefault()">${p.name}</a></h3>
         <div class="fresh-badge">${t('ui.fresh')}</div>
         <div class="card-notes">${pt(p,'notes')}</div>
         ${p.brew?`<div class="brew-tags"><span class="brew-label">${t('ui.ideal')}</span>${p.brew.map(b=>`<span class="brew-tag">${dispBrew(b)}</span>`).join('')}</div>`:''}
@@ -1995,19 +2734,6 @@ function dotsHtml(level){
 }
 
 
-const TASTE_PROFILE = {
-  costarica:{acid:4,sweet:4,bitter:2,body:4},
-  colombia:{acid:3,sweet:4,bitter:2,body:3},
-  elsalvador:{acid:3,sweet:5,bitter:2,body:3},
-  guatemala:{acid:3,sweet:4,bitter:2,body:3},
-  ethiopia:{acid:5,sweet:3,bitter:1,body:2},
-  papua:{acid:4,sweet:4,bitter:1,body:3},
-  myth:{acid:2,sweet:3,bitter:3,body:5},
-  epic:{acid:4,sweet:4,bitter:1,body:3},
-  legend:{acid:3,sweet:4,bitter:2,body:3},
-  poetry:{acid:3,sweet:4,bitter:2,body:4}
-};
-
 function tasteBarsHtml(p){
   var tp = TASTE_PROFILE[p.id] || {acid:3,sweet:3,bitter:3,body:3};
   function row(label, key){
@@ -2020,6 +2746,57 @@ function tasteBarsHtml(p){
     + row(t('ui.bitter'), 'bitter')
     + row(t('ui.body'), 'body')
     + '</div>';
+}
+
+
+/* ---------- Модалка сорта: додаткові розділи ---------- */
+function mL(uk, ru){ return currentLang==='ru' ? ru : uk; }
+function escHtml(x){ return String(x==null?'':x).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+function processInfo(p){
+  var w = /washed/i.test(p.processing||''), n = /natural/i.test(p.processing||'');
+  var key = (w && n) ? 'both' : n ? 'natural' : w ? 'washed' : null;
+  return key && PROCESS_INFO[key] ? PROCESS_INFO[key][currentLang==='ru'?'ru':'uk'] : '';
+}
+function similarProducts(p){
+  var a = TASTE_PROFILE[p.id]; if(!a) return [];
+  function dist(q){ var b = TASTE_PROFILE[q.id]; if(!b) return 99; return ['acid','sweet','bitter','body'].reduce(function(s,k){ return s + Math.pow((a[k]||3)-(b[k]||3),2); },0); }
+  return ALL_PRODUCTS.filter(function(q){ return q.id!==p.id; }).sort(function(x,y){ return dist(x)-dist(y); }).slice(0,3);
+}
+function modalSectionsHtml(p){
+  var alt = (p.region||'').match(/(\d{3,4})\s*[–-]\s*(\d{3,4})\s*м/);
+  var rows = '';
+  if(pt(p,'ratio')||p.ratio) rows += '<div class="spec-row"><span class="spec-ico" aria-hidden="true">◈</span><div><b>'+t('ui.composition')+'</b><span>'+escHtml(pt(p,'ratio')||p.ratio)+'</span></div></div>';
+  rows += '<div class="spec-row"><span class="spec-ico" aria-hidden="true">◉</span><div><b>'+mL('Регіон','Регион')+'</b><span>'+escHtml(pt(p,'region')||p.region)+'</span></div></div>';
+  if(alt) rows += '<div class="spec-row"><span class="spec-ico" aria-hidden="true">▲</span><div><b>'+mL('Висота вирощування','Высота выращивания')+'</b><span>'+alt[1]+'–'+alt[2]+' '+mL('м над рівнем моря','м над уровнем моря')+'</span></div></div>';
+  rows += '<div class="spec-row"><span class="spec-ico" aria-hidden="true">◎</span><div><b>'+t('ui.variety')+'</b><span>'+escHtml(pt(p,'variety')||p.variety)+'</span></div></div>';
+  rows += '<div class="spec-row"><span class="spec-ico" aria-hidden="true">◇</span><div><b>'+t('ui.process')+'</b><span>'+escHtml(p.processing)+'</span></div></div>';
+  rows += '<div class="spec-row"><span class="spec-ico" aria-hidden="true">●</span><div><b>'+mL('Обсмаження','Обжарка')+'</b><span>'+dispRoast(p.roastLabel)+'<span class="roast-dots roast-inline" aria-hidden="true">'+dotsHtml(p.roastLevel)+'</span><span class="roast-ends"><i>'+mL('світле','светлая')+'</i><i>'+mL('темне','тёмная')+'</i></span></span></div></div>';
+  var pi = processInfo(p);
+  var story = (ptStory(p)||[]).map(function(x){ return '<p>'+escHtml(x)+'</p>'; }).join('');
+
+  var brewHtml = '';
+  (p.brew||[]).forEach(function(b){
+    var g = BREW_GUIDE[b==='Гейзерна'?'Гейзер':b]; if(!g) return;
+    brewHtml += '<div class="brew-card"><div class="brew-card-h"><b>'+dispBrew(b)+'</b>'
+      + (g.grind ? '<button type="button" class="brew-pick" data-grind="'+escHtml(g.grind)+'">'+mL('Обрати цей помел','Выбрать этот помол')+'</button>' : '')
+      + '</div><p>'+mL(g.uk,g.ru)+'</p></div>';
+  });
+  if(brewHtml) brewHtml += '<p class="m-note">'+mL('Це стартові рецепти — підлаштуйте їх під свій смак: гірчить → грубіший помел, кисло → дрібніший.','Это стартовые рецепты — подстройте их под свой вкус: горчит → грубее помол, кисло → мельче.')+'</p>';
+
+  var sim = similarProducts(p).map(function(q){
+    return '<button type="button" class="sim-card" data-sim="'+q.id+'"><span class="sim-name">'+escHtml(q.name)+'</span><span class="sim-notes">'+escHtml(pt(q,'notes'))+'</span><span class="sim-price">'+mL('від ','от ')+q.price200+' ₴</span></button>';
+  }).join('');
+
+  return ''
+  + '<details class="m-acc" open><summary>'+mL('Смак','Вкус')+'</summary><div class="m-acc-in">'+tasteBarsHtml(p)+'<p class="m-note">'+mL('Оцінка обсмажувальника за шкалою від 1 до 5.','Оценка обжарщика по шкале от 1 до 5.')+'</p></div></details>'
+  + '<details class="m-acc"><summary>'+mL('Походження та обробка','Происхождение и обработка')+'</summary><div class="m-acc-in"><div class="spec-list modal-specs">'+rows+'</div>'
+    + (pi?'<p class="m-note m-note-strong">'+pi+'</p>':'')
+    + (story?'<div class="modal-story"><div class="origin-story-head">'+t('ui.about')+'</div>'+story+'</div>':'')+'</div></details>'
+  + (brewHtml?'<details class="m-acc"><summary>'+mL('Як заварювати','Как заваривать')+'</summary><div class="m-acc-in">'+brewHtml+'</div></details>':'')
+  + '<details class="m-acc"><summary>'+mL('Доставка та гарантія','Доставка и гарантия')+'</summary><div class="m-acc-in"><ul class="m-list">'
+    + '<li>'+t('trust.fact')+'</li><li>'+t('ship.del2')+' '+t('ship.del3')+'</li><li>'+t('ship.del4')+'</li><li>'+t('ship.pay1')+'</li><li>'+t('ck.guarantee')+'</li></ul></div></details>'
+  + (sim?'<div class="m-similar"><div class="m-sim-h">'+mL('Спробуйте також','Попробуйте также')+'</div><div class="sim-row">'+sim+'</div></div>':'')
+  + '<button type="button" class="m-share" id="modalShare">'+mL('Поділитися цим сортом','Поделиться этим сортом')+'</button>';
 }
 
 function openProduct(id, restore){
@@ -2044,17 +2821,13 @@ function openProduct(id, restore){
         <div style="font-size:.78rem;color:var(--sub);text-transform:uppercase;letter-spacing:.04em;margin-bottom:10px">${dispRoast(p.roastLabel)} ${t('ui.roast')}</div>
         </div>
         <div class="flavor-chips">${(pt(p,'notes')||'').split(/[,，]/).filter(Boolean).map(n=>`<span class="flavor-chip">${n.trim()}</span>`).join('')}</div>
-        <div class="spec-list modal-specs">
-          ${(pt(p,'ratio')||p.ratio)?`<div class="spec-row"><span class="spec-ico" aria-hidden="true">◈</span><div><b>${t('ui.composition')}</b><span>${pt(p,'ratio')||p.ratio}</span></div></div>`:''}
-          <div class="spec-row"><span class="spec-ico" aria-hidden="true">◎</span><div><b>${t('ui.variety')}</b><span>${pt(p,'variety') || p.variety}</span></div></div>
-          <div class="spec-row"><span class="spec-ico" aria-hidden="true">◇</span><div><b>${t('ui.process')}</b><span>${p.processing}</span></div></div>
-        </div>
         ${p.brew?`<div class="brew-tags" style="margin:0 0 12px"><span class="brew-label">${t('ui.ideal')}</span>${p.brew.map(b=>`<span class="brew-tag">${dispBrew(b)}</span>`).join('')}</div>`:''}
         <div class="modal-buy">
           <div class="buy-fields">
           <div class="field">
             <label>${t('ui.weight')}</label>
             <div class="pill-row" id="weightRow">${WEIGHTS.map((w,i)=>`<button type="button" class="pill ${i===0?'active':''}" data-w="${w}">${w} ${t('ui.g')}</button>`).join('')}</div>
+            <div class="price-meta" id="priceMeta" aria-live="polite"></div>
           </div>
           <div class="field" style="margin-top:12px">
             <label>${t('ui.grind')}</label>
@@ -2083,8 +2856,7 @@ function openProduct(id, restore){
           </div>
         </div>
         <p class="desc modal-lead">${pt(p,'info')}</p>
-        ${tasteBarsHtml(p)}
-        ${(ptStory(p)||[]).length?`<div class="modal-story"><div class="origin-story-head">${t('ui.about')}</div>${ptStory(p).map(s=>`<p>${s}</p>`).join('')}</div>`:''}
+        ${modalSectionsHtml(p)}
       </div>
     </div>
   `;
@@ -2109,6 +2881,16 @@ function openProduct(id, restore){
     };
   }
   const priceEl = genericModal.querySelector('#modalPrice');
+  function refreshPriceMeta(){
+    const el = genericModal.querySelector('#priceMeta'); if(!el) return;
+    const price = selectedWeight===500 ? p.price500 : p.price200;
+    let txt = Math.round(price / (selectedWeight/100)) + ' ₴ / 100 ' + t('ui.g');
+    if(selectedWeight===500){
+      const save = Math.round(p.price200*2.5 - p.price500);
+      if(save>0) txt += ' · ' + mL('вигідніше на ','выгоднее на ') + save + ' ₴';
+    }
+    el.textContent = txt;
+  }
   const qtyValueEl = genericModal.querySelector('#qtyValue');
 
   function composeGrind(){ return selectedGrindMain==='Мелена' ? `Мелена (${selectedGrindSub})` : 'Зернова'; }
@@ -2141,7 +2923,7 @@ function openProduct(id, restore){
       genericModal.querySelectorAll('#weightRow .pill').forEach(x=>x.classList.remove('active'));
       btn.classList.add('active');
       selectedWeight = Number(btn.dataset.w);
-      priceEl.textContent = (selectedWeight===500 ? p.price500 : p.price200) + ' ₴';
+      priceEl.textContent = (selectedWeight===500 ? p.price500 : p.price200) + ' ₴'; refreshPriceMeta();
     };
   });
   genericModal.querySelector('#qtyMinus').onclick = ()=>{
@@ -2167,7 +2949,7 @@ function openProduct(id, restore){
     genericModal.querySelectorAll('#weightRow .pill').forEach(btn=>{
       btn.classList.toggle('active', Number(btn.dataset.w)===Number(restore.weight));
     });
-    if(priceEl) priceEl.textContent = (selectedWeight===500 ? p.price500 : p.price200) + ' ₴';
+    if(priceEl) priceEl.textContent = (selectedWeight===500 ? p.price500 : p.price200) + ' ₴'; refreshPriceMeta();
   }
   if(restore && restore.grindMain){
     genericModal.querySelectorAll('#grindRow .pill').forEach(btn=>{
@@ -2191,6 +2973,29 @@ function openProduct(id, restore){
   const qp = genericModal.querySelector('#qtyPlus');
   if(qm){ const prev=qm.onclick; qm.onclick=(e)=>{ if(prev) prev.call(qm,e); saveModalUIState(); }; }
   if(qp){ const prev=qp.onclick; qp.onclick=(e)=>{ if(prev) prev.call(qp,e); saveModalUIState(); }; }
+
+  refreshPriceMeta();
+  genericModal.querySelectorAll('.brew-pick').forEach(btn=>{
+    btn.onclick = ()=>{
+      selectedGrindMain = 'Мелена'; selectedGrindSub = btn.dataset.grind;
+      genericModal.querySelectorAll('#grindRow .pill').forEach(x=>x.classList.toggle('active', x.dataset.g==='Мелена'));
+      renderGrindSub(); saveModalUIState();
+      btn.textContent = mL('Помел обрано ✓','Помол выбран ✓');
+      setTimeout(()=>{ btn.textContent = mL('Обрати цей помел','Выбрать этот помол'); }, 1500);
+      const bf = genericModal.querySelector('.buy-fields'); if(bf) bf.scrollIntoView({behavior:'smooth', block:'nearest'});
+    };
+  });
+  genericModal.querySelectorAll('.sim-card').forEach(btn=>{ btn.onclick = ()=> openProduct(btn.dataset.sim); });
+  const shareBtn = genericModal.querySelector('#modalShare');
+  if(shareBtn) shareBtn.onclick = ()=>{
+    const url = 'https://zrncoffee.com.ua' + (currentLang==='ru' ? '/ru' : '') + '/coffee/' + p.id + '/';
+    const done = ()=>{ shareBtn.textContent = mL('Посилання скопійовано ✓','Ссылка скопирована ✓'); setTimeout(()=>{ shareBtn.textContent = mL('Поділитися цим сортом','Поделиться этим сортом'); }, 1800); };
+    if(navigator.share){ navigator.share({title:p.name+' — ZRN Coffee', url:url}).catch(()=>{}); return; }
+    try{
+      if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(url).then(done, ()=>{}); return; }
+    }catch(e){}
+    try{ const ta=document.createElement('textarea'); ta.value=url; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); done(); }catch(e){}
+  };
 
   modalOverlay.classList.add('open');
   document.body.style.overflow = 'hidden';
