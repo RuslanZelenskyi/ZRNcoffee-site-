@@ -2,7 +2,7 @@
   "_help": "ЄДИНИЙ файл з даними сайту. Правте тільки тут: тексти, ціни, сорти, статті. Після збереження (commit) сторінки та головна збираються автоматично. Докладніше — README-catalog.md. Мови: uk — українська, ru — російська.",
   "site": {
     "url": "https://zrncoffee.com.ua",
-    "telegram": "https://t.me/runik1983",
+    "telegram": "https://t.me/zrncoffee",
     "email": "zrncoffee@gmail.com"
   },
   "products": [
