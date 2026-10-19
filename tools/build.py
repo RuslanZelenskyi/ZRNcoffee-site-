@@ -193,7 +193,8 @@ def ui_texts(index_src):
 ICONS = '''<link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="manifest" href="/site.webmanifest">'''
+<link rel="manifest" href="/site.webmanifest">
+<script src="/analytics.js" defer></script>'''
 
 UI = {
     'uk': dict(lang='uk', loc='uk_UA', catalog='Моносорти', blends='Бленди', blog='Блог', blogTitle='Блог ZRN', buy='Обрати вагу і замовити',
@@ -461,6 +462,7 @@ class Site:
       <a href="mailto:{self.email}">{u['mail']}</a>
       <a href="/oferta/">{u['offer']}</a>
       <a href="/privacy/">{u['privacy']}</a>
+      <a href="#" data-cookie-settings>{'Налаштування cookie' if lang == 'uk' else 'Настройки cookie'}</a>
     </div>
   </div>
 </footer>
