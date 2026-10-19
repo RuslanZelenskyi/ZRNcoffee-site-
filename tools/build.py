@@ -203,7 +203,8 @@ UI = {
                pre='', postSuf=' | Блог ZRN Coffee', home='Головна', altcode='RU', per100='/ 100 г',
                brewNote='Це стартові рецепти — підлаштуйте їх під свій смак: гірчить → грубіший помел, кисло → дрібніший.',
                blogDesc='Статті про каву від мікроростерні ZRN: помел, свіжість, зберігання та заварювання.',
-               blogIdx='Блог ZRN — про каву, помел і свіжість | ZRN Coffee', author='Руслан Зеленський'),
+               blogIdx='Блог ZRN — про каву, помел і свіжість | ZRN Coffee', author='Руслан Зеленський',
+               offer='Публічна оферта', privacy='Політика конфіденційності'),
     'ru': dict(lang='ru', loc='ru_RU', catalog='Моносорты', blends='Бленды', blog='Блог', blogTitle='Блог ZRN', buy='Выбрать вес и заказать',
                g='г', about='Об этом сорте', specs='Характеристики', region='Регион', alt_h='Высота выращивания', alt_u='м над уровнем моря',
                variety='Разновидность', process='Обработка', roast='Обжарка', comp='Состав', brew='Как заваривать', notes='Вкус',
@@ -216,7 +217,8 @@ UI = {
                pre='/ru', postSuf=' | Блог ZRN Coffee', home='Главная', altcode='UA', per100='/ 100 г',
                brewNote='Это стартовые рецепты — подстройте их под свой вкус: горчит → грубее помол, кисло → мельче.',
                blogDesc='Статьи о кофе от микрообжарочной ZRN: помол, свежесть, хранение и заваривание.',
-               blogIdx='Блог ZRN — о кофе, помоле и свежести | ZRN Coffee', author='Руслан Зеленский'),
+               blogIdx='Блог ZRN — о кофе, помоле и свежести | ZRN Coffee', author='Руслан Зеленский',
+               offer='Публичная оферта (укр.)', privacy='Политика конфиденциальности (укр.)'),
 }
 
 
@@ -324,6 +326,8 @@ class Site:
       <a href="{u['pre']}/blog/">{u['blog']}</a>
       <a href="{self.tg}" rel="noopener">Telegram</a>
       <a href="mailto:{self.email}">{u['mail']}</a>
+      <a href="/oferta/">{u['offer']}</a>
+      <a href="/privacy/">{u['privacy']}</a>
     </div>
   </div>
 </footer>
@@ -513,6 +517,8 @@ class Site:
         for a_ in self.posts:
             a = {'uk': self.b_url('uk', a_['id']), 'ru': self.b_url('ru', a_['id']), 'x-default': self.b_url('uk', a_['id'])}
             sm += entry(a['uk'], a, '0.6', 'monthly') + entry(a['ru'], a, '0.5', 'monthly')
+        for path in ('oferta', 'privacy'):
+            sm += entry(f'{self.url}/{path}/', {}, '0.3', 'yearly')
         self.write('sitemap.xml', sm + '</urlset>\n')
 
 
