@@ -372,6 +372,14 @@ section{padding:56px 0;}
 .reviews-cta-btn{display:inline-flex; align-items:center; min-height:44px; background:var(--dark); color:#f3ead9; text-decoration:none; padding:0 20px; border-radius:3px; font-weight:600; font-size:.88rem;}
 .reviews-cta-btn:hover{background:var(--gold-soft);}
 .form-guarantee{font-size:.78rem; color:var(--ink); margin:10px 0 4px; line-height:1.5; text-align:center;}
+.ck-check{display:flex; align-items:flex-start; gap:10px; font-size:.88rem; color:var(--ink); line-height:1.45; cursor:pointer; margin:2px 0 14px;}
+.ck-check input{width:20px; height:20px; flex:none; margin-top:1px; accent-color:var(--gold-soft); cursor:pointer;}
+.rcpt-box{border-left:3px solid var(--gold); padding-left:14px; margin:0 0 14px;}
+.rcpt-box[hidden]{display:none;}
+.ck-check.consent{font-size:.78rem; color:var(--sub); margin:0 0 12px;}
+.ck-check.consent a{color:var(--gold-soft); font-weight:600; text-decoration:underline; text-underline-offset:2px;}
+.ck-check.invalid{outline:2px solid rgba(193,67,42,.55); outline-offset:3px; border-radius:4px;}
+.foot-legal{font-size:.8rem; opacity:.9;}
 .form-reassure{font-size:.76rem; color:var(--sub); margin:10px 0 14px; line-height:1.5; text-align:center;}
 .confirm-extra{font-size:.86rem; color:var(--sub); margin-top:8px;}
 .confirm-extra a{color:var(--gold-soft); font-weight:600;}
@@ -948,6 +956,10 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
         <a href="mailto:zrncoffee@gmail.com" data-i18n="foot.mail">Написати на пошту</a>
         <a href="/blog/" data-seo="blog/" onclick="openBlogOverlay();return false;" data-i18n="nav.blog">Блог</a>
       </div>
+      <div class="foot-contacts foot-legal" style="margin-top:6px">
+        <a href="/oferta/" data-i18n="foot.oferta">Публічна оферта</a>
+        <a href="/privacy/" data-i18n="foot.privacy">Політика конфіденційності</a>
+      </div>
     </div>
     <div class="foot-schedule">
       <div><b data-i18n="foot.orders">Приймання замовлень</b><br><span data-i18n="foot.ordersH">Пн–Нд · 9:00–20:00</span></div>
@@ -1007,6 +1019,17 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
         <label for="ofEmail" data-i18n="ck.email">Email</label>
         <input type="email" id="ofEmail" autocomplete="email" placeholder="name@example.com" data-i18n-placeholder="ck.emailPh">
       </div>
+      <label class="ck-check" for="ofOtherRcpt"><input type="checkbox" id="ofOtherRcpt" aria-controls="rcptBox"> <span data-i18n="ck.otherRcpt">Отримувач — інша особа</span></label>
+      <div id="rcptBox" class="rcpt-box" hidden>
+        <div class="f-field">
+          <label for="ofRcptName" data-i18n="ck.rcptName">Ім'я та прізвище отримувача*</label>
+          <input type="text" id="ofRcptName" autocomplete="off" maxlength="80">
+        </div>
+        <div class="f-field">
+          <label for="ofRcptPhone" data-i18n="ck.rcptPhone">Телефон отримувача*</label>
+          <input type="tel" id="ofRcptPhone" autocomplete="off" value="+380" inputmode="tel" placeholder="+380XXXXXXXXX">
+        </div>
+      </div>
       <div class="f-field">
         <div class="f-label" id="deliveryLabel" data-i18n="ck.delivery">Спосіб доставки</div>
         <div class="ck-options" id="deliveryOpts" role="radiogroup" aria-labelledby="deliveryLabel"></div>
@@ -1031,8 +1054,8 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       <div class="f-field">
         <div class="f-label" id="contactLabel" data-i18n="ck.contact">Як з вами зв'язатися</div>
         <div class="radio-row" role="radiogroup" aria-labelledby="contactLabel">
-          <label class="radio-opt"><input type="radio" name="contactMethod" value="telegram" checked> <span data-i18n="ck.viaTg">Telegram</span></label>
-          <label class="radio-opt"><input type="radio" name="contactMethod" value="viber"> <span data-i18n="ck.viaViber">Viber</span></label>
+          <label class="radio-opt"><input type="radio" name="contactMethod" value="viber" checked> <span data-i18n="ck.viaViber">Viber</span></label>
+          <label class="radio-opt"><input type="radio" name="contactMethod" value="telegram"> <span data-i18n="ck.viaTg">Telegram</span></label>
           <label class="radio-opt"><input type="radio" name="contactMethod" value="call"> <span data-i18n="ck.viaCall">Дзвінок</span></label>
         </div>
       </div>
@@ -1045,6 +1068,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       </div>
       <div id="formError" class="form-error" style="display:none"></div>
       <p class="form-reassure" data-i18n="ck.reassure">Ми відповімо протягом 1–2 годин у робочий час. Реквізити для оплати надішлемо після підтвердження.</p>
+      <label class="ck-check consent" for="ofConsent"><input type="checkbox" id="ofConsent"> <span data-i18n-html="ck.consent">Оформлюючи замовлення, я погоджуюсь з <a href="/oferta/" target="_blank" rel="noopener">офертою</a> та <a href="/privacy/" target="_blank" rel="noopener">політикою конфіденційності</a></span></label>
       <button type="submit" class="checkout" id="submitOrderBtn" data-i18n="ck.submit">Підтвердити замовлення</button>
       <p class="form-guarantee" data-i18n="ck.guarantee">Не сподобалась кава — замінимо на інший сорт або повернемо гроші протягом 14 днів. Напишіть нам.</p>
     </form>
@@ -1240,6 +1264,14 @@ uk: {
   'ck.commentPh': 'Необов\'язково',
   'ck.payNote': 'Реквізити для оплати ми надішлемо вам у Telegram або Viber після підтвердження замовлення',
   'ck.reassure': 'Ми відповімо протягом 1–2 годин у робочий час. Реквізити для оплати надішлемо після підтвердження.',
+  'ck.otherRcpt': 'Отримувач — інша особа',
+  'ck.rcptName': 'Ім\'я та прізвище отримувача*',
+  'ck.rcptPhone': 'Телефон отримувача*',
+  'ck.rcptErr': 'Вкажіть ім\'я та коректний телефон отримувача.',
+  'ck.consent': 'Оформлюючи замовлення, я погоджуюсь з <a href="/oferta/" target="_blank" rel="noopener">офертою</a> та <a href="/privacy/" target="_blank" rel="noopener">політикою конфіденційності</a>',
+  'ck.consentErr': 'Щоб оформити замовлення, підтвердьте згоду з офертою та політикою конфіденційності.',
+  'foot.oferta': 'Публічна оферта',
+  'foot.privacy': 'Політика конфіденційності',
   'ck.guarantee': 'Не сподобалась кава — замінимо на інший сорт або повернемо гроші протягом 14 днів. Напишіть нам.',
   'ck.confirmExtra': 'Ми відповімо вам протягом 1–2 годин у робочий час.',
   'ck.reviewAsk': 'Коли спробуєте каву — напишіть відгук у <a href="https://t.me/zrncoffee" target="_blank" rel="noopener">Telegram</a>. Нам важлива ваша думка.',
@@ -1418,6 +1450,14 @@ ru: {
   'ck.commentPh': 'Необязательно',
   'ck.payNote': 'Реквизиты для оплаты мы пришлём вам в Telegram или Viber после подтверждения заказа',
   'ck.reassure': 'Мы ответим в течение 1–2 часов в рабочее время. Реквизиты для оплаты пришлём после подтверждения.',
+  'ck.otherRcpt': 'Получатель — другое лицо',
+  'ck.rcptName': 'Имя и фамилия получателя*',
+  'ck.rcptPhone': 'Телефон получателя*',
+  'ck.rcptErr': 'Укажите имя и корректный телефон получателя.',
+  'ck.consent': 'Оформляя заказ, я соглашаюсь с <a href="/oferta/" target="_blank" rel="noopener">офертой</a> и <a href="/privacy/" target="_blank" rel="noopener">политикой конфиденциальности</a> (на украинском)',
+  'ck.consentErr': 'Чтобы оформить заказ, подтвердите согласие с офертой и политикой конфиденциальности.',
+  'foot.oferta': 'Публичная оферта',
+  'foot.privacy': 'Политика конфиденциальности',
   'ck.guarantee': 'Не понравился кофе — заменим на другой сорт или вернём деньги в течение 14 дней. Напишите нам.',
   'ck.confirmExtra': 'Мы ответим вам в течение 1–2 часов в рабочее время.',
   'ck.reviewAsk': 'Когда попробуете кофе — напишите отзыв в <a href="https://t.me/zrncoffee" target="_blank" rel="noopener">Telegram</a>. Нам важно ваше мнение.',
@@ -3258,6 +3298,12 @@ function prefillForm(){
   document.getElementById('ofBranch').value = saved.branch || '';
   if(saved.delivery){ delivery = saved.delivery; renderDeliveryPayment(); }
   document.getElementById('formError').style.display = 'none';
+  /* отримувач і згода щоразу скидаються */
+  const oc = document.getElementById('ofOtherRcpt'); if(oc){ oc.checked = false; }
+  const rb = document.getElementById('rcptBox'); if(rb) rb.hidden = true;
+  const rn = document.getElementById('ofRcptName'); if(rn) rn.value = '';
+  const rp = document.getElementById('ofRcptPhone'); if(rp) rp.value = '+380';
+  const cs = document.getElementById('ofConsent'); if(cs){ cs.checked = false; cs.closest('.ck-check').classList.remove('invalid'); }
 }
 
 document.getElementById('toCheckoutBtn').onclick = ()=>{
@@ -3288,6 +3334,9 @@ document.getElementById('orderForm').onsubmit = function(e){
 
   const name = document.getElementById('ofName').value.trim();
   const phone = document.getElementById('ofPhone').value.trim();
+  const otherRcpt = document.getElementById('ofOtherRcpt').checked;
+  const rcptName = otherRcpt ? document.getElementById('ofRcptName').value.trim() : '';
+  const rcptPhoneRaw = otherRcpt ? document.getElementById('ofRcptPhone').value.trim() : '';
   const city = document.getElementById('ofCity').value.trim();
   const branch = document.getElementById('ofBranch').value.trim();
   const comment = document.getElementById('ofComment').value.trim();
@@ -3307,6 +3356,22 @@ document.getElementById('orderForm').onsubmit = function(e){
     if(ph){ ph.style.display='block'; ph.textContent = t('ck.phoneErr'); }
     return;
   }
+  if(otherRcpt && (rcptName.length < 2 || !isValidUaPhone(rcptPhoneRaw))){
+    formError.textContent = t('ck.rcptErr');
+    formError.style.display = 'block';
+    (rcptName.length < 2 ? document.getElementById('ofRcptName') : document.getElementById('ofRcptPhone')).focus();
+    return;
+  }
+  const consentEl = document.getElementById('ofConsent');
+  if(!consentEl.checked){
+    consentEl.closest('.ck-check').classList.add('invalid');
+    formError.textContent = t('ck.consentErr');
+    formError.style.display = 'block';
+    consentEl.focus();
+    return;
+  }
+  const rcptPhone = otherRcpt ? normalizeUaPhone(rcptPhoneRaw) : '';
+  const rcptLine = otherRcpt ? `ОТРИМУВАЧ (інша особа): ${rcptName}, ${rcptPhone}\n` : '';
   const phoneNorm = normalizeUaPhone(phone);
   const email = (document.getElementById('ofEmail')?.value || '').trim();
 
@@ -3333,7 +3398,7 @@ document.getElementById('orderForm').onsubmit = function(e){
 Ім'я: ${name}
 Телефон: ${phoneNorm}
 Email: ${email || '—'}
-Спосіб доставки: ${t('ck.del.'+delivery)}
+${rcptLine}Спосіб доставки: ${t('ck.del.'+delivery)}
 Місто: ${city}
 Відділення/поштомат/адреса: ${branch}
 Спосіб оплати: ${t('ck.pay.'+payment)}
@@ -3370,6 +3435,8 @@ Telegram: ${TG_CONTACT}
     botcheck: document.getElementById('ofBotcheck').checked
   };
   if(contactHandle) payload.contact_handle = contactHandle;
+  if(otherRcpt){ payload.recipient_name = rcptName; payload.recipient_phone = rcptPhone; }
+  payload.consent = 'оферта і політика конфіденційності: так';
   if(email) payload.email = email;
 
   const submitBtn = document.getElementById('submitOrderBtn');
@@ -3402,7 +3469,9 @@ Telegram: ${TG_CONTACT}
       payment: t('ck.pay.'+payment),
       items: itemLines,
       total: total,
-      comment: comment || ''
+      comment: (otherRcpt ? 'ОТРИМУВАЧ: ' + rcptName + ', ' + rcptPhone + (comment ? '. ' : '') : '') + (comment || ''),
+      recipientName: rcptName,
+      recipientPhone: rcptPhone
     };
     const ctrl = (typeof AbortController!=='undefined') ? new AbortController() : null;
     const timer = ctrl ? setTimeout(()=>ctrl.abort(), 15000) : null;
@@ -3702,6 +3771,19 @@ function showReorderBox(){
       if(btn) btn.disabled = false;
       if(msg){ msg.hidden = false; msg.textContent = t('sub.err'); }
     });
+  });
+})();
+
+(function(){
+  const oc = document.getElementById('ofOtherRcpt'), rb = document.getElementById('rcptBox');
+  if(oc && rb) oc.addEventListener('change', function(){
+    rb.hidden = !oc.checked;
+    if(oc.checked){ const n = document.getElementById('ofRcptName'); if(n) n.focus(); }
+  });
+  const cs = document.getElementById('ofConsent');
+  if(cs) cs.addEventListener('change', function(){
+    cs.closest('.ck-check').classList.remove('invalid');
+    if(cs.checked){ const fe = document.getElementById('formError'); if(fe && fe.textContent===t('ck.consentErr')) fe.style.display='none'; }
   });
 })();
 
