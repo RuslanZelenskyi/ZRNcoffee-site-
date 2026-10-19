@@ -190,6 +190,11 @@ def ui_texts(index_src):
 
 
 # ------------------------------------------------------------------ сторінки
+ICONS = '''<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">'''
+
 UI = {
     'uk': dict(lang='uk', loc='uk_UA', catalog='Моносорти', blends='Бленди', blog='Блог', blogTitle='Блог ZRN', buy='Обрати вагу і замовити',
                g='г', about='Про цей сорт', specs='Характеристики', region='Регіон', alt_h='Висота вирощування', alt_u='м над рівнем моря',
@@ -222,6 +227,130 @@ UI = {
 }
 
 
+
+REV = {
+    'uk': dict(title='Залишити відгук про каву | ZRN Coffee', desc='Розкажіть, як вам кава ZRN — відгук допоможе іншим обрати свій сорт.',
+               h1='Ваш відгук про каву', lead='Розкажіть, як вам смакує кава ZRN. Це допомагає іншим обрати свій сорт, а нам — ставати кращими. Займе хвилину.',
+               rating='Ваша оцінка*', rating_err='Поставте оцінку від 1 до 5.', product='Яку каву пробували', product_any='— не вказувати —',
+               text='Ваш відгук*', text_ph='Який смак, аромат, як заварювали, що сподобалось…', text_err='Напишіть, будь ласка, хоча б кілька слів (від 10 символів).',
+               name='Ваше ім’я*', name_ph='Як вас підписати на сайті', name_err='Вкажіть ім’я (можна лише ім’я).',
+               order='Номер замовлення', order_hint='Він є в повідомленні про замовлення — так відгук буде позначено як перевірену покупку. Необов’язково.',
+               consent='Погоджуюсь на публікацію мого відгуку та імені на сайті. <a href="/privacy/" target="_blank" rel="noopener">Політика конфіденційності</a>',
+               consent_err='Підтвердіть згоду на публікацію відгуку.', submit='Надіслати відгук', sending='Надсилаємо…',
+               ok_h='Дякуємо за відгук!', ok_p='Ми обов’язково його прочитаємо. Після перевірки відгук може з’явитися на сайті.', ok_btn='До каталогу',
+               fail='Не вдалося надіслати відгук. Спробуйте ще раз або напишіть нам у Telegram: '),
+    'ru': dict(title='Оставить отзыв о кофе | ZRN Coffee', desc='Расскажите, как вам кофе ZRN — отзыв поможет другим выбрать свой сорт.',
+               h1='Ваш отзыв о кофе', lead='Расскажите, как вам вкус кофе ZRN. Это помогает другим выбрать свой сорт, а нам — становиться лучше. Займёт минуту.',
+               rating='Ваша оценка*', rating_err='Поставьте оценку от 1 до 5.', product='Какой кофе пробовали', product_any='— не указывать —',
+               text='Ваш отзыв*', text_ph='Какой вкус, аромат, как заваривали, что понравилось…', text_err='Напишите, пожалуйста, хотя бы несколько слов (от 10 символов).',
+               name='Ваше имя*', name_ph='Как вас подписать на сайте', name_err='Укажите имя (можно только имя).',
+               order='Номер заказа', order_hint='Он есть в сообщении о заказе — так отзыв будет отмечен как проверенная покупка. Необязательно.',
+               consent='Согласен на публикацию моего отзыва и имени на сайте. <a href="/privacy/" target="_blank" rel="noopener">Политика конфиденциальности (укр.)</a>',
+               consent_err='Подтвердите согласие на публикацию отзыва.', submit='Отправить отзыв', sending='Отправляем…',
+               ok_h='Спасибо за отзыв!', ok_p='Мы обязательно его прочитаем. После проверки отзыв может появиться на сайте.', ok_btn='В каталог',
+               fail='Не удалось отправить отзыв. Попробуйте ещё раз или напишите нам в Telegram: '),
+}
+
+NF = {
+    'uk': dict(h='Сторінку не знайдено', p='Схоже, такої адреси немає: її могли змінити або видалити. Перейдіть до каталогу — там уся свіжообсмажена кава.',
+               cat='До каталогу', blog='Блог', home='На головну'),
+    'ru': dict(h='Страница не найдена', p='Похоже, такого адреса нет: его могли изменить или удалить. Перейдите в каталог — там весь свежеобжаренный кофе.',
+               cat='В каталог', blog='Блог', home='На главную'),
+}
+
+REVIEW_HTML = """<nav class="crumbs" aria-label="breadcrumb"><a href="@@HOME@@">ZRN Coffee</a> › <span>@@H1@@</span></nav>
+<h1>@@H1@@</h1>
+<p class="lead">@@LEAD@@</p>
+<form id="revForm" class="rev-form" novalidate>
+  <fieldset class="rv-f"><legend>@@RATING@@</legend><div class="stars">@@STARS@@</div></fieldset>
+  <div class="rv-f"><label for="revProduct">@@PRODUCT@@</label><select id="revProduct">@@OPTS@@</select></div>
+  <div class="rv-f"><label for="revText">@@TEXT@@</label><textarea id="revText" rows="5" maxlength="2000" placeholder="@@TEXT_PH@@"></textarea></div>
+  <div class="rv-f"><label for="revName">@@NAME@@</label><input type="text" id="revName" maxlength="80" autocomplete="given-name" placeholder="@@NAME_PH@@"></div>
+  <div class="rv-f"><label for="revOrder">@@ORDER@@</label><input type="text" id="revOrder" maxlength="40" autocomplete="off" placeholder="ZRN-000000-000"><small>@@ORDER_HINT@@</small></div>
+  <label class="rv-check" for="revConsent"><input type="checkbox" id="revConsent"><span>@@CONSENT@@</span></label>
+  <div class="rv-hp" aria-hidden="true"><input type="checkbox" id="revBot" tabindex="-1" autocomplete="off"></div>
+  <p id="revErr" class="rv-err" role="alert" hidden></p>
+  <button type="submit" class="btn" id="revBtn">@@SUBMIT@@</button>
+</form>
+<div id="revThanks" class="rev-thanks" hidden>
+  <h2>@@OK_H@@</h2>
+  <p>@@OK_P@@</p>
+  <p><a class="btn" href="@@HOME@@#catalog">@@OK_BTN@@</a></p>
+</div>
+<script>
+(function(){
+  var C = @@CFG@@;
+  var f = document.getElementById('revForm'), err = document.getElementById('revErr'), btn = document.getElementById('revBtn');
+  var q = new URLSearchParams(location.search);
+  var o = (q.get('o') || '').replace(/[^A-Za-z0-9\\-]/g, '').slice(0, 40);
+  if (o) document.getElementById('revOrder').value = o;
+  var pid = q.get('p'); if (pid) document.getElementById('revProduct').value = pid;
+  var lg = document.querySelector('.lang'); if (lg && location.search) lg.href += location.search;
+  function fail(m){ err.textContent = m; err.hidden = false; }
+  f.addEventListener('submit', function(e){
+    e.preventDefault(); err.hidden = true;
+    if (document.getElementById('revBot').checked) return;
+    var rt = f.querySelector('input[name=rating]:checked');
+    var text = document.getElementById('revText').value.trim();
+    var name = document.getElementById('revName').value.trim();
+    var sel = document.getElementById('revProduct'), prod = sel.value ? sel.options[sel.selectedIndex].getAttribute('data-name') : '';
+    var order = document.getElementById('revOrder').value.trim();
+    if (!rt) return fail(C.err.rating_err);
+    if (text.length < 10) return fail(C.err.text_err);
+    if (name.length < 2) return fail(C.err.name_err);
+    if (!document.getElementById('revConsent').checked) return fail(C.err.consent_err);
+    btn.disabled = true; btn.textContent = C.err.sending;
+    var rating = Number(rt.value);
+    var w3 = fetch('https://api.web3forms.com/submit', {method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body: JSON.stringify({access_key:C.key, subject:'Новий відгук ' + rating + '/5 — ZRN Coffee', from_name:'ZRN Coffee — відгуки',
+        name:name, rating:rating + '/5', product:prod || '—', order_number:order || '—', review:text, lang:C.lang,
+        message:'Новий відгук ' + rating + '/5\\nСорт: ' + (prod || '—') + '\\nІм’я: ' + name + '\\nЗамовлення: ' + (order || '—') + '\\n\\n' + text, botcheck:false})})
+      .then(function(r){return r.json();}).then(function(r){return !!(r && r.success);}).catch(function(){return false;});
+    var sh = !C.sheet ? Promise.resolve(false) : fetch(C.sheet, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify({kind:'review', name:name, rating:rating, product:prod, text:text, orderNumber:order, lang:C.lang, consent:true})})
+      .then(function(r){return r.json();}).then(function(r){return !!(r && r.ok);}).catch(function(){return false;});
+    Promise.all([w3, sh]).then(function(r){
+      btn.disabled = false; btn.textContent = C.err.submit;
+      if (r[0] || r[1]) { f.hidden = true; document.getElementById('revThanks').hidden = false; window.scrollTo(0, 0); }
+      else fail(C.err.fail + C.tg);
+    });
+  });
+})();
+</script>
+"""
+
+PAGE_404 = """<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>404 — ZRN Coffee</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#f3ead9">
+@@ICONS@@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,340;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/pages.css">
+</head>
+<body>
+<header class="site-head"><div class="wrap hd-in"><a class="hd-logo" href="/" aria-label="ZRN Craft Micro Roastery"><b>ZRN</b><span>Craft Micro Roastery</span></a></div></header>
+<main class="wrap nf-wrap">
+<div class="nf-code" aria-hidden="true">404</div>
+@@BLOCKS@@</main>
+<script>
+(function(){
+  var l = 'uk';
+  try { var q = new URLSearchParams(location.search).get('lang'); l = (q === 'ru' || q === 'uk') ? q : (localStorage.getItem('zrn_language') || (/^\\/ru(\\/|$)/.test(location.pathname) ? 'ru' : 'uk')); } catch (e) {}
+  if (l !== 'ru') l = 'uk';
+  document.documentElement.lang = l;
+  document.querySelectorAll('.nf').forEach(function(s){ s.hidden = s.getAttribute('data-l') !== l; });
+})();
+</script>
+</body>
+</html>
+"""
+
 class Site:
     def __init__(self, cat, index_src):
         self.cat = cat
@@ -231,6 +360,10 @@ class Site:
         self.prods = cat['products']
         self.posts = cat['posts']
         self.ui_txt = ui_texts(index_src)
+        m = re.search(r"WEB3FORMS_KEY = '([^']*)'", index_src)
+        self.w3key = m.group(1) if m else ''
+        m = re.search(r"ORDER_SHEET_URL = '([^']*)'", index_src)
+        self.sheet_url = m.group(1) if m else ''
         self.out = {}
 
     # --- адреси
@@ -261,7 +394,7 @@ class Site:
         return self.cat['processInfo'][key][lang] if key else ''
 
     # --- каркас
-    def head(self, lang, title, desc, canonical, alts, og_type, image, ld):
+    def head(self, lang, title, desc, canonical, alts, og_type, image, ld, robots='index, follow, max-image-preview:large'):
         u = UI[lang]
         alt_tags = ''.join(f'<link rel="alternate" hreflang="{k}" href="{v}">\n' for k, v in alts.items())
         ld_tags = ''.join(f'<script type="application/ld+json">{json.dumps(x, ensure_ascii=False).replace("</", "<\\/")}</script>\n' for x in ld)
@@ -273,7 +406,7 @@ class Site:
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{E(title)}</title>
 <meta name="description" content="{E(desc)}">
-<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="robots" content="{robots}">
 <meta name="theme-color" content="#f3ead9">
 <link rel="canonical" href="{canonical}">
 {alt_tags}<meta property="og:type" content="{og_type}">
@@ -288,7 +421,7 @@ class Site:
 <meta name="twitter:title" content="{E(title)}">
 <meta name="twitter:description" content="{E(desc)}">
 <meta name="twitter:image" content="{image}">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23211a11'/%3E%3Ctext x='16' y='21' text-anchor='middle' font-size='9' font-weight='700' fill='%23c89640' font-family='Georgia,serif'%3EZRN%3C/text%3E%3C/svg%3E">
+{ICONS}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,340;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -499,6 +632,44 @@ class Site:
                 h += self.footer(lang)
                 self.write(f"{u['pre'].strip('/')}/blog/{a['id']}/index.html".lstrip('/'), h)
 
+    # --- сторінка відгуку (/review/, /ru/review/)
+    def review_pages(self):
+        for lang in LANGS:
+            u, r = UI[lang], REV[lang]
+            other = 'ru' if lang == 'uk' else 'uk'
+            canonical = f"{self.url}{u['pre']}/review/"
+            alts = {'uk': f"{self.url}/review/", 'ru': f"{self.url}/ru/review/", 'x-default': f"{self.url}/review/"}
+            home = '/' if lang == 'uk' else '/?lang=ru'
+            h = self.head(lang, r['title'], r['desc'], canonical, alts, 'website', f"{self.url}/img/og.jpg", [], robots='noindex, follow')
+            h += self.header(lang, f"{UI[other]['pre']}/review/")
+            stars = ''.join(f'<input type="radio" name="rating" id="st{i}" value="{i}"><label for="st{i}" title="{i}"><span aria-hidden="true">★</span><span class="sr">{i}</span></label>'
+                            for i in (5, 4, 3, 2, 1))
+            opts = f'<option value="">{r["product_any"]}</option>' + ''.join(
+                f'<option value="{E(p["id"])}" data-name="{E(p["name"])}">{E(p["name"])}</option>' for p in self.prods)
+            cfg = json.dumps({'key': self.w3key, 'sheet': self.sheet_url, 'tg': self.tg, 'lang': lang,
+                              'err': {k: r[k] for k in ('rating_err', 'text_err', 'name_err', 'consent_err', 'submit', 'sending', 'fail')}},
+                             ensure_ascii=False).replace('</', '<\\/')
+            tpl = REVIEW_HTML
+            for k, v in dict(HOME=home, H1=r['h1'], LEAD=r['lead'], RATING=r['rating'], STARS=stars, PRODUCT=r['product'], OPTS=opts,
+                             TEXT=r['text'], TEXT_PH=E(r['text_ph']), NAME=r['name'], NAME_PH=E(r['name_ph']), ORDER=r['order'],
+                             ORDER_HINT=r['order_hint'], CONSENT=r['consent'], SUBMIT=r['submit'], OK_H=r['ok_h'], OK_P=r['ok_p'],
+                             OK_BTN=r['ok_btn'], CFG=cfg).items():
+                tpl = tpl.replace('@@' + k + '@@', v)
+            h += tpl
+            h += self.footer(lang)
+            self.write(f"{u['pre'].strip('/')}/review/index.html".lstrip('/'), h)
+
+    # --- 404.html (GitHub Pages показує її для неіснуючих адрес)
+    def page_404(self):
+        blocks = ''
+        for lg in LANGS:
+            hm = '/' if lg == 'uk' else '/?lang=ru'
+            blocks += (f'<section class="nf" data-l="{lg}"{"" if lg == "uk" else " hidden"}><h1>{NF[lg]["h"]}</h1><p>{NF[lg]["p"]}</p>'
+                       f'<p class="nf-btns"><a class="btn" href="{hm}#catalog">{NF[lg]["cat"]}</a> '
+                       f'<a class="btn ghost" href="{UI[lg]["pre"]}/blog/">{NF[lg]["blog"]}</a> '
+                       f'<a class="btn ghost" href="{hm}">{NF[lg]["home"]}</a></p></section>\n')
+        self.write('404.html', PAGE_404.replace('@@ICONS@@', ICONS).replace('@@BLOCKS@@', blocks))
+
     # --- sitemap
     def sitemap(self):
         def entry(loc, alts, prio, freq):
@@ -608,6 +779,37 @@ section p,.article p{margin-bottom:12px;color:var(--sub)}
 .site-foot{border-top:1px solid var(--line);background:var(--bg2);padding:26px 0;font-size:.9rem;color:var(--sub)}
 .foot-links{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:8px}
 .foot-links a{display:inline-flex;align-items:center;min-height:44px;color:var(--sub)}
+.btn.ghost{background:transparent;color:var(--dark);border:1px solid var(--line)}
+.btn.ghost:hover{background:var(--card);color:var(--dark)}
+.nf-wrap{text-align:center;padding-top:56px}
+.nf-code{font-family:'Fraunces',Georgia,serif;font-size:clamp(5rem,22vw,9rem);line-height:1;color:var(--gold);opacity:.85;margin-bottom:8px}
+.nf h1{margin-bottom:12px}
+.nf p{color:var(--sub);max-width:46ch;margin:0 auto 14px}
+.nf-btns{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:22px}
+.nf-btns .btn{min-width:150px}
+.lead{color:var(--sub);max-width:62ch;margin-bottom:22px}
+.rev-form{max-width:620px;margin-bottom:34px}
+.rv-f{margin:0 0 16px;border:0;padding:0}
+.rv-f label,.rv-f legend{display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;color:var(--sub);margin-bottom:7px;padding:0}
+.rv-f input[type=text],.rv-f select,.rv-f textarea{width:100%;font:inherit;font-size:1rem;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px 14px;min-height:48px}
+.rv-f textarea{resize:vertical;min-height:120px;line-height:1.5}
+.rv-f input:focus,.rv-f select:focus,.rv-f textarea:focus{outline:2px solid var(--gold);outline-offset:1px}
+.rv-f small{display:block;margin-top:6px;font-size:.8rem;color:var(--sub);line-height:1.4}
+.stars{display:inline-flex;flex-direction:row-reverse;justify-content:flex-end;gap:2px}
+.stars input{position:absolute;opacity:0;width:1px;height:1px}
+.stars label{margin:0;padding:0 3px;font-size:2.3rem;line-height:1;color:#cdbf9f;cursor:pointer;text-transform:none;letter-spacing:0;min-width:44px;min-height:48px;display:inline-flex;align-items:center;justify-content:center}
+.stars input:checked~label,.stars label:hover,.stars label:hover~label{color:#c89640}
+.stars input:focus-visible+label{outline:2px solid var(--gold);border-radius:6px}
+.rv-check{display:flex;gap:10px;align-items:flex-start;font-size:.88rem;color:var(--sub);line-height:1.45;margin:4px 0 16px;cursor:pointer}
+.rv-check input{width:20px;height:20px;flex:none;margin-top:1px;accent-color:var(--gold-soft)}
+.rv-check a{color:var(--gold-soft);text-decoration:underline}
+.rv-hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.rv-err{background:rgba(193,67,42,.09);color:#9c3b26;border:1px solid rgba(193,67,42,.3);border-radius:8px;padding:10px 14px;font-size:.9rem;margin:0 0 14px}
+.rev-form .btn{width:100%;border:0;cursor:pointer;font:inherit;font-weight:600}
+.rev-form .btn:disabled{opacity:.6;cursor:wait}
+.rev-thanks{max-width:560px;margin:10px 0 40px}
+.rev-thanks h2{font-size:1.6rem;margin-bottom:10px}
+.rev-thanks p{color:var(--sub);margin-bottom:14px}
 @media(max-width:560px){.hd-logo span{display:none}.site-head nav a{padding:0 7px;font-size:.85rem}.specs div{flex-direction:column;gap:2px}.specs dt{flex:none}.bar{grid-template-columns:96px 1fr}}
 '''
 
@@ -618,6 +820,8 @@ def main():
     site = Site(cat, index_src)
     site.product_pages()
     site.blog_pages()
+    site.review_pages()
+    site.page_404()
     site.sitemap()
     site.write('pages.css', CSS)
     # прибираємо застарілі сторінки сортів/статей, яких більше немає в catalog.json
