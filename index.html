@@ -36,6 +36,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
+<script src="/analytics.js" defer></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,340;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -962,6 +963,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       <div class="foot-contacts foot-legal" style="margin-top:6px">
         <a href="/oferta/" data-i18n="foot.oferta">Публічна оферта</a>
         <a href="/privacy/" data-i18n="foot.privacy">Політика конфіденційності</a>
+        <a href="#" data-cookie-settings data-i18n="foot.cookies">Налаштування cookie</a>
       </div>
     </div>
     <div class="foot-schedule">
@@ -1275,6 +1277,7 @@ uk: {
   'ck.consentErr': 'Щоб оформити замовлення, підтвердьте згоду з офертою та політикою конфіденційності.',
   'foot.oferta': 'Публічна оферта',
   'foot.privacy': 'Політика конфіденційності',
+  'foot.cookies': 'Налаштування cookie',
   'ck.guarantee': 'Не сподобалась кава — замінимо на інший сорт або повернемо гроші протягом 14 днів. Напишіть нам.',
   'ck.confirmExtra': 'Ми відповімо вам протягом 1–2 годин у робочий час.',
   'ck.reviewAsk': 'Коли спробуєте каву — <a href="/review/">залишіть відгук</a>. Нам важлива ваша думка.',
@@ -1461,6 +1464,7 @@ ru: {
   'ck.consentErr': 'Чтобы оформить заказ, подтвердите согласие с офертой и политикой конфиденциальности.',
   'foot.oferta': 'Публичная оферта',
   'foot.privacy': 'Политика конфиденциальности',
+  'foot.cookies': 'Настройки cookie',
   'ck.guarantee': 'Не понравился кофе — заменим на другой сорт или вернём деньги в течение 14 дней. Напишите нам.',
   'ck.confirmExtra': 'Мы ответим вам в течение 1–2 часов в рабочее время.',
   'ck.reviewAsk': 'Когда попробуете кофе — <a href="/review/">оставьте отзыв</a>. Нам важно ваше мнение.',
@@ -2833,6 +2837,8 @@ function modalSectionsHtml(p){
 function openProduct(id, restore){
   const p = ALL_PRODUCTS.find(x=>x.id===id);
   if(!p) return;
+  const _isRerender = !!restore;
+  if(!_isRerender && window.zrnTrack) zrnTrack('view_item', {currency:'UAH', value:p.price200, items:[{item_id:p.id, item_name:p.name, price:p.price200, quantity:1}]});
   restore = restore || window._modalUIState || null;
   if(restore && restore.id && restore.id!==id) restore = null;   // стан іншої картки не переноситься
   genericModal.style.setProperty('--accent', p.accent||'#a9792f');
@@ -2965,6 +2971,7 @@ function openProduct(id, restore){
   };
   genericModal.querySelector('.modal-add').onclick = (e)=>{
     addToCart(p.id, composeGrind(), selectedWeight, selectedQty);
+    if(window.zrnTrack){ const _u = priceFor(p, selectedWeight); zrnTrack('add_to_cart', {currency:'UAH', value:_u*selectedQty, items:[{item_id:p.id, item_name:p.name, item_variant:selectedWeight+' г, '+composeGrind(), price:_u, quantity:selectedQty}]}); }
     const btn = e.currentTarget;
     const original = btn.textContent;
     btn.textContent = t('ui.added');
@@ -3088,6 +3095,10 @@ blogOverlay.onclick = (e)=>{ if(e.target===blogOverlay) closeBlogOverlay(); };
 /* ---------- кошик (зберігається в браузері між візитами) ---------- */
 const WEB3FORMS_KEY = '2bb53a08-cd92-4679-bf33-541f5a776b8a';
 const TG_CONTACT = 't.me/zrncoffee';
+document.addEventListener('click', function(e){
+  const a = e.target.closest && e.target.closest('a[href*="t.me/"]');
+  if(a && window.zrnTrack) zrnTrack('generate_lead', {method:'telegram', link_location: a.closest('footer') ? 'footer' : (a.closest('#drawer') ? 'cart' : 'page')});
+});
 /* Дублювання замовлень у Google Таблицю (Apps Script, URL закінчується на /exec).
    Порожньо — запит пропускається. */
 const ORDER_SHEET_URL = 'https://script.google.com/macros/s/AKfycbxWAf8jVIdgq2Cs0YnjczFzvAgiHxoB-Xt7Rz-V3pwdx5XkbrUoDITER-noSKNmnDwr/exec';
@@ -3258,7 +3269,9 @@ function updateStickyBar(){
 }
 window.addEventListener('scroll', updateStickyBar, {passive:true});
 window.addEventListener('resize', updateStickyBar, {passive:true});
+function zrnCartItems(){ return cartLines().map(l=>({item_id:l.id, item_name:l.p.name, item_variant:l.weight+' г, '+l.grind, price:l.unit, quantity:l.qty})); }
 function openDrawer(){
+  if(window.zrnTrack && cartLines().length) zrnTrack('view_cart', {currency:'UAH', value:cartTotal(), items:zrnCartItems()});
   overlay.classList.add('open');
   drawer.classList.add('open');
   if(siteHeader) siteHeader.classList.add('header-hidden');
@@ -3311,6 +3324,7 @@ function prefillForm(){
 
 document.getElementById('toCheckoutBtn').onclick = ()=>{
   if(Object.keys(cart).length===0) return;
+  if(window.zrnTrack) zrnTrack('begin_checkout', {currency:'UAH', value:cartTotal(), items:zrnCartItems()});
   prefillForm();
   showDrawerView(formView);
 };
@@ -3496,6 +3510,7 @@ Telegram: ${TG_CONTACT}
     submitBtn.disabled = false;
     submitBtn.textContent = t('ck.submit');
     if(accepted){
+      if(window.zrnPurchase) zrnPurchase(orderNumber, total, zrnCartItems());
       try{ localStorage.setItem('zrn_checkout', JSON.stringify({name, phone: phoneNorm, email, delivery, city, branch})); }catch(err){}
       document.getElementById('confirmText').innerHTML = (contactMethod==='call' ? t('ck.okCall') : t('ck.okMsg')).replace('{n}', orderNumber);
       try{
