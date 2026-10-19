@@ -32,7 +32,10 @@
 <meta name="twitter:image" content="https://zrncoffee.com.ua/img/og.jpg">
 <meta name="twitter:image:alt" content="ZRN Coffee — свіжообсмажена кава в зернах">
 <!-- Favicon (inline SVG) -->
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23211a11'/%3E%3Ctext x='16' y='21' text-anchor='middle' font-size='9' font-weight='700' fill='%23c89640' font-family='Georgia,serif'%3EZRN%3C/text%3E%3C/svg%3E" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,340;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -905,7 +908,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
     <div class="reviews-grid" id="reviewsGrid" hidden></div>
     <div class="reviews-cta">
       <p class="reviews-cta-text" data-i18n="rev.cta">Спробували нашу каву? Напишіть відгук у Telegram</p>
-      <a class="reviews-cta-btn" href="https://t.me/zrncoffee" target="_blank" rel="noopener" data-i18n="rev.ctaBtn">Написати відгук</a>
+      <a class="reviews-cta-btn" href="/review/" data-seo="review/" data-i18n="rev.ctaBtn">Написати відгук</a>
     </div>
   </section>
 
@@ -1079,7 +1082,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       <div class="confirm-icon">✓</div>
       <p id="confirmText"></p>
       <p class="confirm-extra" data-i18n="ck.confirmExtra">Ми відповімо вам протягом 1–2 годин у робочий час.</p>
-      <p class="confirm-extra" data-i18n-html="ck.reviewAsk">Коли спробуєте каву — напишіть відгук у <a href="https://t.me/zrncoffee" target="_blank" rel="noopener">Telegram</a>. Нам важлива ваша думка.</p>
+      <p class="confirm-extra" data-i18n-html="ck.reviewAsk">Коли спробуєте каву — <a href="/review/">залишіть відгук</a>. Нам важлива ваша думка.</p>
       <button class="checkout" id="closeConfirmBtn" data-i18n="ck.close">Закрити</button>
     </div>
   </div>
@@ -1274,7 +1277,7 @@ uk: {
   'foot.privacy': 'Політика конфіденційності',
   'ck.guarantee': 'Не сподобалась кава — замінимо на інший сорт або повернемо гроші протягом 14 днів. Напишіть нам.',
   'ck.confirmExtra': 'Ми відповімо вам протягом 1–2 годин у робочий час.',
-  'ck.reviewAsk': 'Коли спробуєте каву — напишіть відгук у <a href="https://t.me/zrncoffee" target="_blank" rel="noopener">Telegram</a>. Нам важлива ваша думка.',
+  'ck.reviewAsk': 'Коли спробуєте каву — <a href="/review/">залишіть відгук</a>. Нам важлива ваша думка.',
   'ck.errFields': 'Будь ласка, заповніть усі обов’язкові поля (позначені *).',
   'ck.errSend': 'Не вдалося відправити замовлення. Спробуйте ще раз або напишіть нам у Telegram: ',
   'ck.errNet': 'Не вдалося відправити замовлення. Перевірте з’єднання і спробуйте ще раз, або напишіть нам у Telegram: ',
@@ -1460,7 +1463,7 @@ ru: {
   'foot.privacy': 'Политика конфиденциальности',
   'ck.guarantee': 'Не понравился кофе — заменим на другой сорт или вернём деньги в течение 14 дней. Напишите нам.',
   'ck.confirmExtra': 'Мы ответим вам в течение 1–2 часов в рабочее время.',
-  'ck.reviewAsk': 'Когда попробуете кофе — напишите отзыв в <a href="https://t.me/zrncoffee" target="_blank" rel="noopener">Telegram</a>. Нам важно ваше мнение.',
+  'ck.reviewAsk': 'Когда попробуете кофе — <a href="/review/">оставьте отзыв</a>. Нам важно ваше мнение.',
   'ck.errFields': 'Пожалуйста, заполните все обязательные поля (отмечены *).',
   'ck.errSend': 'Не удалось отправить заказ. Попробуйте ещё раз или напишите нам в Telegram: ',
   'ck.errNet': 'Не удалось отправить заказ. Проверьте соединение и попробуйте ещё раз, или напишите нам в Telegram: ',
@@ -3504,6 +3507,8 @@ Telegram: ${TG_CONTACT}
       }catch(err){}
       cart = {}; saveCart(); renderCart();
       showDrawerView(confirmView);
+      const ra = document.querySelector('#confirmView .confirm-extra a');
+      if(ra) ra.href = (currentLang==='ru' ? '/ru' : '') + '/review/?o=' + encodeURIComponent(orderNumber);
     } else {
       formError.textContent = t('ck.errSend') + TG_CONTACT;
       formError.style.display = 'block';
