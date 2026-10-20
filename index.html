@@ -380,8 +380,9 @@ section{padding:56px 0;}
 .ck-check input{width:20px; height:20px; flex:none; margin-top:1px; accent-color:var(--gold-soft); cursor:pointer;}
 .rcpt-box{border-left:3px solid var(--gold); padding-left:14px; margin:0 0 14px;}
 .rcpt-box[hidden]{display:none;}
-.ck-check.consent{font-size:.78rem; color:var(--sub); margin:0 0 12px;}
-.ck-check.consent a{color:var(--gold-soft); font-weight:600; text-decoration:underline; text-underline-offset:2px;}
+.ck-consent-note{font-size:.78rem; color:var(--sub); line-height:1.45; margin:10px 0 12px; text-align:center;}
+.ck-consent-note a{color:var(--gold-soft); font-weight:600; text-decoration:underline; text-underline-offset:2px;}
+.contact-note{font-size:.84rem; color:var(--sub); line-height:1.45; margin:-4px 0 14px;}
 .ck-check.invalid{outline:2px solid rgba(193,67,42,.55); outline-offset:3px; border-radius:4px;}
 .foot-legal{font-size:.8rem; opacity:.9;}
 .form-reassure{font-size:.76rem; color:var(--sub); margin:10px 0 14px; line-height:1.5; text-align:center;}
@@ -1053,10 +1054,6 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
         <div class="pay-note" data-i18n="ck.payNote">Реквізити для оплати ми надішлемо вам у Telegram або Viber після підтвердження замовлення</div>
       </div>
       <div class="f-field">
-        <label for="ofComment" data-i18n="ck.comment">Коментар</label>
-        <textarea id="ofComment" rows="2" placeholder="Необов'язково" data-i18n-placeholder="ck.commentPh"></textarea>
-      </div>
-      <div class="f-field">
         <div class="f-label" id="contactLabel" data-i18n="ck.contact">Як з вами зв'язатися</div>
         <div class="radio-row" role="radiogroup" aria-labelledby="contactLabel">
           <label class="radio-opt"><input type="radio" name="contactMethod" value="viber" checked> <span data-i18n="ck.viaViber">Viber</span></label>
@@ -1064,17 +1061,18 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
           <label class="radio-opt"><input type="radio" name="contactMethod" value="call"> <span data-i18n="ck.viaCall">Дзвінок</span></label>
         </div>
       </div>
+      <p class="contact-note" data-i18n-html="ck.contactNote">Напишемо або зателефонуємо на номер із замовлення.<br>Якщо в месенджері інший номер або нік — вкажіть його в коментарі</p>
       <div class="f-field">
-        <label for="ofContactHandle" data-i18n="ck.handle">Ваш нік або номер у Telegram/Viber</label>
-        <input type="text" id="ofContactHandle" autocomplete="off" maxlength="64" placeholder="@нік або +380…" data-i18n-placeholder="ck.handlePh">
+        <label for="ofComment" data-i18n="ck.comment">Коментар</label>
+        <textarea id="ofComment" rows="2" placeholder="Побажання, або інший нік/номер для зв'язку — сюди" data-i18n-placeholder="ck.commentPh"></textarea>
       </div>
       <div style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden" aria-hidden="true">
         <input type="checkbox" id="ofBotcheck" name="botcheck" tabindex="-1" autocomplete="off">
       </div>
       <div id="formError" class="form-error" style="display:none"></div>
       <p class="form-reassure" data-i18n="ck.reassure">Ми відповімо протягом 1–2 годин у робочий час. Реквізити для оплати надішлемо після підтвердження.</p>
-      <label class="ck-check consent" for="ofConsent"><input type="checkbox" id="ofConsent"> <span data-i18n-html="ck.consent">Оформлюючи замовлення, я погоджуюсь з <a href="/oferta/" target="_blank" rel="noopener">офертою</a> та <a href="/privacy/" target="_blank" rel="noopener">політикою конфіденційності</a></span></label>
       <button type="submit" class="checkout" id="submitOrderBtn" data-i18n="ck.submit">Підтвердити замовлення</button>
+      <p class="ck-consent-note" data-i18n-html="ck.consent">Оформлюючи замовлення, ви погоджуєтесь з <a href="/oferta/" target="_blank" rel="noopener">офертою</a> та <a href="/privacy/" target="_blank" rel="noopener">політикою конфіденційності</a>.</p>
       <p class="form-guarantee" data-i18n="ck.guarantee">Не сподобалась кава — замінимо на інший сорт або повернемо гроші протягом 14 днів. Напишіть нам.</p>
     </form>
   </div>
@@ -1259,22 +1257,20 @@ uk: {
   'ck.viaTg': 'Telegram',
   'ck.viaViber': 'Viber',
   'ck.viaCall': 'Дзвінок',
-  'ck.handle': 'Ваш нік або номер у Telegram/Viber',
-  'ck.handlePh': '@нік або +380…',
   'ck.submit': 'Підтвердити замовлення',
   'ck.sending': 'Відправка...',
   'ck.close': 'Закрити',
   'ck.cityPh': 'Наприклад: Київ, Львів, Одеса',
   'ck.branchPh': 'Наприклад: Відділення №15, Поштомат №2348, вул. Франка 12',
-  'ck.commentPh': 'Необов\'язково',
+  'ck.commentPh': 'Побажання, або інший нік/номер для зв\'язку — сюди',
   'ck.payNote': 'Реквізити для оплати ми надішлемо вам у Telegram або Viber після підтвердження замовлення',
   'ck.reassure': 'Ми відповімо протягом 1–2 годин у робочий час. Реквізити для оплати надішлемо після підтвердження.',
   'ck.otherRcpt': 'Отримувач — інша особа',
   'ck.rcptName': 'Ім\'я та прізвище отримувача*',
   'ck.rcptPhone': 'Телефон отримувача*',
   'ck.rcptErr': 'Вкажіть ім\'я та коректний телефон отримувача.',
-  'ck.consent': 'Оформлюючи замовлення, я погоджуюсь з <a href="/oferta/" target="_blank" rel="noopener">офертою</a> та <a href="/privacy/" target="_blank" rel="noopener">політикою конфіденційності</a>',
-  'ck.consentErr': 'Щоб оформити замовлення, підтвердьте згоду з офертою та політикою конфіденційності.',
+  'ck.consent': 'Оформлюючи замовлення, ви погоджуєтесь з <a href="/oferta/" target="_blank" rel="noopener">офертою</a> та <a href="/privacy/" target="_blank" rel="noopener">політикою конфіденційності</a>.',
+  'ck.contactNote': 'Напишемо або зателефонуємо на номер із замовлення.<br>Якщо в месенджері інший номер або нік — вкажіть його в коментарі',
   'foot.oferta': 'Публічна оферта',
   'foot.privacy': 'Політика конфіденційності',
   'foot.cookies': 'Налаштування cookie',
@@ -1446,22 +1442,20 @@ ru: {
   'ck.viaTg': 'Telegram',
   'ck.viaViber': 'Viber',
   'ck.viaCall': 'Звонок',
-  'ck.handle': 'Ваш ник или номер в Telegram/Viber',
-  'ck.handlePh': '@ник или +380…',
   'ck.submit': 'Подтвердить заказ',
   'ck.sending': 'Отправка...',
   'ck.close': 'Закрыть',
   'ck.cityPh': 'Например: Киев, Львов, Одесса',
   'ck.branchPh': 'Например: Отделение №15, Почтомат №2348, ул. Франка 12',
-  'ck.commentPh': 'Необязательно',
+  'ck.commentPh': 'Пожелания, или другой ник/номер для связи — сюда',
   'ck.payNote': 'Реквизиты для оплаты мы пришлём вам в Telegram или Viber после подтверждения заказа',
   'ck.reassure': 'Мы ответим в течение 1–2 часов в рабочее время. Реквизиты для оплаты пришлём после подтверждения.',
   'ck.otherRcpt': 'Получатель — другое лицо',
   'ck.rcptName': 'Имя и фамилия получателя*',
   'ck.rcptPhone': 'Телефон получателя*',
   'ck.rcptErr': 'Укажите имя и корректный телефон получателя.',
-  'ck.consent': 'Оформляя заказ, я соглашаюсь с <a href="/oferta/" target="_blank" rel="noopener">офертой</a> и <a href="/privacy/" target="_blank" rel="noopener">политикой конфиденциальности</a> (на украинском)',
-  'ck.consentErr': 'Чтобы оформить заказ, подтвердите согласие с офертой и политикой конфиденциальности.',
+  'ck.consent': 'Оформляя заказ, вы соглашаетесь с <a href="/oferta/" target="_blank" rel="noopener">офертой</a> и <a href="/privacy/" target="_blank" rel="noopener">политикой конфиденциальности</a> (на украинском).',
+  'ck.contactNote': 'Напишем или позвоним на номер из заказа.<br>Если в мессенджере другой номер или ник — укажите его в комментарии',
   'foot.oferta': 'Публичная оферта',
   'foot.privacy': 'Политика конфиденциальности',
   'foot.cookies': 'Настройки cookie',
@@ -3319,7 +3313,6 @@ function prefillForm(){
   const rb = document.getElementById('rcptBox'); if(rb) rb.hidden = true;
   const rn = document.getElementById('ofRcptName'); if(rn) rn.value = '';
   const rp = document.getElementById('ofRcptPhone'); if(rp) rp.value = '+380';
-  const cs = document.getElementById('ofConsent'); if(cs){ cs.checked = false; cs.closest('.ck-check').classList.remove('invalid'); }
 }
 
 document.getElementById('toCheckoutBtn').onclick = ()=>{
@@ -3358,7 +3351,7 @@ document.getElementById('orderForm').onsubmit = function(e){
   const branch = document.getElementById('ofBranch').value.trim();
   const comment = document.getElementById('ofComment').value.trim();
   const contactMethod = form.querySelector('input[name="contactMethod"]:checked').value;
-  const contactHandle = (document.getElementById('ofContactHandle').value || '').trim();
+  const contactHandle = '';
   if(document.getElementById('ofBotcheck').checked) return;   // honeypot
 
   if(!name || !phone || !city || !branch){
@@ -3377,14 +3370,6 @@ document.getElementById('orderForm').onsubmit = function(e){
     formError.textContent = t('ck.rcptErr');
     formError.style.display = 'block';
     (rcptName.length < 2 ? document.getElementById('ofRcptName') : document.getElementById('ofRcptPhone')).focus();
-    return;
-  }
-  const consentEl = document.getElementById('ofConsent');
-  if(!consentEl.checked){
-    consentEl.closest('.ck-check').classList.add('invalid');
-    formError.textContent = t('ck.consentErr');
-    formError.style.display = 'block';
-    consentEl.focus();
     return;
   }
   const rcptPhone = otherRcpt ? normalizeUaPhone(rcptPhoneRaw) : '';
@@ -3799,11 +3784,6 @@ function showReorderBox(){
   if(oc && rb) oc.addEventListener('change', function(){
     rb.hidden = !oc.checked;
     if(oc.checked){ const n = document.getElementById('ofRcptName'); if(n) n.focus(); }
-  });
-  const cs = document.getElementById('ofConsent');
-  if(cs) cs.addEventListener('change', function(){
-    cs.closest('.ck-check').classList.remove('invalid');
-    if(cs.checked){ const fe = document.getElementById('formError'); if(fe && fe.textContent===t('ck.consentErr')) fe.style.display='none'; }
   });
 })();
 
