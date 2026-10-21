@@ -352,6 +352,27 @@ PAGE_404 = """<!DOCTYPE html>
 </html>
 """
 
+# Короткі адреси для соцмереж: zrncoffee.com.ua/ig → головна + запам'ятане джерело заказу
+SHORT = {'ig': 'instagram', 'tg': 'telegram', 'viber': 'viber', 'qr': 'qr', 'fb': 'facebook',
+         'tt': 'tiktok', 'yt': 'youtube', 'x': 'x (twitter)'}
+
+SHORT_HTML = '''<!DOCTYPE html>
+<html lang="uk"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ZRN Coffee</title><meta name="robots" content="noindex, follow"><link rel="canonical" href="@@URL@@/">
+<script>
+(function(){var to='/';try{
+  var q=new URLSearchParams(location.search).get('to');
+  if(q&&q.charAt(0)==='/'&&q.charAt(1)!=='/'&&q.length<120)to=q;
+  localStorage.setItem('zrn_attr',JSON.stringify({s:@@SRC@@,l:to.split('?')[0],t:Date.now()}));
+}catch(e){}
+location.replace(to);})();
+</script>
+<meta http-equiv="refresh" content="1;url=/">
+<style>body{margin:0;display:grid;place-items:center;min-height:100vh;background:#f3ead9;font:16px system-ui,sans-serif;color:#1f1912}a{color:#1f1912}</style>
+</head><body><p><a href="/">ZRN Coffee →</a></p></body></html>
+'''
+
+
 class Site:
     def __init__(self, cat, index_src):
         self.cat = cat
@@ -672,6 +693,11 @@ class Site:
                        f'<a class="btn ghost" href="{hm}">{NF[lg]["home"]}</a></p></section>\n')
         self.write('404.html', PAGE_404.replace('@@ICONS@@', ICONS).replace('@@BLOCKS@@', blocks))
 
+    # --- короткі посилання (/ig, /tg, ...)
+    def short_links(self):
+        for code, src in SHORT.items():
+            self.write(f'{code}/index.html', SHORT_HTML.replace('@@URL@@', self.url).replace('@@SRC@@', json.dumps(src, ensure_ascii=False)))
+
     # --- sitemap
     def sitemap(self):
         def entry(loc, alts, prio, freq):
@@ -824,6 +850,7 @@ def main():
     site.blog_pages()
     site.review_pages()
     site.page_404()
+    site.short_links()
     site.sitemap()
     site.write('pages.css', CSS)
     # прибираємо застарілі сторінки сортів/статей, яких більше немає в catalog.json
