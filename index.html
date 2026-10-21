@@ -3394,6 +3394,7 @@ document.getElementById('orderForm').onsubmit = function(e){
   const contactLabel = contactMethod==='telegram' ? t('ck.viaTg') : contactMethod==='viber' ? t('ck.viaViber') : t('ck.viaCall');
   const contactFull = contactLabel + (contactHandle ? ' — ' + contactHandle : '');
 
+  const attr = (window.zrnAttribution ? zrnAttribution() : {source:'', landing:''});
   const message =
 `Нове замовлення ${orderNumber}
 
@@ -3413,6 +3414,7 @@ ${itemLines.join('\n')}
 
 Коментар: ${comment || '—'}
 
+Джерело: ${attr.source} → ${attr.landing}
 Telegram: ${TG_CONTACT}
 Дата і час: ${dateStr}`;
 
@@ -3439,6 +3441,7 @@ Telegram: ${TG_CONTACT}
   if(contactHandle) payload.contact_handle = contactHandle;
   if(otherRcpt){ payload.recipient_name = rcptName; payload.recipient_phone = rcptPhone; }
   payload.consent = 'оферта і політика конфіденційності: так';
+  payload.source = attr.source; payload.landing_page = attr.landing;
   if(email) payload.email = email;
 
   const submitBtn = document.getElementById('submitOrderBtn');
@@ -3473,7 +3476,9 @@ Telegram: ${TG_CONTACT}
       total: total,
       comment: (otherRcpt ? 'ОТРИМУВАЧ: ' + rcptName + ', ' + rcptPhone + (comment ? '. ' : '') : '') + (comment || ''),
       recipientName: rcptName,
-      recipientPhone: rcptPhone
+      recipientPhone: rcptPhone,
+      source: attr.source,
+      landing: attr.landing
     };
     const ctrl = (typeof AbortController!=='undefined') ? new AbortController() : null;
     const timer = ctrl ? setTimeout(()=>ctrl.abort(), 15000) : null;
