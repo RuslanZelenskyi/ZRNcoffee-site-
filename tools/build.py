@@ -358,7 +358,7 @@ SHORT = {'ig': 'instagram', 'tg': 'telegram', 'viber': 'viber', 'qr': 'qr', 'fb'
 
 SHORT_HTML = '''<!DOCTYPE html>
 <html lang="uk"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ZRN Coffee</title><meta name="robots" content="noindex, follow"><link rel="canonical" href="@@URL@@/">
+<title>ZRN Coffee</title>@@META@@<meta name="robots" content="noindex, follow"><link rel="canonical" href="@@URL@@/">
 <script>
 (function(){var to='/';try{
   var q=new URLSearchParams(location.search).get('to');
@@ -695,8 +695,13 @@ class Site:
 
     # --- короткі посилання (/ig, /tg, ...)
     def short_links(self):
+        # Превʼю в Viber/Telegram/Facebook бере Open Graph із самої сторінки (JS і редірект боти не виконують),
+        # тому копіюємо їх з index.html — коротке посилання виглядає в чаті так само, як головна.
+        head = open(INDEX, encoding='utf-8').read().split('</head>')[0]
+        tags = re.findall(r'<meta (?:property="og:[^"]+"|name="twitter:[^"]+"|name="description")[^>]*>', head)
+        meta = '\n'.join(tags) + '\n'
         for code, src in SHORT.items():
-            self.write(f'{code}/index.html', SHORT_HTML.replace('@@URL@@', self.url).replace('@@SRC@@', json.dumps(src, ensure_ascii=False)))
+            self.write(f'{code}/index.html', SHORT_HTML.replace('@@META@@', meta).replace('@@URL@@', self.url).replace('@@SRC@@', json.dumps(src, ensure_ascii=False)))
 
     # --- sitemap
     def sitemap(self):
