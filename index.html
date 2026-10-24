@@ -3678,8 +3678,9 @@ document.querySelectorAll('#faqList .faq-q').forEach(btn=>{
 
 /* ---------- відгуки: реальні відгуки додавайте сюди ----------
    Формат: {name:'Ім’я', city:'Місто', rating:5, product:'Назва кави', text:'Текст відгуку'}
+   Рядок нижче генерує tools/build.py з листа «Відгуки» (статус «Опубліковано») — вручну не правте.
    Поки масив порожній — блок із відгуками прихований. */
-const REVIEWS = [];
+/*REVIEWS:START*/const REVIEWS = [];/*REVIEWS:END*/
 (function renderReviews(){
   const box = document.getElementById('reviewsGrid');
   if(!box) return;
@@ -3698,6 +3699,23 @@ const REVIEWS = [];
   box.hidden = false;
 })();
 
+
+/* ---- свіжість: якщо сайт був у фоні 10+ хв (встановлений ярлик/PWA) — тихо перезавантажуємо, щоб ціни не були застарілими.
+   Не чіпаємо, якщо відкрито вікно/кошик або у формі щось введено. Кошик зберігається в localStorage. ---- */
+(function keepFresh(){
+  var hiddenAt = 0, LIMIT = 10*60*1000;
+  function busy(){
+    if(document.querySelector('.open')) return true;
+    var f = document.querySelectorAll('input:not([type=hidden]):not([type=checkbox]):not([type=radio]):not([type=button]):not([type=submit]), textarea');
+    for(var i=0;i<f.length;i++){ var v = String(f[i].value||'').trim(); if(v && v!=='+380') return true; }
+    return false;
+  }
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden){ hiddenAt = Date.now(); return; }
+    if(hiddenAt && Date.now()-hiddenAt > LIMIT && !busy()){ hiddenAt = 0; location.reload(); }
+  });
+  window.addEventListener('pageshow', function(e){ if(e.persisted && hiddenAt && Date.now()-hiddenAt > LIMIT && !busy()) location.reload(); });
+})();
 
 /* ---- a11y: ESC closes overlays ---- */
 document.addEventListener('keydown', function(e){
