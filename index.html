@@ -382,6 +382,9 @@ section{padding:56px 0;}
 .rcpt-box[hidden]{display:none;}
 .ck-consent-note{font-size:.78rem; color:var(--sub); line-height:1.45; margin:10px 0 12px; text-align:center;}
 .ck-consent-note a{color:var(--gold-soft); font-weight:600; text-decoration:underline; text-underline-offset:2px;}
+#confirmView .confirm-status{display:block; box-sizing:border-box; width:100%; margin:14px auto 0; padding:12px 16px; text-align:center; border:1px solid var(--gold-soft); border-radius:12px; color:var(--ink); text-decoration:none; font-weight:600; font-size:.95rem; background:transparent;}
+#confirmView .confirm-status:hover{background:rgba(201,162,77,.12);}
+#confirmView .checkout{margin-top:10px; width:100%; box-sizing:border-box;}
 .contact-note{font-size:.84rem; color:var(--sub); line-height:1.45; margin:-4px 0 14px;}
 .ck-check.invalid{outline:2px solid rgba(193,67,42,.55); outline-offset:3px; border-radius:4px;}
 .foot-legal{font-size:.8rem; opacity:.9;}
@@ -797,7 +800,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
     <div class="brandline">Coffee Roasters</div>
     <div class="ornament"><span class="ln"></span><span class="dot"></span><span class="ln r"></span></div>
     <h1 class="tagline" data-i18n-html="hero.h1"><b>Свіжообсмажена кава</b> в зернах з доставкою по Україні</h1>
-    <p class="hero-offer" data-i18n-html="hero.offer">Свіжа обсмажка під ваше замовлення.<br>Моносорти та авторські бленди ZRN.<br>200 г — від 260 ₴</p>
+    <p class="hero-offer" data-i18n-html="hero.offer">Свіжа обсмажка під ваше замовлення.<br>Моносорти та авторські бленди ZRN.<br><span data-v="heroW">200</span> г — від <span data-v="heroP">260</span> ₴</p>
     <div class="order-steps">
       <span data-i18n="hero.s1">Ви обираєте</span><span class="arrow">→</span><span data-i18n="hero.s2">Ми обсмажуємо</span><span class="arrow">→</span><span data-i18n="hero.s3">Пакуємо</span><span class="arrow">→</span><span data-i18n="hero.s4">Відправляємо</span>
     </div>
@@ -841,7 +844,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       <li><a href="/coffee/poetry/">Poetry</a> — 200 г: 300 ₴, 500 г: 695 ₴</li>
   </ul>
   <!--CAT:NOSCRIPT:END-->
-  <p>Обсмажуємо після замовлення. Доставка Новою Поштою або Укрпоштою. Безкоштовна доставка від 1400 ₴.</p>
+  <p>Обсмажуємо після замовлення. Доставка Новою Поштою або Укрпоштою. Безкоштовна доставка від <span data-v="freeShip">1400</span> ₴.</p>
   <p><a href="/blog/">Блог</a></p>
   <p>Пошта: <a href="mailto:zrncoffee@gmail.com">zrncoffee@gmail.com</a></p>
 </div>
@@ -931,7 +934,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       </div>
       <div class="faq-item">
         <button type="button" class="faq-q" aria-expanded="false"><span data-i18n="faq.q4">Яка доставка і оплата?</span><span class="faq-icon">+</span></button>
-        <div class="faq-a" data-i18n="faq.a4">Нова Пошта або Укрпошта. Оплата — переказ на картку або накладений платіж. Від 1400 ₴ доставка безкоштовна.</div>
+        <div class="faq-a" data-i18n="faq.a4">Нова Пошта або Укрпошта. Оплата — переказ на картку або накладений платіж. Від <span data-v="freeShip">1400</span> ₴ доставка безкоштовна.</div>
       </div>
       <div class="faq-item">
         <button type="button" class="faq-q" aria-expanded="false"><span data-i18n="faq.q5">Скільки йде доставка по Україні?</span><span class="faq-icon">+</span></button>
@@ -964,6 +967,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       <div class="foot-contacts foot-legal" style="margin-top:6px">
         <a href="/oferta/" data-i18n="foot.oferta">Публічна оферта</a>
         <a href="/privacy/" data-i18n="foot.privacy">Політика конфіденційності</a>
+        <a href="/status/" data-status-link data-i18n="foot.status">Статус замовлення</a>
         <a href="#" data-cookie-settings data-i18n="foot.cookies">Налаштування cookie</a>
       </div>
     </div>
@@ -1081,8 +1085,10 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
     <div class="confirm-box">
       <div class="confirm-icon">✓</div>
       <p id="confirmText"></p>
+      <p class="confirm-extra" id="confirmMail" hidden></p>
       <p class="confirm-extra" data-i18n="ck.confirmExtra">Ми відповімо вам протягом 1–2 годин у робочий час.</p>
       <p class="confirm-extra" data-i18n-html="ck.reviewAsk">Коли спробуєте каву — <a href="/review/">залишіть відгук</a>. Нам важлива ваша думка.</p>
+      <a class="confirm-status" id="confirmStatusBtn" href="/status/" data-i18n="ck.statusBtn">Стежити за статусом замовлення</a>
       <button class="checkout" id="closeConfirmBtn" data-i18n="ck.close">Закрити</button>
     </div>
   </div>
@@ -1099,7 +1105,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       <p data-i18n="ship.del1">Доставка по Україні</p>
       <p data-i18n="ship.del2">Нова Пошта або Укрпошта.</p>
       <p data-i18n="ship.del3">Вартість доставки розраховує перевізник.</p>
-      <p data-i18n="ship.del4">Безкоштовна доставка — від 1400 ₴.</p>
+      <p data-i18n="ship.del4">Безкоштовна доставка — від <span data-v="freeShip">1400</span> ₴.</p>
     </div>
     <div class="ship-block">
       <h3 data-i18n="ship.payTitle">Оплата</h3>
@@ -1137,7 +1143,8 @@ window.addEventListener('load', syncHeaderHeight);
    ТОВАРИ — редагуйте тут: ціна, назва, нотки, опис.
    roastLevel: 1-5 (скільки крапок закрашено на етикетці)
    ============================================================ */
-const WEIGHTS = [200, 500];
+/*SETTINGS:START*/const ZRN_SET = {"freeShip": 1400, "heroW": 200, "heroP": 260};/*SETTINGS:END*/
+function zrnTok(v){ return String(v).replace(/\{free\}/g, ZRN_SET.freeShip).replace(/\{heroW\}/g, ZRN_SET.heroW).replace(/\{heroP\}/g, ZRN_SET.heroP); }
 
 /* ========== I18N UA/RU ========== */
 const ZRN_I18N = {
@@ -1158,7 +1165,7 @@ uk: {
   'nav.menu': 'Меню',
   'nav.close': 'Закрити',
   'nav.cart': 'Кошик',
-  'hero.offer': 'Свіжа обсмажка під ваше замовлення.<br>Моносорти та авторські бленди ZRN.<br>200 г — від 260 ₴',
+  'hero.offer': 'Свіжа обсмажка під ваше замовлення.<br>Моносорти та авторські бленди ZRN.<br>{heroW} г — від {heroP} ₴',
   'hero.s1': 'Ви обираєте',
   'hero.s2': 'Ми обсмажуємо',
   'hero.s3': 'Пакуємо',
@@ -1207,7 +1214,7 @@ uk: {
   'faq.q3': 'Як довго кава залишається свіжою?',
   'faq.a3': 'Після обсмаження каві потрібно відлежатися 3–5 днів (дегазація). Найкращий смак — приблизно до 40 днів після обсмаження при правильному зберіганні. Дату обсмаження завжди вказуємо на пачці.',
   'faq.q4': 'Яка доставка і оплата?',
-  'faq.a4': 'Нова Пошта або Укрпошта. Оплата — переказ на картку або накладений платіж. Від 1400 ₴ доставка безкоштовна.',
+  'faq.a4': 'Нова Пошта або Укрпошта. Оплата — переказ на картку або накладений платіж. Від {free} ₴ доставка безкоштовна.',
   'faq.q5': 'Скільки йде доставка по Україні?',
   'faq.a5': 'Після відправки зазвичай 1–3 дні Новою Поштою (залежить від міста). Укрпоштою може бути трохи довше. ТТН надсилаємо, щойно відправимо посилку.',
   'faq.q6': 'Як зберігати каву вдома?',
@@ -1221,7 +1228,7 @@ uk: {
   'ship.del1': 'Доставка по Україні',
   'ship.del2': 'Нова Пошта або Укрпошта.',
   'ship.del3': 'Вартість доставки розраховує перевізник.',
-  'ship.del4': 'Безкоштовна доставка — від 1400 ₴.',
+  'ship.del4': 'Безкоштовна доставка — від {free} ₴.',
   'ship.payTitle': 'Оплата',
   'ship.pay1': 'Картка або накладений платіж.',
   'foot.tag': 'Мікроростерня<br>Обсмажуємо після замовлення',
@@ -1260,6 +1267,8 @@ uk: {
   'ck.submit': 'Підтвердити замовлення',
   'ck.sending': 'Відправка...',
   'ck.close': 'Закрити',
+  'ck.statusBtn': 'Стежити за статусом замовлення',
+  'ck.mailSent': 'Підтвердження надіслано на {e}',
   'ck.cityPh': 'Наприклад: Київ, Львів, Одеса',
   'ck.branchPh': 'Наприклад: Відділення №15, Поштомат №2348, вул. Франка 12',
   'ck.commentPh': 'Побажання, або інший нік/номер для зв\'язку — сюди',
@@ -1274,6 +1283,7 @@ uk: {
   'foot.oferta': 'Публічна оферта',
   'foot.privacy': 'Політика конфіденційності',
   'foot.cookies': 'Налаштування cookie',
+  'foot.status': 'Статус замовлення',
   'ck.guarantee': 'Не сподобалась кава — замінимо на інший сорт або повернемо гроші протягом 14 днів. Напишіть нам.',
   'ck.confirmExtra': 'Ми відповімо вам протягом 1–2 годин у робочий час.',
   'ck.reviewAsk': 'Коли спробуєте каву — <a href="/review/">залишіть відгук</a>. Нам важлива ваша думка.',
@@ -1343,7 +1353,7 @@ ru: {
   'nav.menu': 'Меню',
   'nav.close': 'Закрыть',
   'nav.cart': 'Корзина',
-  'hero.offer': 'Свежая обжарка под ваш заказ.<br>Моносорты и авторские бленды ZRN.<br>200 г — от 260 ₴',
+  'hero.offer': 'Свежая обжарка под ваш заказ.<br>Моносорты и авторские бленды ZRN.<br>{heroW} г — от {heroP} ₴',
   'hero.s1': 'Вы выбираете',
   'hero.s2': 'Мы обжариваем',
   'hero.s3': 'Упаковываем',
@@ -1392,7 +1402,7 @@ ru: {
   'faq.q3': 'Как долго кофе остаётся свежим?',
   'faq.a3': 'После обжарки кофе нужно отлежаться 3–5 дней (дегазация). Лучший вкус — примерно до 40 дней после обжарки при правильном хранении. Дату обжарки всегда указываем на пачке.',
   'faq.q4': 'Какая доставка и оплата?',
-  'faq.a4': 'Новая Почта или Укрпочта. Оплата — перевод на карту или наложенный платёж. От 1400 ₴ доставка бесплатная.',
+  'faq.a4': 'Новая Почта или Укрпочта. Оплата — перевод на карту или наложенный платёж. От {free} ₴ доставка бесплатная.',
   'faq.q5': 'Сколько идёт доставка по Украине?',
   'faq.a5': 'После отправки обычно 1–3 дня Новой Почтой (зависит от города). Укрпочтой может быть чуть дольше. ТТН присылаем, как только отправим посылку.',
   'faq.q6': 'Как хранить кофе дома?',
@@ -1406,7 +1416,7 @@ ru: {
   'ship.del1': 'Доставка по Украине',
   'ship.del2': 'Новая Почта или Укрпочта.',
   'ship.del3': 'Стоимость доставки рассчитывает перевозчик.',
-  'ship.del4': 'Бесплатная доставка — от 1400 ₴.',
+  'ship.del4': 'Бесплатная доставка — от {free} ₴.',
   'ship.payTitle': 'Оплата',
   'ship.pay1': 'Карта или наложенный платёж.',
   'foot.tag': 'Микроростерия<br>Обжариваем после заказа',
@@ -1445,6 +1455,8 @@ ru: {
   'ck.submit': 'Подтвердить заказ',
   'ck.sending': 'Отправка...',
   'ck.close': 'Закрыть',
+  'ck.statusBtn': 'Следить за статусом заказа',
+  'ck.mailSent': 'Подтверждение отправлено на {e}',
   'ck.cityPh': 'Например: Киев, Львов, Одесса',
   'ck.branchPh': 'Например: Отделение №15, Почтомат №2348, ул. Франка 12',
   'ck.commentPh': 'Пожелания, или другой ник/номер для связи — сюда',
@@ -1459,6 +1471,7 @@ ru: {
   'foot.oferta': 'Публичная оферта',
   'foot.privacy': 'Политика конфиденциальности',
   'foot.cookies': 'Настройки cookie',
+  'foot.status': 'Статус заказа',
   'ck.guarantee': 'Не понравился кофе — заменим на другой сорт или вернём деньги в течение 14 дней. Напишите нам.',
   'ck.confirmExtra': 'Мы ответим вам в течение 1–2 часов в рабочее время.',
   'ck.reviewAsk': 'Когда попробуете кофе — <a href="/review/">оставьте отзыв</a>. Нам важно ваше мнение.',
@@ -1934,8 +1947,10 @@ const PRODUCTS = [
    "Еспресо",
    "Автомат"
   ],
-  "price200": 305,
-  "price500": 705
+  "w1": 200,
+  "w2": 500,
+  "price1": 305,
+  "price2": 705
  },
  {
   "id": "colombia",
@@ -1962,8 +1977,10 @@ const PRODUCTS = [
    "Автомат",
    "Турка"
   ],
-  "price200": 290,
-  "price500": 670
+  "w1": 200,
+  "w2": 500,
+  "price1": 290,
+  "price2": 670
  },
  {
   "id": "elsalvador",
@@ -1987,8 +2004,10 @@ const PRODUCTS = [
    "Автомат",
    "Турка"
   ],
-  "price200": 290,
-  "price500": 670
+  "w1": 200,
+  "w2": 500,
+  "price1": 290,
+  "price2": 670
  },
  {
   "id": "guatemala",
@@ -2013,8 +2032,10 @@ const PRODUCTS = [
    "Турка",
    "Фільтр"
   ],
-  "price200": 295,
-  "price500": 680
+  "w1": 200,
+  "w2": 500,
+  "price1": 295,
+  "price2": 680
  },
  {
   "id": "ethiopia",
@@ -2040,8 +2061,10 @@ const PRODUCTS = [
    "Автомат",
    "Гейзер"
   ],
-  "price200": 270,
-  "price500": 620
+  "w1": 200,
+  "w2": 500,
+  "price1": 270,
+  "price2": 620
  },
  {
   "id": "papua",
@@ -2065,8 +2088,10 @@ const PRODUCTS = [
    "Автомат",
    "Гейзер"
   ],
-  "price200": 295,
-  "price500": 680
+  "w1": 200,
+  "w2": 500,
+  "price1": 295,
+  "price2": 680
  }
 ];
 const BLENDS = [
@@ -2095,8 +2120,10 @@ const BLENDS = [
    "Гейзер",
    "Автомат"
   ],
-  "price200": 260,
-  "price500": 600
+  "w1": 200,
+  "w2": 500,
+  "price1": 260,
+  "price2": 600
  },
  {
   "id": "epic",
@@ -2122,8 +2149,10 @@ const BLENDS = [
    "Автомат",
    "Еспресо"
   ],
-  "price200": 295,
-  "price500": 690
+  "w1": 200,
+  "w2": 500,
+  "price1": 295,
+  "price2": 690
  },
  {
   "id": "legend",
@@ -2151,8 +2180,10 @@ const BLENDS = [
    "Фільтр",
    "Автомат"
   ],
-  "price200": 305,
-  "price500": 710
+  "w1": 200,
+  "w2": 500,
+  "price1": 305,
+  "price2": 710
  },
  {
   "id": "poetry",
@@ -2179,8 +2210,10 @@ const BLENDS = [
    "Фільтр",
    "Турка"
   ],
-  "price200": 300,
-  "price500": 695
+  "w1": 200,
+  "w2": 500,
+  "price1": 300,
+  "price2": 695
  }
 ];
 const BLOG = [
@@ -2343,7 +2376,7 @@ function bt(post, field){
 
 function t(key){
   const pack = ZRN_I18N[currentLang] || ZRN_I18N.uk;
-  return (pack[key] != null ? pack[key] : (ZRN_I18N.uk[key] != null ? ZRN_I18N.uk[key] : key));
+  return zrnTok(pack[key] != null ? pack[key] : (ZRN_I18N.uk[key] != null ? ZRN_I18N.uk[key] : key));
 }
 
 /* Display maps for grind labels stored in cart (always Ukrainian internals) */
@@ -2400,6 +2433,7 @@ function dispRoast(r){
 }
 
 function applyStaticI18n(){
+  document.querySelectorAll('[data-status-link]').forEach(a=>{ a.setAttribute('href', (typeof currentLang!=='undefined' && currentLang==='ru' ? '/ru' : '') + '/status/'); });
   document.querySelectorAll('[data-i18n]').forEach(el=>{
     const key = el.getAttribute('data-i18n');
     if(!key) return;
@@ -2446,7 +2480,7 @@ function updateFaqJsonLd(){
     const dict = ZRN_I18N[currentLang] || ZRN_I18N.uk;
     const items = [];
     for(let i=1; i<=30; i++){
-      const q = dict['faq.q'+i], a = dict['faq.a'+i];
+      const q = dict['faq.q'+i], a = dict['faq.a'+i] && zrnTok(dict['faq.a'+i]);
       if(!q || !a) break;
       items.push({'@type':'Question', name:q, acceptedAnswer:{'@type':'Answer', text:a}});
     }
@@ -2616,7 +2650,7 @@ const ALL_PRODUCTS = [...PRODUCTS, ...BLENDS];
             offers: {
               '@type': 'Offer',
               priceCurrency: 'UAH',
-              price: String(p.price200),
+              price: String(p.price1),
               availability: 'https://schema.org/InStock',
               itemCondition: 'https://schema.org/NewCondition',
               url: url
@@ -2648,8 +2682,8 @@ function renderGrid(containerId, list){
         ${p.brew?`<div class="brew-tags"><span class="brew-label">${t('ui.ideal')}</span>${p.brew.map(b=>`<span class="brew-tag">${dispBrew(b)}</span>`).join('')}</div>`:''}
         <div class="price-row">
           <div>
-            <div class="price">${p.price200} ₴ <span class="price-sec">/ 200 ${t('ui.g')}</span></div>
-            <div class="price-sec" style="margin-top:2px">${p.price500} ₴ / 500 ${t('ui.g')}</div>
+            <div class="price">${p.price1} ₴ <span class="price-sec">/ ${p.w1} ${t('ui.g')}</span></div>
+            <div class="price-sec" style="margin-top:2px">${p.price2} ₴ / ${p.w2} ${t('ui.g')}</div>
           </div>
           <button class="add" data-id="${p.id}">${t('ui.choose')}</button>
         </div>
@@ -2813,7 +2847,7 @@ function modalSectionsHtml(p){
   if(brewHtml) brewHtml += '<p class="m-note">'+mL('Це стартові рецепти — підлаштуйте їх під свій смак: гірчить → грубіший помел, кисло → дрібніший.','Это стартовые рецепты — подстройте их под свой вкус: горчит → грубее помол, кисло → мельче.')+'</p>';
 
   var sim = similarProducts(p).map(function(q){
-    return '<button type="button" class="sim-card" data-sim="'+q.id+'"><span class="sim-name">'+escHtml(q.name)+'</span><span class="sim-notes">'+escHtml(pt(q,'notes'))+'</span><span class="sim-price">'+mL('від ','от ')+q.price200+' ₴</span></button>';
+    return '<button type="button" class="sim-card" data-sim="'+q.id+'"><span class="sim-name">'+escHtml(q.name)+'</span><span class="sim-notes">'+escHtml(pt(q,'notes'))+'</span><span class="sim-price">'+mL('від ','от ')+q.price1+' ₴</span></button>';
   }).join('');
 
   return ''
@@ -2832,7 +2866,7 @@ function openProduct(id, restore){
   const p = ALL_PRODUCTS.find(x=>x.id===id);
   if(!p) return;
   const _isRerender = !!restore;
-  if(!_isRerender && window.zrnTrack) zrnTrack('view_item', {currency:'UAH', value:p.price200, items:[{item_id:p.id, item_name:p.name, price:p.price200, quantity:1}]});
+  if(!_isRerender && window.zrnTrack) zrnTrack('view_item', {currency:'UAH', value:p.price1, items:[{item_id:p.id, item_name:p.name, price:p.price1, quantity:1}]});
   restore = restore || window._modalUIState || null;
   if(restore && restore.id && restore.id!==id) restore = null;   // стан іншої картки не переноситься
   genericModal.style.setProperty('--accent', p.accent||'#a9792f');
@@ -2857,7 +2891,7 @@ function openProduct(id, restore){
           <div class="buy-fields">
           <div class="field">
             <label>${t('ui.weight')}</label>
-            <div class="pill-row" id="weightRow">${WEIGHTS.map((w,i)=>`<button type="button" class="pill ${i===0?'active':''}" data-w="${w}">${w} ${t('ui.g')}</button>`).join('')}</div>
+            <div class="pill-row" id="weightRow">${[p.w1,p.w2].map((w,i)=>`<button type="button" class="pill ${i===0?'active':''}" data-w="${w}">${w} ${t('ui.g')}</button>`).join('')}</div>
             <div class="price-meta" id="priceMeta" aria-live="polite"></div>
           </div>
           <div class="field" style="margin-top:12px">
@@ -2876,7 +2910,7 @@ function openProduct(id, restore){
           </div>
           </div>
           <div class="modal-footer">
-            <span class="modal-price" id="modalPrice">${p.price200} ₴</span>
+            <span class="modal-price" id="modalPrice">${p.price1} ₴</span>
             <div class="modal-add-row">
               <button type="button" class="modal-add" data-id="${p.id}">${t('ui.add')}</button>
             </div>
@@ -2894,7 +2928,7 @@ function openProduct(id, restore){
   genericModal.querySelector('#modalClose').onclick = closeModal;
   let selectedGrindMain = GRINDS[0];
   let selectedGrindSub = GRIND_TYPES[2].label;
-  let selectedWeight = WEIGHTS[0];
+  let selectedWeight = p.w1;
   let selectedQty = 1;
   if(restore){
     if(restore.weight) selectedWeight = Number(restore.weight);
@@ -2914,10 +2948,10 @@ function openProduct(id, restore){
   const priceEl = genericModal.querySelector('#modalPrice');
   function refreshPriceMeta(){
     const el = genericModal.querySelector('#priceMeta'); if(!el) return;
-    const price = selectedWeight===500 ? p.price500 : p.price200;
+    const price = priceFor(p, selectedWeight);
     let txt = Math.round(price / (selectedWeight/100)) + ' ₴ / 100 ' + t('ui.g');
-    if(selectedWeight===500){
-      const save = Math.round(p.price200*2.5 - p.price500);
+    if(selectedWeight===p.w2){
+      const save = Math.round(p.price1*p.w2/p.w1 - p.price2);
       if(save>0) txt += ' · ' + mL('вигідніше на ','выгоднее на ') + save + ' ₴';
     }
     el.textContent = txt;
@@ -2954,7 +2988,7 @@ function openProduct(id, restore){
       genericModal.querySelectorAll('#weightRow .pill').forEach(x=>x.classList.remove('active'));
       btn.classList.add('active');
       selectedWeight = Number(btn.dataset.w);
-      priceEl.textContent = (selectedWeight===500 ? p.price500 : p.price200) + ' ₴'; refreshPriceMeta();
+      priceEl.textContent = priceFor(p, selectedWeight) + ' ₴'; refreshPriceMeta();
     };
   });
   genericModal.querySelector('#qtyMinus').onclick = ()=>{
@@ -2981,7 +3015,7 @@ function openProduct(id, restore){
     genericModal.querySelectorAll('#weightRow .pill').forEach(btn=>{
       btn.classList.toggle('active', Number(btn.dataset.w)===Number(restore.weight));
     });
-    if(priceEl) priceEl.textContent = (selectedWeight===500 ? p.price500 : p.price200) + ' ₴'; refreshPriceMeta();
+    if(priceEl) priceEl.textContent = priceFor(p, selectedWeight) + ' ₴'; refreshPriceMeta();
   }
   if(restore && restore.grindMain){
     genericModal.querySelectorAll('#grindRow .pill').forEach(btn=>{
@@ -3098,7 +3132,6 @@ document.addEventListener('click', function(e){
 const ORDER_SHEET_URL = 'https://script.google.com/macros/s/AKfycbxWAf8jVIdgq2Cs0YnjczFzvAgiHxoB-Xt7Rz-V3pwdx5XkbrUoDITER-noSKNmnDwr/exec';
 
 const CART_KEY = 'zrn_cart_v2';
-const CART_WEIGHTS = [200, 500];
 let cart = {};
 /* Залишає лише валідні позиції: id є в ALL_PRODUCTS, вага 200/500, кількість — ціле > 0.
    Повертає true, якщо щось було видалено/виправлено. */
@@ -3110,7 +3143,7 @@ function sanitizeCart(){
     const parts = String(key).split('|');
     const id = parts[0], w = Number(parts[2]);
     const q = Math.floor(Number(qty));
-    if(parts.length===3 && ALL_PRODUCTS.some(x=>x.id===id) && CART_WEIGHTS.indexOf(w)>=0 && q>0){
+    if(parts.length===3 && ALL_PRODUCTS.some(x=>x.id===id && (x.w1===w || x.w2===w)) && q>0){
       clean[key] = q;
       if(q!==qty) changed = true;
     } else changed = true;
@@ -3139,7 +3172,7 @@ function cartLines(){
 })();
 let delivery = 'np';
 let payment = 'cod';
-const FREE_SHIP_FROM = 1400;
+const FREE_SHIP_FROM = ZRN_SET.freeShip;
 
 function saveCart(){ try{ localStorage.setItem(CART_KEY, JSON.stringify(cart)); }catch(e){} }
 function addToCart(id, grind, weight, qty){ qty = qty||1; const key=id+'|'+grind+'|'+weight; cart[key]=(cart[key]||0)+qty; saveCart(); renderCart(); }
@@ -3150,7 +3183,7 @@ function changeCartQty(key, delta){
   if(cart[key]<=0) delete cart[key];
   saveCart(); renderCart();
 }
-function priceFor(p, weight){ return weight===500 ? p.price500 : p.price200; }
+function priceFor(p, weight){ return weight===p.w2 ? p.price2 : p.price1; }
 
 function renderDeliveryPayment(){
   const dOpts = document.getElementById('deliveryOpts');
@@ -3333,10 +3366,21 @@ function genOrderNumber(){
   const mm = String(d.getMonth()+1).padStart(2,'0');
   const dd = String(d.getDate()).padStart(2,'0');
   const rand = String(Math.floor(Math.random()*1000)).padStart(3,'0');
-  return `ZRN-${yy}${mm}${dd}-${rand}`;
+  return `ZRN-${yy}${mm}${dd}-R${rand}`;   /* запасний номер (R) — якщо таблиця не відповіла */
+}
+/* Номер замовлення видає таблиця (ZRN-ГГММДД-001, 002…). Якщо вона недоступна — запасний випадковий номер з літерою R. */
+function getOrderNumber(){
+  if(!ORDER_SHEET_URL) return Promise.resolve(genOrderNumber());
+  const ctrl = (typeof AbortController!=='undefined') ? new AbortController() : null;
+  const timer = ctrl ? setTimeout(()=>ctrl.abort(), 6000) : null;
+  return fetch(ORDER_SHEET_URL + (ORDER_SHEET_URL.indexOf('?')<0?'?':'&') + 'n=new', {signal: ctrl ? ctrl.signal : undefined})
+    .then(r=>r.json())
+    .then(j=>(j && j.ok && /^ZRN-\d{6}-\d{3,4}$/.test(j.number)) ? j.number : genOrderNumber())
+    .catch(()=>genOrderNumber())
+    .then(n=>{ if(timer) clearTimeout(timer); return n; });
 }
 
-document.getElementById('orderForm').onsubmit = function(e){
+document.getElementById('orderForm').onsubmit = async function(e){
   e.preventDefault();
   const form = e.target;
   const formError = document.getElementById('formError');
@@ -3380,7 +3424,8 @@ document.getElementById('orderForm').onsubmit = function(e){
   const items = Object.entries(cart);
   if(items.length===0) return;
 
-  const orderNumber = genOrderNumber();
+  const _sb = document.getElementById('submitOrderBtn'); _sb.disabled = true; _sb.textContent = t('ck.sending');
+  const orderNumber = await getOrderNumber();
   const total = cartTotal();
   const itemLines = items.map(([key,qty])=>{
     const [id,grind,w] = key.split('|');
@@ -3395,6 +3440,7 @@ document.getElementById('orderForm').onsubmit = function(e){
   const contactFull = contactLabel + (contactHandle ? ' — ' + contactHandle : '');
 
   const attr = (window.zrnAttribution ? zrnAttribution() : {source:'', landing:''});
+  let shownNumber = null;   /* номер, який підтвердила таблиця (на випадок заміни при збігу) */
   const message =
 `Нове замовлення ${orderNumber}
 
@@ -3478,7 +3524,9 @@ Telegram: ${TG_CONTACT}
       recipientName: rcptName,
       recipientPhone: rcptPhone,
       source: attr.source,
-      landing: attr.landing
+      landing: attr.landing,
+      email: email,
+      lang: currentLang
     };
     const ctrl = (typeof AbortController!=='undefined') ? new AbortController() : null;
     const timer = ctrl ? setTimeout(()=>ctrl.abort(), 15000) : null;
@@ -3489,7 +3537,7 @@ Telegram: ${TG_CONTACT}
       signal: ctrl ? ctrl.signal : undefined
     })
     .then(r=>r.json())
-    .then(res=>!!(res && res.ok))
+    .then(res=>{ if(res && res.ok && res.orderNumber) shownNumber = res.orderNumber; return !!(res && res.ok); })
     .catch(()=>false)
     .then(ok=>{ if(timer) clearTimeout(timer); return ok; });
   })();
@@ -3500,9 +3548,15 @@ Telegram: ${TG_CONTACT}
     submitBtn.disabled = false;
     submitBtn.textContent = t('ck.submit');
     if(accepted){
-      if(window.zrnPurchase) zrnPurchase(orderNumber, total, zrnCartItems());
+      const finalNumber = shownNumber || orderNumber;
+      if(window.zrnPurchase) zrnPurchase(finalNumber, total, zrnCartItems());
       try{ localStorage.setItem('zrn_checkout', JSON.stringify({name, phone: phoneNorm, email, delivery, city, branch})); }catch(err){}
-      document.getElementById('confirmText').innerHTML = (contactMethod==='call' ? t('ck.okCall') : t('ck.okMsg')).replace('{n}', orderNumber);
+      document.getElementById('confirmText').innerHTML = (contactMethod==='call' ? t('ck.okCall') : t('ck.okMsg')).replace('{n}', finalNumber);
+      const cm = document.getElementById('confirmMail');
+      if(cm){ if(email && r[1]){ cm.textContent = t('ck.mailSent').replace('{e}', email); cm.hidden = false; } else { cm.hidden = true; } }
+      const cs = document.getElementById('confirmStatusBtn');
+      if(cs) cs.href = (currentLang==='ru' ? '/ru' : '') + '/status/?o=' + encodeURIComponent(finalNumber);
+      try{ localStorage.setItem('zrn_status_hint', JSON.stringify({o: finalNumber, p: String(phoneNorm).replace(/\D/g,'').slice(-4)})); }catch(err){}
       try{
         var lastItems = items.map(function(pair){
           var parts = pair[0].split('|');
@@ -3513,7 +3567,7 @@ Telegram: ${TG_CONTACT}
       cart = {}; saveCart(); renderCart();
       showDrawerView(confirmView);
       const ra = document.querySelector('#confirmView .confirm-extra a');
-      if(ra) ra.href = (currentLang==='ru' ? '/ru' : '') + '/review/?o=' + encodeURIComponent(orderNumber);
+      if(ra) ra.href = (currentLang==='ru' ? '/ru' : '') + '/review/?o=' + encodeURIComponent(finalNumber);
     } else {
       formError.textContent = t('ck.errSend') + TG_CONTACT;
       formError.style.display = 'block';
