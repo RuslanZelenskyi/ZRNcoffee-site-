@@ -837,10 +837,13 @@ class Site:
                            'shippingDetails': {'@type': 'OfferShippingDetails',
                                                'shippingDestination': {'@type': 'DefinedRegion', 'addressCountry': 'UA'},
                                                'deliveryTime': {'@type': 'ShippingDeliveryTime',
-                                                                'handlingTime': {'@type': 'QuantitativeValue', 'minValue': 0, 'maxValue': 1, 'unitCode': 'DAY'}}},
+                                                                'handlingTime': {'@type': 'QuantitativeValue', 'minValue': 0, 'maxValue': 1, 'unitCode': 'DAY'},
+                                                                'transitTime': {'@type': 'QuantitativeValue', 'minValue': 1, 'maxValue': 3, 'unitCode': 'DAY'}}},
                            'hasMerchantReturnPolicy': {'@type': 'MerchantReturnPolicy', 'applicableCountry': 'UA',
                                                        'returnPolicyCategory': 'https://schema.org/MerchantReturnFiniteReturnWindow',
-                                                       'merchantReturnDays': 14}}
+                                                       'merchantReturnDays': 14,
+                                                       'returnMethod': 'https://schema.org/ReturnByMail',
+                                                       'returnFees': 'https://schema.org/ReturnShippingFees'}}
                           for w, pr in ((p['w1'], p['price1']), (p['w2'], p['price2']))]
                 ld_prod = {'@context': 'https://schema.org', '@type': 'Product', 'name': name, 'sku': p['id'], 'image': img,
                            'description': self.short(f"{notes}. {p['info'][lang]}", 300), 'category': 'Coffee', 'url': canonical,
