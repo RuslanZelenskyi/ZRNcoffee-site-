@@ -16,6 +16,8 @@ import html
 import json
 import os
 import re
+import time
+import urllib.request
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -86,6 +88,108 @@ def load():
     return cat
 
 
+# ------------------------------------------------------------------ ціни, ваги і налаштування з Google Таблиці
+SETTINGS = {'freeShip': 1400, 'heroW': 200, 'heroP': 260}   # заповнюється в apply_sheet()
+
+
+def find_sheet_url():
+    m = re.search(r"const ORDER_SHEET_URL\s*=\s*'([^']*)'", open(INDEX, encoding='utf-8').read())
+    return (m.group(1) if m else '').strip()
+
+
+def fetch_sheet(url):
+    last = ''
+    for attempt in range(3):
+        try:
+            req = urllib.request.Request(url + ('&' if '?' in url else '?') + 'prices=1', headers={'User-Agent': 'zrn-build'})
+            with urllib.request.urlopen(req, timeout=25) as r:
+                data = json.loads(r.read().decode('utf-8'))
+            if isinstance(data, dict) and data.get('ok') and isinstance(data.get('products'), list):
+                return data
+            last = 'таблиця відповіла без даних цін (оновіть Apps Script до нової версії і запустіть setupPrices)'
+        except Exception as e:   # мережа, не JSON тощо
+            last = str(e)
+        time.sleep(2 + attempt * 3)
+    return last
+
+
+def posint(v):
+    try:
+        f = float(str(v).replace(',', '.').replace(' ', '').replace('\u00a0', ''))
+    except ValueError:
+        return None
+    return int(round(f)) if f > 0 and abs(f - round(f)) < 1e-9 else None
+
+
+def truthy(v):
+    return str(v).strip().lower() not in ('ні', 'нет', 'no', 'false', '0', '-', 'hide', 'приховати')
+
+
+def apply_sheet(cat):
+    """Накладає на catalog.json ціни/ваги/видимість/порядок із листа «Ціни» та налаштування з листа «Налаштування».
+    Значення з catalog.json (price200/price500) — запасні: їх використовують, якщо сорту в таблиці немає."""
+    for p in cat['products']:
+        p['w1'], p['w2'], p['price1'], p['price2'] = 200, 500, p['price200'], p['price500']
+    url = os.environ.get('ZRN_SHEET_URL') or find_sheet_url()
+    off = os.environ.get('ZRN_OFFLINE') == '1' or cat['site'].get('pricesFromSheet') is False or not url
+    sheet = None
+    if off:
+        sys.stderr.write('Увага: ціни беруться з catalog.json (таблицю не читаємо).\n')
+    else:
+        sheet = fetch_sheet(url)
+        if isinstance(sheet, str):
+            sys.stderr.write('\nПОМИЛКА: не вдалося прочитати ціни з Google Таблиці: ' + sheet + '\n'
+                             'Збирання зупинено, щоб на сайті не з\'явилися застарілі ціни: попередня версія сайту лишається.\n'
+                             'Що зробити: перевірте, що Apps Script оновлено й розгорнуто (Deploy → New version), потім запустіть збирання знову.\n')
+            sys.exit(1)
+    rows = {}
+    if sheet:
+        for r in sheet['products']:
+            rows[str(r.get('id', '')).strip()] = r
+        for rid in rows:
+            if rid and rid not in {p['id'] for p in cat['products']}:
+                sys.stderr.write(f'Увага: у листі «Ціни» є сорт «{rid}», якого немає в catalog.json — рядок пропущено.\n')
+    shown = []
+    for idx, p in enumerate(cat['products']):
+        r = rows.get(p['id'])
+        p['_ord'] = (1e9, idx)
+        if r:
+            if not truthy(r.get('show', 'Так')):
+                continue
+            w1, w2, p1, p2 = (posint(r.get(k)) for k in ('w1', 'w2', 'p1', 'p2'))
+            if None in (w1, w2, p1, p2):
+                sys.stderr.write(f'Увага: сорт «{p["id"]}»: у листі «Ціни» не всі значення є додатними числами — лишаємо значення з catalog.json.\n')
+            else:
+                if w1 > w2:
+                    w1, w2, p1, p2 = w2, w1, p2, p1
+                if w1 == w2:
+                    sys.stderr.write(f'Увага: сорт «{p["id"]}»: однакові ваги — лишаємо значення з catalog.json.\n')
+                else:
+                    p['w1'], p['w2'], p['price1'], p['price2'] = w1, w2, p1, p2
+            o = posint(r.get('order'))
+            if o is not None:
+                p['_ord'] = (o, idx)
+        shown.append(p)
+    if not shown:
+        fail('усі сорти приховані в листі «Ціни» — на сайті має лишитися хоча б один.')
+    cat['products'] = sorted(shown, key=lambda p: p['_ord'])
+    for p in cat['products']:
+        p.pop('_ord', None)
+    # налаштування: порожня клітинка → автоматично
+    st = (sheet or {}).get('settings') or {}
+    free = posint(st.get('freeShip')) or 1400
+    hw = posint(st.get('heroW'))
+    hp = posint(st.get('heroP'))
+    if not hw:
+        ws = [p['w1'] for p in cat['products']]
+        hw = max(set(ws), key=lambda w: (ws.count(w), -w))
+    if not hp:
+        hp = min(p['price1'] for p in cat['products'] if p['w1'] == hw)
+    SETTINGS.update({'freeShip': free, 'heroW': hw, 'heroP': hp})
+    cat['settings'] = dict(SETTINGS)
+    return cat
+
+
 # ------------------------------------------------------------------ блок даних для index.html
 def j(obj):
     return json.dumps(obj, ensure_ascii=False, indent=1).replace('</', '<\\/')
@@ -115,8 +219,10 @@ def js_block(cat):
         o['info'] = p['info']['uk']
         o['story'] = p['story']['uk']
         o['brew'] = p['brew']
-        o['price200'] = p['price200']
-        o['price500'] = p['price500']
+        o['w1'] = p['w1']
+        o['w2'] = p['w2']
+        o['price1'] = p['price1']
+        o['price2'] = p['price2']
         return o
 
     i18n = {}
@@ -155,7 +261,7 @@ def replace_between(text, start, end, new, label):
 
 def noscript_block(cat):
     def lis(lst):
-        return ''.join(f'\n      <li><a href="/coffee/{p["id"]}/">{E(p["name"])}</a> — 200 г: {p["price200"]} ₴, 500 г: {p["price500"]} ₴</li>'
+        return ''.join(f'\n      <li><a href="/coffee/{p["id"]}/">{E(p["name"])}</a> — {p["w1"]} г: {p["price1"]} ₴, {p["w2"]} г: {p["price2"]} ₴</li>'
                        for p in lst)
     mono = [p for p in cat['products'] if p['type'] == 'mono']
     blend = [p for p in cat['products'] if p['type'] == 'blend']
@@ -169,6 +275,9 @@ def build_index(cat):
     b = s.index('/*CATALOG:END*/') + len('/*CATALOG:END*/')
     s = s[:a] + js_block(cat) + s[b:]
     s = replace_between(s, '<!--CAT:NOSCRIPT:START-->', '<!--CAT:NOSCRIPT:END-->', noscript_block(cat), 'CAT:NOSCRIPT')
+    s = replace_between(s, '/*SETTINGS:START*/', '/*SETTINGS:END*/', 'const ZRN_SET = ' + json.dumps(SETTINGS) + ';', 'SETTINGS')
+    # числа у статичному HTML (для пошуковиків і режиму без JS): <span data-v="free">1400</span>
+    s = re.sub(r'(<span data-v="(\w+)">)[^<]*(</span>)', lambda m: m.group(1) + str(SETTINGS.get(m.group(2), '')) + m.group(3), s)
     open(INDEX, 'w', encoding='utf-8').write(s)
     return s
 
@@ -186,7 +295,9 @@ def ui_texts(index_src):
             fail(f'в index.html не знайдено текст інтерфейсу "{key}" ({lang})')
         return m.group(1).replace("\\'", "'").replace('\\\\', '\\')
     keys = ['trust.fact', 'ship.del2', 'ship.del3', 'ship.del4', 'ship.pay1', 'ck.guarantee']
-    return {lang: {k: get(lang, k) for k in keys} for lang in LANGS}
+    def tok(v):
+        return v.replace('{free}', str(SETTINGS['freeShip'])).replace('{heroW}', str(SETTINGS['heroW'])).replace('{heroP}', str(SETTINGS['heroP']))
+    return {lang: {k: tok(get(lang, k)) for k in keys} for lang in LANGS}
 
 
 # ------------------------------------------------------------------ сторінки
@@ -373,6 +484,187 @@ location.replace(to);})();
 '''
 
 
+ST = {
+    'uk': dict(
+        title='Статус замовлення | ZRN Coffee', desc='Дізнайтесь, на якому етапі ваше замовлення: обсмажування, пакування, доставка.',
+        h1='Статус замовлення', lead='Введіть номер замовлення та останні 4 цифри телефону, який вказували в замовленні.',
+        order='Номер замовлення', order_ph='ZRN-261022-001', last4='Останні 4 цифри телефону', last4_ph='1234',
+        btn='Дізнатись статус', loading='Шукаємо…', refresh='Оновити', again='Інше замовлення', forget='Не ваш пристрій? Очистити збережене',
+        err_fmt='Перевірте номер замовлення та 4 цифри телефону.',
+        err_nf='Не знайшли замовлення. Перевірте номер і останні 4 цифри телефону — вони мають збігатися з тими, що в замовленні.',
+        err_lock='Забагато невдалих спроб. Спробуйте за 15 хвилин або напишіть нам.',
+        err_net='Не вдалося отримати статус. Спробуйте ще раз за хвилину або напишіть нам у Telegram: ',
+        ordered='Замовлення від', steps=['Прийнято', 'Обсмажуємо', 'Пакуємо', 'Відправлено', 'Отримано'],
+        cancelled='Замовлення скасовано', returned='Посилку повернено відправнику',
+        track_created='Передано до відправлення', track_transit='Посилка в дорозі', track_arrived='Посилка прибула — можна забирати',
+        track_received='Посилку отримано', track_returning='Посилка повертається відправнику',
+        at='Відділення', eta='Очікувана доставка', pay_h='Оплата',
+        pay=dict(cod='При отриманні (накладений платіж)', wait='Очікуємо оплату. Реквізити надішлемо після підтвердження замовлення.',
+                 paid='Оплачено', codpaid='Оплачено при отриманні', refused='Посилку не забрали', refund='Кошти повернено'),
+        del_h='Доставка', ttn_np='ТТН Нової Пошти', ttn_ukr='Трек-номер Укрпошти', copy='Копіювати', copied='Скопійовано', track_link='Відстежити на сайті перевізника',
+        items_h='Склад замовлення', total='Разом', note_h='Повідомлення від нас', help='Є питання?', tg='Написати в Telegram',
+        auto='Статус доставки оновлюється автоматично.'),
+    'ru': dict(
+        title='Статус заказа | ZRN Coffee', desc='Узнайте, на каком этапе ваш заказ: обжарка, упаковка, доставка.',
+        h1='Статус заказа', lead='Введите номер заказа и последние 4 цифры телефона, который указывали в заказе.',
+        order='Номер заказа', order_ph='ZRN-261022-001', last4='Последние 4 цифры телефона', last4_ph='1234',
+        btn='Узнать статус', loading='Ищем…', refresh='Обновить', again='Другой заказ', forget='Не ваше устройство? Очистить сохранённое',
+        err_fmt='Проверьте номер заказа и 4 цифры телефона.',
+        err_nf='Не нашли заказ. Проверьте номер и последние 4 цифры телефона — они должны совпадать с указанными в заказе.',
+        err_lock='Слишком много неудачных попыток. Попробуйте через 15 минут или напишите нам.',
+        err_net='Не удалось получить статус. Попробуйте ещё раз через минуту или напишите нам в Telegram: ',
+        ordered='Заказ от', steps=['Принят', 'Обжарка', 'Упаковка', 'Отправлен', 'Получен'],
+        cancelled='Заказ отменён', returned='Посылка возвращена отправителю',
+        track_created='Передано к отправке', track_transit='Посылка в пути', track_arrived='Посылка прибыла — можно забирать',
+        track_received='Посылка получена', track_returning='Посылка возвращается отправителю',
+        at='Отделение', eta='Ожидаемая доставка', pay_h='Оплата',
+        pay=dict(cod='При получении (наложенный платёж)', wait='Ожидаем оплату. Реквизиты отправим после подтверждения заказа.',
+                 paid='Оплачено', codpaid='Оплачено при получении', refused='Посылку не забрали', refund='Средства возвращены'),
+        del_h='Доставка', ttn_np='ТТН Новой Почты', ttn_ukr='Трек-номер Укрпочты', copy='Копировать', copied='Скопировано', track_link='Отследить на сайте перевозчика',
+        items_h='Состав заказа', total='Итого', note_h='Сообщение от нас', help='Есть вопросы?', tg='Написать в Telegram',
+        auto='Статус доставки обновляется автоматически.'),
+}
+
+STATUS_HTML = """<nav class="crumbs" aria-label="breadcrumb"><a href="@@HOME@@">ZRN Coffee</a> › <span>@@H1@@</span></nav>
+<h1>@@H1@@</h1>
+<p class="lead" id="stLead">@@LEAD@@</p>
+<form id="stForm" class="st-form" novalidate>
+  <div class="rv-f"><label for="stOrder">@@ORDER@@</label><input type="text" id="stOrder" inputmode="text" autocapitalize="characters" autocomplete="off" spellcheck="false" maxlength="24" placeholder="@@ORDER_PH@@"></div>
+  <div class="rv-f"><label for="stLast4">@@LAST4@@</label><input type="text" id="stLast4" inputmode="numeric" autocomplete="off" maxlength="4" pattern="[0-9]{4}" placeholder="@@LAST4_PH@@"></div>
+  <p id="stErr" class="rv-err" role="alert" hidden></p>
+  <button type="submit" class="btn" id="stBtn">@@BTN@@</button>
+  <p class="st-forget"><a href="#" id="stForget" hidden>@@FORGET@@</a></p>
+</form>
+<section id="stRes" class="st-res" aria-live="polite" hidden></section>
+<noscript><p>Для перегляду статусу потрібен JavaScript. Напишіть нам: <a href="@@TG@@">Telegram</a></p></noscript>
+<script>
+(function(){
+  var C = @@CFG@@, T = C.t;
+  var $ = function(id){ return document.getElementById(id); };
+  var form = $('stForm'), err = $('stErr'), btn = $('stBtn'), res = $('stRes'), forget = $('stForget');
+  var HINT = 'zrn_status_hint';
+  function el(tag, cls, txt){ var e = document.createElement(tag); if (cls) e.className = cls; if (txt !== undefined && txt !== null) e.textContent = txt; return e; }
+  function readHint(){ try { var h = JSON.parse(localStorage.getItem(HINT)); return (h && h.o && h.p) ? h : null; } catch (e) { return null; } }
+  function fail(m){ err.textContent = m; err.hidden = false; }
+  function money(v){ return (isNaN(Number(v)) ? v : Number(v).toLocaleString(C.lang === 'ru' ? 'ru-RU' : 'uk-UA')) + ' ₴'; }
+  function dateOnly(s){ return String(s || '').split(' ')[0]; }
+  function etaFmt(s){ var m = /^(\\d{2})-(\\d{2})-(\\d{4})/.exec(s || ''); return m ? m[1] + '.' + m[2] + '.' + m[3] : (s || ''); }
+
+  function render(d, order, last4){
+    res.textContent = '';
+    var tr = d.tracking, stage = d.status.stage;
+    if (tr) {
+      if (tr.stage === 'received') stage = 4;
+      else if (tr.stage === 'returning') stage = -2;
+      else if ((tr.stage === 'transit' || tr.stage === 'arrived' || tr.stage === 'created') && (stage === null || stage < 3)) stage = 3;
+    }
+    var card = el('div', 'st-card');
+    var head = el('div', 'st-head');
+    head.appendChild(el('div', 'st-num', d.number));
+    head.appendChild(el('div', 'st-date', T.ordered + ' ' + dateOnly(d.date)));
+    card.appendChild(head);
+
+    if (stage === -1 || stage === -2) {
+      card.appendChild(el('div', 'st-banner st-bad', stage === -1 ? T.cancelled : T.returned));
+    } else if (stage === null) {
+      card.appendChild(el('div', 'st-banner', d.status.raw));
+    } else {
+      var ol = el('ol', 'st-tl');
+      T.steps.forEach(function(label, i){
+        var li = el('li', i < stage ? 'done' : (i === stage ? 'cur' : ''));
+        li.appendChild(el('span', 'st-dot', i < stage ? '✓' : String(i + 1)));
+        li.appendChild(el('span', 'st-lb', label));
+        ol.appendChild(li);
+      });
+      card.appendChild(ol);
+    }
+    if (tr && tr.stage !== 'notfound') {
+      var tm = { created: T.track_created, transit: T.track_transit, arrived: T.track_arrived, received: T.track_received, returning: T.track_returning }[tr.stage];
+      if (tm) {
+        var b = el('div', 'st-track'); b.appendChild(el('b', '', tm));
+        var sub = [];
+        if (tr.stage === 'arrived' && tr.where) sub.push(tr.where);
+        if ((tr.stage === 'transit' || tr.stage === 'created') && tr.eta) sub.push(T.eta + ': ' + etaFmt(tr.eta));
+        if (sub.length) b.appendChild(el('div', 'st-sub', sub.join(' · ')));
+        card.appendChild(b);
+      }
+    }
+    if (d.note) { var n = el('div', 'st-note'); n.appendChild(el('b', '', T.note_h)); n.appendChild(el('div', '', d.note)); card.appendChild(n); }
+
+    var g = el('div', 'st-grid');
+    var pay = el('div', 'st-box'); pay.appendChild(el('h3', '', T.pay_h)); pay.appendChild(el('p', '', T.pay[d.pay] || '')); g.appendChild(pay);
+    var dl = el('div', 'st-box'); dl.appendChild(el('h3', '', T.del_h));
+    dl.appendChild(el('p', '', [d.delivery.label, d.delivery.city, d.delivery.branch].filter(Boolean).join(', ')));
+    if (d.ttn) {
+      var row = el('p', 'st-ttn'); row.appendChild(el('span', '', (d.delivery.carrier === 'ukr' ? T.ttn_ukr : T.ttn_np) + ': '));
+      var code = el('b', '', d.ttn); row.appendChild(code);
+      var cp = el('button', 'st-copy', T.copy); cp.type = 'button';
+      cp.onclick = function(){ try { navigator.clipboard.writeText(d.ttn); cp.textContent = T.copied; setTimeout(function(){ cp.textContent = T.copy; }, 1500); } catch (e) {} };
+      row.appendChild(cp); dl.appendChild(row);
+      var url = d.delivery.carrier === 'ukr' ? 'https://track.ukrposhta.ua/tracking_UA.html?barcode=' + encodeURIComponent(d.ttn)
+              : (d.delivery.carrier === 'np' ? 'https://novaposhta.ua/tracking/?cargo_number=' + encodeURIComponent(d.ttn) : '');
+      if (url) { var a = el('a', 'st-link', T.track_link + ' →'); a.href = url; a.target = '_blank'; a.rel = 'noopener'; dl.appendChild(a); }
+    }
+    g.appendChild(dl);
+    card.appendChild(g);
+
+    var it = el('div', 'st-box st-items'); it.appendChild(el('h3', '', T.items_h));
+    var ul = el('ul'); d.items.forEach(function(x){ ul.appendChild(el('li', '', x)); }); it.appendChild(ul);
+    it.appendChild(el('p', 'st-total', T.total + ': ' + money(d.total)));
+    card.appendChild(it);
+    if (d.ttn && d.delivery.carrier === 'np') card.appendChild(el('p', 'st-auto', T.auto));
+
+    var act = el('div', 'st-act');
+    var rf = el('button', 'btn', T.refresh); rf.type = 'button'; rf.onclick = function(){ lookup(order, last4, true); };
+    var ag = el('button', 'btn ghost', T.again); ag.type = 'button';
+    ag.onclick = function(){ res.hidden = true; form.hidden = false; $('stLead').hidden = false; $('stOrder').value = ''; $('stLast4').value = ''; $('stOrder').focus(); };
+    var tg = el('a', 'btn ghost', T.tg); tg.href = C.tg; tg.rel = 'noopener';
+    act.appendChild(rf); act.appendChild(ag); act.appendChild(tg);
+    card.appendChild(act);
+    res.appendChild(card);
+    res.hidden = false; form.hidden = true; $('stLead').hidden = true;
+    window.scrollTo(0, 0);
+  }
+
+  function lookup(order, last4, keep){
+    err.hidden = true;
+    btn.disabled = true; btn.textContent = T.loading;
+    fetch(C.sheet, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ kind: 'status', order: order, last4: last4 }) })
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        btn.disabled = false; btn.textContent = T.btn;
+        if (d && d.ok && d.found) {
+          try { localStorage.setItem(HINT, JSON.stringify({ o: d.number, p: last4 })); } catch (e) {}
+          render(d, order, last4);
+        } else if (d && d.ok) { form.hidden = false; res.hidden = true; $('stLead').hidden = false; fail(d.locked ? T.err_lock : T.err_nf); }
+        else throw new Error('bad');
+      })
+      .catch(function(){ btn.disabled = false; btn.textContent = T.btn; form.hidden = false; res.hidden = true; fail(T.err_net + C.tgText); });
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var o = $('stOrder').value.trim(), p = $('stLast4').value.replace(/\\D/g, '');
+    if (o.length < 8 || p.length !== 4) return fail(T.err_fmt);
+    lookup(o, p);
+  });
+  $('stLast4').addEventListener('input', function(){ this.value = this.value.replace(/\\D/g, '').slice(0, 4); });
+  forget.addEventListener('click', function(e){ e.preventDefault(); try { localStorage.removeItem(HINT); } catch (x) {} forget.hidden = true; $('stOrder').value = ''; $('stLast4').value = ''; });
+
+  var lg = document.querySelector('.lang'); if (lg && location.search) lg.href += location.search;
+  var q = new URLSearchParams(location.search).get('o');
+  q = q ? q.replace(/[^A-Za-z0-9\\-]/g, '').slice(0, 24) : '';
+  var h = readHint();
+  if (h) forget.hidden = false;
+  if (q) $('stOrder').value = q;
+  if (h && (!q || q.toUpperCase().replace(/[^A-Z0-9]/g, '').replace(/^ZRN/, '') === String(h.o).toUpperCase().replace(/[^A-Z0-9]/g, '').replace(/^ZRN/, ''))) {
+    $('stOrder').value = h.o; $('stLast4').value = h.p; lookup(h.o, h.p);   // той самий пристрій, що й замовлення — одразу показуємо статус
+  } else if (q) { $('stLast4').focus(); }
+})();
+</script>
+"""
+
+
 class Site:
     def __init__(self, cat, index_src):
         self.cat = cat
@@ -483,6 +775,7 @@ class Site:
       <a href="mailto:{self.email}">{u['mail']}</a>
       <a href="/oferta/">{u['offer']}</a>
       <a href="/privacy/">{u['privacy']}</a>
+      <a href="{u['pre']}/status/">{'Статус замовлення' if lang == 'uk' else 'Статус заказа'}</a>
       <a href="#" data-cookie-settings>{'Налаштування cookie' if lang == 'uk' else 'Настройки cookie'}</a>
     </div>
   </div>
@@ -509,7 +802,7 @@ class Site:
                 name = p['name']
                 notes = p['notes'][lang]
                 title = f"{u['h1']}{name}{u['tTitle']}"
-                desc = self.short(f"{u['h1']}{name}: {notes}. {p['region'][lang]}. {u['fresh']}. 200 {u['g']} — {p['price200']} ₴.", 158)
+                desc = self.short(f"{u['h1']}{name}: {notes}. {p['region'][lang]}. {u['fresh']}. {p['w1']} {u['g']} — {p['price1']} ₴.", 158)
                 img = f"{self.url}/{p['img']}"
                 canonical = self.p_url(lang, p['id'])
                 alts = {'uk': self.p_url('uk', p['id']), 'ru': self.p_url('ru', p['id']), 'x-default': self.p_url('uk', p['id'])}
@@ -525,7 +818,7 @@ class Site:
                            'hasMerchantReturnPolicy': {'@type': 'MerchantReturnPolicy', 'applicableCountry': 'UA',
                                                        'returnPolicyCategory': 'https://schema.org/MerchantReturnFiniteReturnWindow',
                                                        'merchantReturnDays': 14}}
-                          for w, pr in ((200, p['price200']), (500, p['price500']))]
+                          for w, pr in ((p['w1'], p['price1']), (p['w2'], p['price2']))]
                 ld_prod = {'@context': 'https://schema.org', '@type': 'Product', 'name': name, 'sku': p['id'], 'image': img,
                            'description': self.short(f"{notes}. {p['info'][lang]}", 300), 'category': 'Coffee', 'url': canonical,
                            'brand': {'@type': 'Brand', 'name': 'ZRN Coffee'}, 'offers': offers}
@@ -560,7 +853,7 @@ class Site:
 
                 def mini(q):
                     return (f'<a class="mini" href="{u["pre"]}/coffee/{q["id"]}/"><img src="/{q["img"]}" alt="{E(q["alt"])}" width="120" height="120" loading="lazy">'
-                            f'<span>{E(q["name"])}</span><small>{E(q["notes"][lang])}</small><em>{u["from_"]}{q["price200"]} ₴</em></a>')
+                            f'<span>{E(q["name"])}</span><small>{E(q["notes"][lang])}</small><em>{u["from_"]}{q["price1"]} ₴</em></a>')
                 allc = ' · '.join(f'<a href="{u["pre"]}/coffee/{q["id"]}/">{E(q["name"])}</a>' for q in self.prods if q['id'] != p['id'])
                 h += f'''<nav class="crumbs" aria-label="breadcrumb"><a href="{shop}">ZRN Coffee</a> › <a href="{shop}#{sect}">{u['blends'] if p['type'] == 'blend' else u['catalog']}</a> › <span>{E(name)}</span></nav>
 <article class="product">
@@ -572,8 +865,8 @@ class Site:
       <p class="origin">{E(p['region'][lang])}</p>
       <div class="chips" aria-label="{u['notes']}">{chips}</div>
       <div class="prices">
-        <div><b>200 {u['g']}</b><span>{p['price200']} ₴</span><small>{round(p['price200'] / 2)} ₴ {u['per100']}</small></div>
-        <div><b>500 {u['g']}</b><span>{p['price500']} ₴</span><small>{round(p['price500'] / 5)} ₴ {u['per100']}</small></div>
+        <div><b>{p['w1']} {u['g']}</b><span>{p['price1']} ₴</span><small>{round(p['price1'] * 100 / p['w1'])} ₴ {u['per100']}</small></div>
+        <div><b>{p['w2']} {u['g']}</b><span>{p['price2']} ₴</span><small>{round(p['price2'] * 100 / p['w2'])} ₴ {u['per100']}</small></div>
       </div>
       <a class="btn" href="{buy_href}" rel="nofollow">{u['buy']}</a>
       <p class="fresh">{u['fresh']}</p>
@@ -654,6 +947,27 @@ class Site:
                              f'<p>{E(y["excerpt"][lang])}</p></a>' for y in rel) + '</div></section>\n'
                 h += self.footer(lang)
                 self.write(f"{u['pre'].strip('/')}/blog/{a['id']}/index.html".lstrip('/'), h)
+
+    # --- сторінка статусу замовлення (/status/, /ru/status/)
+    def status_pages(self):
+        for lang in LANGS:
+            u, r = UI[lang], ST[lang]
+            other = 'ru' if lang == 'uk' else 'uk'
+            canonical = f"{self.url}{u['pre']}/status/"
+            alts = {'uk': f"{self.url}/status/", 'ru': f"{self.url}/ru/status/", 'x-default': f"{self.url}/status/"}
+            home = '/' if lang == 'uk' else '/?lang=ru'
+            h = self.head(lang, r['title'], r['desc'], canonical, alts, 'website', f"{self.url}/img/og.jpg", [], robots='noindex, follow')
+            h += self.header(lang, f"{UI[other]['pre']}/status/")
+            cfg = json.dumps({'sheet': self.sheet_url, 'tg': self.tg, 'tgText': self.tg.replace('https://', ''), 'lang': lang,
+                              't': {k: v for k, v in r.items() if k not in ('title', 'desc')}},
+                             ensure_ascii=False).replace('</', '<\\/')
+            tpl = STATUS_HTML
+            for k, v in dict(HOME=home, H1=r['h1'], LEAD=r['lead'], ORDER=r['order'], ORDER_PH=r['order_ph'], LAST4=r['last4'],
+                             LAST4_PH=r['last4_ph'], BTN=r['btn'], FORGET=r['forget'], TG=self.tg, CFG=cfg).items():
+                tpl = tpl.replace('@@' + k + '@@', v)
+            h += tpl
+            h += self.footer(lang)
+            self.write(f"{u['pre'].strip('/')}/status/index.html".lstrip('/'), h)
 
     # --- сторінка відгуку (/review/, /ru/review/)
     def review_pages(self):
@@ -843,17 +1157,60 @@ section p,.article p{margin-bottom:12px;color:var(--sub)}
 .rev-thanks{max-width:560px;margin:10px 0 40px}
 .rev-thanks h2{font-size:1.6rem;margin-bottom:10px}
 .rev-thanks p{color:var(--sub);margin-bottom:14px}
+.st-form{max-width:460px;margin-bottom:34px}
+.st-form .btn{width:100%;border:0;cursor:pointer;font:inherit;font-weight:600}
+.st-form .btn:disabled{opacity:.6;cursor:wait}
+.st-form input{letter-spacing:.04em}
+.st-forget{margin:14px 0 0;font-size:.82rem}
+.st-forget a{color:var(--sub);text-decoration:underline}
+.st-res{max-width:720px;margin:0 0 44px}
+.st-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 18px}
+.st-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 16px;align-items:baseline;margin-bottom:18px}
+.st-num{font-family:'Fraunces',Georgia,serif;font-size:1.5rem;color:var(--dark)}
+.st-date{color:var(--sub);font-size:.9rem}
+.st-tl{list-style:none;margin:0 0 18px;padding:0;display:flex;gap:0;counter-reset:s}
+.st-tl li{flex:1;position:relative;text-align:center;font-size:.78rem;color:var(--sub);padding-top:0}
+.st-tl li::before{content:"";position:absolute;top:15px;left:-50%;width:100%;height:2px;background:var(--line);z-index:0}
+.st-tl li:first-child::before{display:none}
+.st-tl li.done::before,.st-tl li.cur::before{background:var(--gold)}
+.st-dot{position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:var(--bg);border:2px solid var(--line);font-weight:600;font-size:.85rem;color:var(--sub)}
+.st-tl li.done .st-dot{background:var(--gold);border-color:var(--gold);color:#fff}
+.st-tl li.cur .st-dot{border-color:var(--gold);color:var(--dark);box-shadow:0 0 0 4px rgba(201,162,77,.22)}
+.st-tl li.cur .st-lb{color:var(--dark);font-weight:600}
+.st-lb{display:block;margin-top:6px;line-height:1.25}
+.st-banner{background:rgba(201,162,77,.14);border-radius:10px;padding:14px 16px;font-weight:600;margin-bottom:16px;color:var(--dark)}
+.st-banner.st-bad{background:rgba(193,67,42,.1);color:#9c3b26}
+.st-track{background:rgba(201,162,77,.14);border-radius:10px;padding:12px 16px;margin-bottom:16px;color:var(--dark)}
+.st-sub{color:var(--sub);font-size:.88rem;margin-top:3px}
+.st-note{border-left:3px solid var(--gold);padding:4px 0 4px 14px;margin:0 0 16px;color:var(--dark)}
+.st-note b{display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;color:var(--sub);margin-bottom:3px}
+.st-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.st-box{border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.st-box h3{margin:0 0 6px;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;color:var(--sub);font-weight:600}
+.st-box p{margin:0 0 6px;font-size:.92rem;line-height:1.45}
+.st-ttn{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.st-copy{font:inherit;font-size:.78rem;padding:3px 10px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--dark);cursor:pointer}
+.st-link{display:inline-block;color:var(--gold-soft);text-decoration:underline;font-size:.88rem;margin-top:2px}
+.st-items ul{margin:0 0 8px;padding-left:18px;font-size:.92rem}
+.st-items li{margin:2px 0}
+.st-total{font-weight:600}
+.st-auto{color:var(--sub);font-size:.8rem;margin:12px 0 0}
+.st-act{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.st-act .btn{flex:1 1 140px;text-align:center;border:0;cursor:pointer;font:inherit;font-weight:600}
+.st-act .btn.ghost{border:1px solid var(--line)}
+@media(max-width:560px){.st-grid{grid-template-columns:1fr}.st-tl li{font-size:.6rem;padding:0;letter-spacing:-.01em;overflow-wrap:normal;hyphens:none}.st-dot{width:28px;height:28px}.st-tl li::before{top:13px}.st-card{padding:18px 12px}}
 @media(max-width:560px){.hd-logo span{display:none}.site-head nav a{padding:0 7px;font-size:.85rem}.specs div{flex-direction:column;gap:2px}.specs dt{flex:none}.bar{grid-template-columns:96px 1fr}}
 '''
 
 
 def main():
-    cat = load()
+    cat = apply_sheet(load())
     index_src = build_index(cat)
     site = Site(cat, index_src)
     site.product_pages()
     site.blog_pages()
     site.review_pages()
+    site.status_pages()
     site.page_404()
     site.short_links()
     site.sitemap()
@@ -877,7 +1234,7 @@ def main():
         full = os.path.join(ROOT, rel)
         os.makedirs(os.path.dirname(full), exist_ok=True)
         open(full, 'w', encoding='utf-8').write(content)
-    print(f'Готово: сортів {len(cat["products"])}, статей {len(cat["posts"])}, файлів згенеровано {len(site.out)} + index.html')
+    print(f'Готово: ціни — {"з таблиці" if os.environ.get("ZRN_OFFLINE") != "1" else "з catalog.json"}; сортів {len(cat["products"])}, статей {len(cat["posts"])}, файлів згенеровано {len(site.out)} + index.html')
 
 
 if __name__ == '__main__':
