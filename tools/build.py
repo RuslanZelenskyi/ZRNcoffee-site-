@@ -125,6 +125,23 @@ def truthy(v):
     return str(v).strip().lower() not in ('ні', 'нет', 'no', 'false', '0', '-', 'hide', 'приховати')
 
 
+REVIEWS_DATA = None   # None = у таблиці немає даних про відгуки (старий Apps Script) → блок у index.html не чіпаємо
+
+
+def reviews_from(sheet):
+    out = []
+    for r in (sheet or {}).get('reviews') or []:
+        text = str(r.get('text', '')).strip()
+        if len(text) < 5:
+            continue
+        try:
+            rating = max(1, min(5, int(float(r.get('rating', 5)))))
+        except ValueError:
+            rating = 5
+        out.append({'name': str(r.get('name', '')).strip()[:80], 'rating': rating, 'product': str(r.get('product', '')).strip()[:80], 'text': text[:1200]})
+    return out[:12]
+
+
 def apply_sheet(cat):
     """Накладає на catalog.json ціни/ваги/видимість/порядок із листа «Ціни» та налаштування з листа «Налаштування».
     Значення з catalog.json (price200/price500) — запасні: їх використовують, якщо сорту в таблиці немає."""
@@ -175,6 +192,9 @@ def apply_sheet(cat):
     cat['products'] = sorted(shown, key=lambda p: p['_ord'])
     for p in cat['products']:
         p.pop('_ord', None)
+    global REVIEWS_DATA
+    if sheet and isinstance(sheet.get('reviews'), list):
+        REVIEWS_DATA = reviews_from(sheet)
     # налаштування: порожня клітинка → автоматично
     st = (sheet or {}).get('settings') or {}
     free = posint(st.get('freeShip')) or 1400
@@ -277,6 +297,9 @@ def build_index(cat):
     s = replace_between(s, '<!--CAT:NOSCRIPT:START-->', '<!--CAT:NOSCRIPT:END-->', noscript_block(cat), 'CAT:NOSCRIPT')
     s = replace_between(s, '/*SETTINGS:START*/', '/*SETTINGS:END*/', 'const ZRN_SET = ' + json.dumps(SETTINGS) + ';', 'SETTINGS')
     # числа у статичному HTML (для пошуковиків і режиму без JS): <span data-v="free">1400</span>
+    if REVIEWS_DATA is not None:
+        rj = json.dumps(REVIEWS_DATA, ensure_ascii=False).replace('</', '<\\/').replace('\u2028', '\\u2028').replace('\u2029', '\\u2029')
+        s = replace_between(s, '/*REVIEWS:START*/', '/*REVIEWS:END*/', 'const REVIEWS = ' + rj + ';', 'REVIEWS')
     s = re.sub(r'(<span data-v="(\w+)">)[^<]*(</span>)', lambda m: m.group(1) + str(SETTINGS.get(m.group(2), '')) + m.group(3), s)
     open(INDEX, 'w', encoding='utf-8').write(s)
     return s
