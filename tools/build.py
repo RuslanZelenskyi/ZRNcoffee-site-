@@ -317,7 +317,7 @@ def ui_texts(index_src):
         if not m:
             fail(f'в index.html не знайдено текст інтерфейсу "{key}" ({lang})')
         return m.group(1).replace("\\'", "'").replace('\\\\', '\\')
-    keys = ['trust.fact', 'ship.del2', 'ship.del3', 'ship.del4', 'ship.pay1', 'ck.guarantee']
+    keys = ['trust.fact', 'ship.del2', 'ship.del3', 'ship.del4', 'ship.pay1', 'ck.guarantee', 'meta.title', 'meta.desc']
     def tok(v):
         return v.replace('{free}', str(SETTINGS['freeShip'])).replace('{heroW}', str(SETTINGS['heroW'])).replace('{heroP}', str(SETTINGS['heroP']))
     return {lang: {k: tok(get(lang, k)) for k in keys} for lang in LANGS}
@@ -697,6 +697,7 @@ class Site:
         self.prods = cat['products']
         self.posts = cat['posts']
         self.ui_txt = ui_texts(index_src)
+        self.index_src = index_src
         m = re.search(r"WEB3FORMS_KEY = '([^']*)'", index_src)
         self.w3key = m.group(1) if m else ''
         m = re.search(r"ORDER_SHEET_URL = '([^']*)'", index_src)
@@ -707,7 +708,7 @@ class Site:
     def p_url(self, lang, pid): return f"{self.url}{UI[lang]['pre']}/coffee/{pid}/"
     def b_url(self, lang, bid): return f"{self.url}{UI[lang]['pre']}/blog/{bid}/"
     def blog_idx(self, lang): return f"{self.url}{UI[lang]['pre']}/blog/"
-    def main(self, lang): return self.url + '/' if lang == 'uk' else self.url + '/?lang=ru'
+    def main(self, lang): return self.url + '/' if lang == 'uk' else self.url + '/ru/'
 
     @staticmethod
     def short(s, n):
@@ -769,7 +770,7 @@ class Site:
 
     def header(self, lang, alt_href):
         u = UI[lang]
-        home = '/' if lang == 'uk' else '/?lang=ru'
+        home = '/' if lang == 'uk' else '/ru/'
         return f'''<header class="site-head">
   <div class="wrap hd-in">
     <a class="hd-logo" href="{home}" aria-label="ZRN Craft Micro Roastery"><b>ZRN</b><span>{u['craft']}</span></a>
@@ -786,7 +787,7 @@ class Site:
 
     def footer(self, lang):
         u = UI[lang]
-        home = '/' if lang == 'uk' else '/?lang=ru'
+        home = '/' if lang == 'uk' else '/ru/'
         return f'''</main>
 <footer class="site-foot">
   <div class="wrap">
@@ -829,8 +830,8 @@ class Site:
                 img = f"{self.url}/{p['img']}"
                 canonical = self.p_url(lang, p['id'])
                 alts = {'uk': self.p_url('uk', p['id']), 'ru': self.p_url('ru', p['id']), 'x-default': self.p_url('uk', p['id'])}
-                shop = '/' if lang == 'uk' else '/?lang=ru'
-                buy_href = ('/?buy=' if lang == 'uk' else '/?lang=ru&amp;buy=') + p['id']
+                shop = '/' if lang == 'uk' else '/ru/'
+                buy_href = ('/?buy=' if lang == 'uk' else '/ru/?buy=') + p['id']
                 sect = 'blends' if p['type'] == 'blend' else 'catalog'
                 offers = [{'@type': 'Offer', 'name': f"{w} {u['g']}", 'priceCurrency': 'UAH', 'price': str(pr),
                            'availability': 'https://schema.org/InStock', 'itemCondition': 'https://schema.org/NewCondition', 'url': canonical,
@@ -937,7 +938,7 @@ class Site:
         for lang in LANGS:
             u = UI[lang]
             other = 'ru' if lang == 'uk' else 'uk'
-            home = '/' if lang == 'uk' else '/?lang=ru'
+            home = '/' if lang == 'uk' else '/ru/'
             canonical = self.blog_idx(lang)
             alts = {'uk': self.blog_idx('uk'), 'ru': self.blog_idx('ru'), 'x-default': self.blog_idx('uk')}
             ld = [{'@context': 'https://schema.org', '@type': 'CollectionPage', 'name': u['blogTitle'], 'url': canonical,
@@ -981,7 +982,7 @@ class Site:
             other = 'ru' if lang == 'uk' else 'uk'
             canonical = f"{self.url}{u['pre']}/status/"
             alts = {'uk': f"{self.url}/status/", 'ru': f"{self.url}/ru/status/", 'x-default': f"{self.url}/status/"}
-            home = '/' if lang == 'uk' else '/?lang=ru'
+            home = '/' if lang == 'uk' else '/ru/'
             h = self.head(lang, r['title'], r['desc'], canonical, alts, 'website', f"{self.url}/img/og.jpg", [], robots='noindex, follow')
             h += self.header(lang, f"{UI[other]['pre']}/status/")
             cfg = json.dumps({'sheet': self.sheet_url, 'tg': self.tg, 'tgText': self.tg.replace('https://', ''), 'lang': lang,
@@ -1002,7 +1003,7 @@ class Site:
             other = 'ru' if lang == 'uk' else 'uk'
             canonical = f"{self.url}{u['pre']}/review/"
             alts = {'uk': f"{self.url}/review/", 'ru': f"{self.url}/ru/review/", 'x-default': f"{self.url}/review/"}
-            home = '/' if lang == 'uk' else '/?lang=ru'
+            home = '/' if lang == 'uk' else '/ru/'
             h = self.head(lang, r['title'], r['desc'], canonical, alts, 'website', f"{self.url}/img/og.jpg", [], robots='noindex, follow')
             h += self.header(lang, f"{UI[other]['pre']}/review/")
             stars = ''.join(f'<input type="radio" name="rating" id="st{i}" value="{i}"><label for="st{i}" title="{i}"><span aria-hidden="true">★</span><span class="sr">{i}</span></label>'
@@ -1026,7 +1027,7 @@ class Site:
     def page_404(self):
         blocks = ''
         for lg in LANGS:
-            hm = '/' if lg == 'uk' else '/?lang=ru'
+            hm = '/' if lg == 'uk' else '/ru/'
             blocks += (f'<section class="nf" data-l="{lg}"{"" if lg == "uk" else " hidden"}><h1>{NF[lg]["h"]}</h1><p>{NF[lg]["p"]}</p>'
                        f'<p class="nf-btns"><a class="btn" href="{hm}#catalog">{NF[lg]["cat"]}</a> '
                        f'<a class="btn ghost" href="{UI[lg]["pre"]}/blog/">{NF[lg]["blog"]}</a> '
@@ -1044,6 +1045,30 @@ class Site:
             self.write(f'{code}/index.html', SHORT_HTML.replace('@@META@@', meta).replace('@@URL@@', self.url).replace('@@SRC@@', json.dumps(src, ensure_ascii=False)))
 
     # --- sitemap
+    def home_ru(self):
+        """Російська головна: /ru/index.html — той самий index.html, але з російськими <title>, описом, canonical, og.
+        Мову сторінки вибирає JS за адресою /ru/ (див. initLanguage)."""
+        h = self.index_src
+        t = html.escape(self.ui_txt['ru']['meta.title'], quote=True)
+        d = html.escape(self.ui_txt['ru']['meta.desc'], quote=True)
+        def sub(pattern, repl):
+            nonlocal h
+            h, n = re.subn(pattern, lambda m: repl, h, count=1)
+            if n != 1:
+                fail(f'/ru/: не знайдено в index.html: {pattern}')
+        sub(r'<html lang="uk">', '<html lang="ru">')
+        sub(r'<title>[^<]*</title>', f'<title>{t}</title>')
+        sub(r'<meta name="description" content="[^"]*">', f'<meta name="description" content="{d}">')
+        sub(r'<link rel="canonical" href="[^"]*">', f'<link rel="canonical" href="{self.url}/ru/">')
+        sub(r'<meta property="og:locale" content="uk_UA">', '<meta property="og:locale" content="ru_RU">')
+        sub(r'<meta property="og:locale:alternate" content="ru_RU">', '<meta property="og:locale:alternate" content="uk_UA">')
+        sub(r'<meta property="og:title" content="[^"]*">', f'<meta property="og:title" content="{t}">')
+        sub(r'<meta property="og:description" content="[^"]*">', f'<meta property="og:description" content="{d}">')
+        sub(r'<meta property="og:url" content="[^"]*">', f'<meta property="og:url" content="{self.url}/ru/">')
+        sub(r'<meta name="twitter:title" content="[^"]*">', f'<meta name="twitter:title" content="{t}">')
+        sub(r'<meta name="twitter:description" content="[^"]*">', f'<meta name="twitter:description" content="{d}">')
+        self.write('ru/index.html', h)
+
     def sitemap(self):
         def entry(loc, alts, prio, freq):
             x = f"  <url>\n    <loc>{loc}</loc>\n    <lastmod>{TODAY}</lastmod>\n    <changefreq>{freq}</changefreq>\n    <priority>{prio}</priority>\n"
@@ -1051,8 +1076,8 @@ class Site:
                 x += f'    <xhtml:link rel="alternate" hreflang="{k}" href="{v}"/>\n'
             return x + '  </url>\n'
         sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'
-        ma = {'uk': self.url + '/', 'ru': self.url + '/?lang=ru', 'x-default': self.url + '/'}
-        sm += entry(self.url + '/', ma, '1.0', 'weekly') + entry(self.url + '/?lang=ru', ma, '0.8', 'weekly')
+        ma = {'uk': self.url + '/', 'ru': self.url + '/ru/', 'x-default': self.url + '/'}
+        sm += entry(self.url + '/', ma, '1.0', 'weekly') + entry(self.url + '/ru/', ma, '0.8', 'weekly')
         for p in self.prods:
             a = {'uk': self.p_url('uk', p['id']), 'ru': self.p_url('ru', p['id']), 'x-default': self.p_url('uk', p['id'])}
             sm += entry(a['uk'], a, '0.9', 'weekly') + entry(a['ru'], a, '0.7', 'weekly')
@@ -1239,6 +1264,7 @@ def main():
     site.status_pages()
     site.page_404()
     site.short_links()
+    site.home_ru()
     site.sitemap()
     site.write('pages.css', CSS)
     # прибираємо застарілі сторінки сортів/статей, яких більше немає в catalog.json
