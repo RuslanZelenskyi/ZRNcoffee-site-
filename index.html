@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>ZRN Coffee — свіжа обсмажена кава в зернах</title>
+<title>Свіжообсмажена кава в зернах — купити в Україні | ZRN Coffee</title>
 <meta name="description" content="Свіжообсмажена кава ZRN. Моносорти та авторські бленди. Обсмаження під замовлення, зерно або мелена кава. Доставка по Україні.">
 <meta name="robots" content="index, follow">
 <meta name="author" content="Руслан Зеленський, ZRN Coffee">
 <meta name="theme-color" content="#f3ead9">
 <link rel="canonical" href="https://zrncoffee.com.ua/">
 <link rel="alternate" hreflang="uk" href="https://zrncoffee.com.ua/">
-<link rel="alternate" hreflang="ru" href="https://zrncoffee.com.ua/?lang=ru">
+<link rel="alternate" hreflang="ru" href="https://zrncoffee.com.ua/ru/">
 <link rel="alternate" hreflang="x-default" href="https://zrncoffee.com.ua/">
 <!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:locale" content="uk_UA">
 <meta property="og:locale:alternate" content="ru_RU">
-<meta property="og:title" content="ZRN Coffee — свіжа обсмажена кава в зернах">
+<meta property="og:title" content="Свіжообсмажена кава в зернах — купити в Україні | ZRN Coffee">
 <meta property="og:description" content="Свіжообсмажена кава ZRN. Моносорти та авторські бленди. Обсмаження під замовлення, зерно або мелена кава. Доставка по Україні.">
 <meta property="og:site_name" content="ZRN Coffee">
 <meta property="og:url" content="https://zrncoffee.com.ua/">
@@ -27,7 +27,7 @@
 <meta property="og:image:alt" content="ZRN Coffee — свіжообсмажена кава в зернах">
 <!-- Twitter / X -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="ZRN Coffee — свіжа обсмажена кава в зернах">
+<meta name="twitter:title" content="Свіжообсмажена кава в зернах — купити в Україні | ZRN Coffee">
 <meta name="twitter:description" content="Свіжообсмажена кава ZRN. Моносорти та авторські бленди. Обсмаження під замовлення. Доставка по Україні.">
 <meta name="twitter:image" content="https://zrncoffee.com.ua/img/og.jpg">
 <meta name="twitter:image:alt" content="ZRN Coffee — свіжообсмажена кава в зернах">
@@ -767,7 +767,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
     <div class="lang-switch" role="group" aria-label="Language">
       <a href="https://zrncoffee.com.ua/" class="lang-btn active" data-lang="uk" aria-pressed="true" hreflang="uk">UA</a>
       <span class="lang-sep" aria-hidden="true">|</span>
-      <a href="https://zrncoffee.com.ua/?lang=ru" class="lang-btn" data-lang="ru" aria-pressed="false" hreflang="ru">RU</a>
+      <a href="https://zrncoffee.com.ua/ru/" class="lang-btn" data-lang="ru" aria-pressed="false" hreflang="ru">RU</a>
     </div>
     <button id="cartBtn" aria-label="Кошик" data-i18n-aria="nav.cart">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h2l2.2 11.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.6L21 9H6"></path><circle cx="9" cy="21" r="1.4" fill="var(--ink)" stroke="none"></circle><circle cx="17" cy="21" r="1.4" fill="var(--ink)" stroke="none"></circle></svg>
@@ -1149,7 +1149,7 @@ function zrnTok(v){ return String(v).replace(/\{free\}/g, ZRN_SET.freeShip).repl
 /* ========== I18N UA/RU ========== */
 const ZRN_I18N = {
 uk: {
-  'meta.title': 'ZRN Coffee — свіжа обсмажена кава в зернах',
+  'meta.title': 'Свіжообсмажена кава в зернах — купити в Україні | ZRN Coffee',
   'meta.desc': 'Свіжообсмажена кава ZRN. Моносорти та авторські бленди. Обсмаження під замовлення, зерно або мелена кава. Доставка по Україні.',
   'nav.aria': 'Основна навігація',
   'nav.catalog': 'Моносорти',
@@ -1337,7 +1337,7 @@ uk: {
   'badge.new': 'Новинка'
 },
 ru: {
-  'meta.title': 'ZRN Coffee — свежеобжаренный кофе в зёрнах',
+  'meta.title': 'Свежеобжаренный кофе в зёрнах — купить в Украине | ZRN Coffee',
   'meta.desc': 'Свежеобжаренный кофе ZRN. Моносорты и авторские бленды. Обжарка под заказ, зерно или молотый кофе. Доставка по Украине.',
   'nav.aria': 'Основная навигация',
   'nav.catalog': 'Моносорты',
@@ -2502,18 +2502,17 @@ function setLanguage(lang, opts){
     btn.classList.toggle('active', on);
     btn.setAttribute('aria-pressed', on ? 'true' : 'false');
   });
-  // Separate crawlable URLs: / (uk) and /?lang=ru
+  // Окремі адреси для мов: / (укр.) і /ru/ (рос.) — це один і той самий файл, мова вибирається за адресою
   if(!opts.skipUrl && !window._zrnModalPushed){
     try{
       var u = new URL(location.href);
-      if(lang === 'ru') u.searchParams.set('lang', 'ru');
-      else u.searchParams.delete('lang');
-      var next = u.pathname + u.search + u.hash;
+      u.searchParams.delete('lang');
+      var next = (lang === 'ru' ? '/ru/' : '/') + u.search + u.hash;
       if(next !== (location.pathname + location.search + location.hash)){
         history.replaceState(null, '', next);
       }
       var can = document.querySelector('link[rel="canonical"]');
-      if(can) can.setAttribute('href', lang === 'ru' ? 'https://zrncoffee.com.ua/?lang=ru' : 'https://zrncoffee.com.ua/');
+      if(can) can.setAttribute('href', lang === 'ru' ? 'https://zrncoffee.com.ua/ru/' : 'https://zrncoffee.com.ua/');
     }catch(e){}
   }
   applyStaticI18n();
@@ -2550,7 +2549,8 @@ function initLanguage(){
   let lang = 'uk';
   try{
     var q = new URLSearchParams(location.search).get('lang');
-    if(q === 'ru' || q === 'uk') lang = q;
+    if(/^\/ru(\/|$)/.test(location.pathname)) lang = 'ru';          // адреса /ru/ завжди російською
+    else if(q === 'ru' || q === 'uk') lang = q;                      // старі посилання /?lang=ru
     else lang = localStorage.getItem('zrn_language') || 'uk';
   }catch(e){}
   if(lang !== 'ru' && lang !== 'uk') lang = 'uk';
@@ -3083,8 +3083,8 @@ function zrnSyncLangUrl(){
   try{
     var u = new URL(location.href);
     if(/\/coffee\//.test(u.pathname)) return;
-    if(currentLang==='ru') u.searchParams.set('lang','ru'); else u.searchParams.delete('lang');
-    var n = u.pathname + u.search + u.hash;
+    u.searchParams.delete('lang');
+    var n = (currentLang==='ru' ? '/ru/' : '/') + u.search + u.hash;
     if(n !== (location.pathname + location.search + location.hash)) history.replaceState(null,'',n);
   }catch(e){}
 }
@@ -3766,7 +3766,11 @@ function closeMobileNav(){
   // re-bind after functions defined - use event after load
 })();
 
-function cleanPhone(phone){ return String(phone||'').replace(/[\s()\-]/g,''); }
+function cleanPhone(phone){
+  let c = String(phone||'').replace(/[\s()\-.]/g,'');
+  if(/^\+3800\d{9}$/.test(c)) c = '+380' + c.slice(5);   // поле вже містить +380, а людина ввела номер з 0: +380067… → +38067…
+  return c;
+}
 function isValidUaPhone(phone){
   const c = cleanPhone(phone);
   // +380XXXXXXXXX, 380XXXXXXXXX або 0XXXXXXXXX
@@ -3876,7 +3880,7 @@ if(typeof showReorderBox==='function') showReorderBox();
   var id = q.get('buy') || h;
   var p = id ? ALL_PRODUCTS.find(function(x){ return x.id===id; }) : null;
   if(p){
-    try{ history.replaceState(null, '', currentLang==='ru' ? '/?lang=ru' : '/'); }catch(e){}
+    try{ history.replaceState(null, '', currentLang==='ru' ? '/ru/' : '/'); }catch(e){}
     openProduct(p.id);
   } else if(h==='ship' && typeof openShipModal==='function'){ openShipModal(); }
   else if(h==='blog' && typeof openBlogOverlay==='function'){ openBlogOverlay(); }
