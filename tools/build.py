@@ -89,7 +89,7 @@ def load():
 
 
 # ------------------------------------------------------------------ ціни, ваги і налаштування з Google Таблиці
-SETTINGS = {'freeShip': 1400, 'heroW': 200, 'heroP': 260}   # заповнюється в apply_sheet()
+SETTINGS = {'freeShip': 1400, 'heroW': 200, 'heroP': 260, 'sub': {'on': True, 'free': 600, 'comfort': 0, 'premium': 0, 'lead': 3}}   # заповнюється в apply_sheet()
 
 
 def find_sheet_url():
@@ -205,7 +205,22 @@ def apply_sheet(cat):
         hw = max(set(ws), key=lambda w: (ws.count(w), -w))
     if not hp:
         hp = min(p['price1'] for p in cat['products'] if p['w1'] == hw)
-    SETTINGS.update({'freeShip': free, 'heroW': hw, 'heroP': hp})
+    # Клуб (підписка): порожні клітинки → автоматично (Comfort = медіана ціни за 100 г, Premium = верхня межа)
+    rates = sorted((p['price2'] / p['w2'] if p.get('w2') else p['price1'] / p['w1']) * 100 for p in cat['products'])
+    def rate_at(q):
+        # Comfort — медіана (до 5 ₴), Premium — верхня межа асортименту (вгору до 5 ₴)
+        if not rates:
+            return 0
+        if q >= 1:
+            return int(-(-rates[-1] // 5) * 5)
+        return int(round(rates[(len(rates) - 1) // 2 if len(rates) % 2 else len(rates) // 2 - 1] / 5) * 5)
+    off = str(st.get('subOn', '')).strip().lower() in ('ні', 'нет', 'no', 'off', 'false', '0')
+    SETTINGS.update({'freeShip': free, 'heroW': hw, 'heroP': hp, 'sub': {
+        'on': not off,
+        'free': posint(st.get('subFree')) or 600,
+        'comfort': posint(st.get('subComfort')) or rate_at(0.5),
+        'premium': posint(st.get('subPremium')) or rate_at(1),
+        'lead': posint(st.get('subLead')) or 3}})
     cat['settings'] = dict(SETTINGS)
     return cat
 
@@ -548,6 +563,222 @@ ST = {
         auto='Статус доставки обновляется автоматически.'),
 }
 
+SB = {
+ 'uk': dict(
+  title='Моя підписка | Клуб ZRN', desc='Керування підпискою Клубу ZRN: пауза, пропуск, зміна сорту.',
+  h1='Моя підписка', lead='Введіть номер підписки та останні 4 цифри телефону, який вказували у заявці.',
+  id='Номер підписки', id_ph='SUB-0001', last4='Останні 4 цифри телефону', last4_ph='1234', btn='Відкрити', loading='Шукаємо…',
+  forget='Не ваш пристрій? Очистити збережене',
+  err_fmt='Перевірте номер підписки та 4 цифри телефону.', err_nf='Не знайшли підписку. Перевірте номер і останні 4 цифри телефону.',
+  err_lock='Забагато невдалих спроб. Спробуйте за 15 хвилин або напишіть нам.', err_net='Не вдалося з’єднатися. Спробуйте ще раз або напишіть нам: ',
+  err_locked='Відправка вже в роботі — тут змінити не вийде. Напишіть нам, і ми щось придумаємо.', err_act='Не вдалося виконати дію. Спробуйте ще раз або напишіть нам.',
+  st_new='Заявку отримано', st_new_p='Ми зв’яжемося з вами, підтвердимо умови та призначимо першу відправку. Поки нічого не оплачується.',
+  st_act='Активна', st_pause='На паузі', st_cancel='Скасована', st_cancel_p='Підписку скасовано. Дякуємо, що були з нами. Двері завжди відчинені — оформити нову можна будь-коли.',
+  plan_h='Ваш план', type='Тип', fmt='Формат', level='Рівень', sort='Сорт', freq='Періодичність', price='За відправку', grind='Помел', club_h='Статус у клубі', ships='Відправок',
+  freq_t={'10': 'Кожні 10 днів', '14': 'Кожні 2 тижні', '30': 'Щомісяця'},
+  next_h='Наступна відправка', next_none='Дату призначимо після підтвердження.', next_sort='Сорт цієї відправки', next_sort_none='роастмайстер обере сам', skipped='Цю відправку пропущено за вашим проханням.',
+  pause_until='Пауза до', locked_note='До обсмажки менше ніж {lead} дні — зміни вже не приймаємо тут. Напишіть нам.',
+  a_skip='Пропустити наступну відправку', a_unskip='Не пропускати наступну відправку', a_pause='Поставити на паузу', a_pause_date='Пауза до (необов’язково)', a_resume='Відновити підписку',
+  a_sort='Змінити сорт', a_sort_save='Зберегти сорт', a_comm_h='Як нам з вами спілкуватися', a_req_h='Особливий ритм, інший формат, окрема пропозиція', a_req_ph='Напишіть, що вам потрібно — відповімо особисто', a_req_btn='Надіслати',
+  a_cancel='Скасувати підписку', a_cancel_sure='Точно скасувати? Натисніть ще раз', a_cancel_note='Без пояснень і без утримання.',
+  comm={'Звичайна': 'Звичайно', 'Більше близькості': 'Хочу більше близькості', 'Менше повідомлень': 'Хочу менше повідомлень'},
+  ok_skip='Готово: наступну відправку пропустимо.', ok_unskip='Готово: відправку повернуто в план.', ok_pause='Готово: підписка на паузі.', ok_resume='Готово: підписку відновлено.',
+  ok_sort='Готово: сорт змінено.', ok_comm='Збережено.', ok_req='Дякуємо! Ми відповімо особисто.', ok_cancel='Підписку скасовано.',
+  refresh='Оновити', again='Інша підписка', tg='Написати в Telegram', join='Оформити підписку', pay_h='Оплата',
+  pay_t='За 1–2 дні до обсмажки надішлемо суму до сплати. Після підтвердження оплати обсмажуємо й відправляємо.'),
+ 'ru': dict(
+  title='Моя подписка | Клуб ZRN', desc='Управление подпиской Клуба ZRN: пауза, пропуск, смена сорта.',
+  h1='Моя подписка', lead='Введите номер подписки и последние 4 цифры телефона, который указывали в заявке.',
+  id='Номер подписки', id_ph='SUB-0001', last4='Последние 4 цифры телефона', last4_ph='1234', btn='Открыть', loading='Ищем…',
+  forget='Не ваше устройство? Очистить сохранённое',
+  err_fmt='Проверьте номер подписки и 4 цифры телефона.', err_nf='Не нашли подписку. Проверьте номер и последние 4 цифры телефона.',
+  err_lock='Слишком много неудачных попыток. Попробуйте через 15 минут или напишите нам.', err_net='Не удалось соединиться. Попробуйте ещё раз или напишите нам: ',
+  err_locked='Отправка уже в работе — здесь изменить не получится. Напишите нам, и мы что-нибудь придумаем.', err_act='Не удалось выполнить действие. Попробуйте ещё раз или напишите нам.',
+  st_new='Заявка получена', st_new_p='Мы свяжемся с вами, подтвердим условия и назначим первую отправку. Пока ничего не оплачивается.',
+  st_act='Активна', st_pause='На паузе', st_cancel='Отменена', st_cancel_p='Подписка отменена. Спасибо, что были с нами. Двери всегда открыты — оформить новую можно в любой момент.',
+  plan_h='Ваш план', type='Тип', fmt='Формат', level='Уровень', sort='Сорт', freq='Периодичность', price='За отправку', grind='Помол', club_h='Статус в клубе', ships='Отправок',
+  freq_t={'10': 'Каждые 10 дней', '14': 'Каждые 2 недели', '30': 'Каждый месяц'},
+  next_h='Следующая отправка', next_none='Дату назначим после подтверждения.', next_sort='Сорт этой отправки', next_sort_none='роастмастер выберет сам', skipped='Эта отправка пропущена по вашей просьбе.',
+  pause_until='Пауза до', locked_note='До обжарки меньше {lead} дней — изменения здесь уже не принимаем. Напишите нам.',
+  a_skip='Пропустить следующую отправку', a_unskip='Не пропускать следующую отправку', a_pause='Поставить на паузу', a_pause_date='Пауза до (необязательно)', a_resume='Возобновить подписку',
+  a_sort='Сменить сорт', a_sort_save='Сохранить сорт', a_comm_h='Как нам с вами общаться', a_req_h='Особый ритм, другой формат, отдельное предложение', a_req_ph='Напишите, что вам нужно — ответим лично', a_req_btn='Отправить',
+  a_cancel='Отменить подписку', a_cancel_sure='Точно отменить? Нажмите ещё раз', a_cancel_note='Без объяснений и без удержания.',
+  comm={'Звичайна': 'Как обычно', 'Більше близькості': 'Хочу больше близости', 'Менше повідомлень': 'Хочу меньше сообщений'},
+  ok_skip='Готово: следующую отправку пропустим.', ok_unskip='Готово: отправка возвращена в план.', ok_pause='Готово: подписка на паузе.', ok_resume='Готово: подписка возобновлена.',
+  ok_sort='Готово: сорт изменён.', ok_comm='Сохранено.', ok_req='Спасибо! Мы ответим лично.', ok_cancel='Подписка отменена.',
+  refresh='Обновить', again='Другая подписка', tg='Написать в Telegram', join='Оформить подписку', pay_h='Оплата',
+  pay_t='За 1–2 дня до обжарки пришлём сумму к оплате. После подтверждения оплаты обжариваем и отправляем.'),
+}
+
+SUB_HTML = """<nav class="crumbs" aria-label="breadcrumb"><a href="@@HOME@@">ZRN Coffee</a> › <span>@@H1@@</span></nav>
+<h1>@@H1@@</h1>
+<p class="lead" id="sbLead">@@LEAD@@</p>
+<form id="sbForm" class="st-form" novalidate>
+  <div class="rv-f"><label for="sbId">@@ID@@</label><input type="text" id="sbId" autocapitalize="characters" autocomplete="off" spellcheck="false" maxlength="16" placeholder="@@ID_PH@@"></div>
+  <div class="rv-f"><label for="sbLast4">@@LAST4@@</label><input type="text" id="sbLast4" inputmode="numeric" autocomplete="off" maxlength="4" placeholder="@@LAST4_PH@@"></div>
+  <p id="sbErr" class="rv-err" role="alert" hidden></p>
+  <button type="submit" class="btn" id="sbBtn">@@BTN@@</button>
+  <p class="st-forget"><a href="#" id="sbForget" hidden>@@FORGET@@</a></p>
+</form>
+<section id="sbRes" class="st-res" aria-live="polite" hidden></section>
+<noscript><p>Для керування підпискою потрібен JavaScript. Напишіть нам: <a href="@@TG@@">Telegram</a></p></noscript>
+<script>
+(function(){
+  var C = @@CFG@@, T = C.t;
+  var $ = function(id){ return document.getElementById(id); };
+  var form = $('sbForm'), err = $('sbErr'), btn = $('sbBtn'), res = $('sbRes'), forget = $('sbForget');
+  var HINT = 'zrn_sub_hint', cur = null, flash = '', cancelArmed = false;
+  function el(tag, cls, txt){ var e = document.createElement(tag); if (cls) e.className = cls; if (txt !== undefined && txt !== null) e.textContent = txt; return e; }
+  function readHint(){ try { var h = JSON.parse(localStorage.getItem(HINT)); return (h && h.s && h.p) ? h : null; } catch (e) { return null; } }
+  function fail(m){ err.textContent = m; err.hidden = false; }
+  function dmy(s){ var m = /^(\\d{4})-(\\d{2})-(\\d{2})/.exec(s || ''); return m ? m[3] + '.' + m[2] + '.' + m[1] : (s || ''); }
+  function money(v){ return Number(v).toLocaleString(C.lang === 'ru' ? 'ru-RU' : 'uk-UA') + ' ₴'; }
+  function row(box, k, v){ if (v === '' || v === null || v === undefined) return; var p = el('p'); p.appendChild(el('span', 'sb-k', k + ': ')); p.appendChild(el('b', '', v)); box.appendChild(p); }
+  function call(payload, cb){
+    var b = { kind: payload.kind, id: cur.id, last4: cur.last4 };
+    for (var k in payload) if (k !== 'kind') b[k] = payload[k];
+    fetch(C.sheet, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(b) })
+      .then(function(r){ return r.json(); }).then(cb).catch(function(){ cb(null); });
+  }
+  function act(action, value, okMsg){
+    flash = '';
+    call({ kind: 'sub_action', action: action, value: value || '' }, function(d){
+      if (d && d.ok && d.found && d.sub) { cur.sub = d.sub; flash = okMsg; cancelArmed = false; render(); }
+      else { flash = '!' + ((d && d.error === 'locked') ? T.err_locked : T.err_act); render(); }
+    });
+  }
+  function render(){
+    var s = cur.sub; res.textContent = '';
+    var card = el('div', 'st-card');
+    var head = el('div', 'st-head');
+    head.appendChild(el('div', 'st-num', s.id));
+    var stTxt = { 'Нова заявка': T.st_new, 'Активна': T.st_act, 'Пауза': T.st_pause, 'Скасована': T.st_cancel }[s.status] || s.status;
+    head.appendChild(el('div', 'st-date', stTxt));
+    card.appendChild(head);
+    if (flash) card.appendChild(el('div', flash.charAt(0) === '!' ? 'st-banner st-bad' : 'st-banner', flash.replace(/^!/, '')));
+    if (s.status === 'Нова заявка') { card.appendChild(el('div', 'st-banner', T.st_new_p)); }
+    if (s.status === 'Скасована') { card.appendChild(el('div', 'st-banner st-bad', T.st_cancel_p)); }
+    var g = el('div', 'st-grid');
+    var plan = el('div', 'st-box'); plan.appendChild(el('h3', '', T.plan_h));
+    row(plan, T.type, s.type === "Roaster's Choice" ? 'Roaster’s Choice' : 'My Choice');
+    row(plan, T.fmt, s.format + ' · ' + s.weight + ' г');
+    if (s.type === 'My Choice') row(plan, T.sort, s.sort); else row(plan, T.level, s.level);
+    row(plan, T.freq, T.freq_t[String(s.freq)] || s.freq);
+    row(plan, T.price, money(s.price));
+    row(plan, T.grind, s.grind);
+    g.appendChild(plan);
+    var nx = el('div', 'st-box'); nx.appendChild(el('h3', '', T.next_h));
+    if (s.status === 'Пауза') { nx.appendChild(el('p', '', T.st_pause + (s.pauseUntil ? ' · ' + T.pause_until + ' ' + dmy(s.pauseUntil) : ''))); }
+    else if (s.status === 'Скасована') { nx.appendChild(el('p', '', '—')); }
+    else if (s.next) {
+      nx.appendChild(el('p', '', dmy(s.next)));
+      if (s.skip) nx.appendChild(el('p', 'sb-sub', T.skipped));
+      else row(nx, T.next_sort, s.type === 'My Choice' ? s.sort : (s.nextSort || T.next_sort_none));
+    } else nx.appendChild(el('p', '', T.next_none));
+    if (s.club) row(nx, T.club_h, s.club);
+    if (s.count) row(nx, T.ships, String(s.count));
+    g.appendChild(nx);
+    card.appendChild(g);
+    var pb = el('div', 'st-box'); pb.appendChild(el('h3', '', T.pay_h)); pb.appendChild(el('p', '', T.pay_t)); card.appendChild(pb);
+
+    var live = s.status === 'Активна' || s.status === 'Пауза';
+    if (live) {
+      var acts = el('div', 'st-act sb-act');
+      if (s.locked && s.status === 'Активна') card.appendChild(el('p', 'st-auto', T.locked_note.replace('{lead}', s.lead)));
+      if (s.status === 'Активна') {
+        var sk = el('button', 'btn ghost', s.skip ? T.a_unskip : T.a_skip); sk.type = 'button'; sk.disabled = !!(s.locked && !s.skip);
+        sk.onclick = function(){ act('skip', '', s.skip ? T.ok_unskip : T.ok_skip); }; acts.appendChild(sk);
+        var pw = el('div', 'sb-pause');
+        var di = el('input'); di.type = 'date'; di.id = 'sbPauseDate'; di.setAttribute('aria-label', T.a_pause_date);
+        var pl = el('label', '', T.a_pause_date); pl.setAttribute('for', 'sbPauseDate');
+        var pb2 = el('button', 'btn ghost', T.a_pause); pb2.type = 'button';
+        pb2.onclick = function(){ act('pause', di.value, T.ok_pause); };
+        pw.appendChild(pl); pw.appendChild(di); pw.appendChild(pb2); card.appendChild(acts); card.appendChild(pw);
+      } else {
+        var rs = el('button', 'btn', T.a_resume); rs.type = 'button'; rs.onclick = function(){ act('resume', '', T.ok_resume); }; acts.appendChild(rs); card.appendChild(acts);
+      }
+      if (s.type === 'My Choice' && s.status === 'Активна' && C.products.length) {
+        var sb = el('div', 'st-box sb-blk'); sb.appendChild(el('h3', '', T.a_sort));
+        var sel = el('select', 'sb-sel'); C.products.forEach(function(n){ var o = el('option', '', n); o.value = n; if (n === s.sort) o.selected = true; sel.appendChild(o); });
+        var sv = el('button', 'btn ghost', T.a_sort_save); sv.type = 'button'; sv.disabled = !!s.locked;
+        sv.onclick = function(){ act('sort', sel.value, T.ok_sort); };
+        sb.appendChild(sel); sb.appendChild(sv); card.appendChild(sb);
+      }
+      var cb = el('div', 'st-box sb-blk'); cb.appendChild(el('h3', '', T.a_comm_h));
+      Object.keys(T.comm).forEach(function(k){
+        var lb = el('label', 'sb-radio'); var r = el('input'); r.type = 'radio'; r.name = 'sbComm'; r.value = k; r.checked = (s.comm || 'Звичайна') === k;
+        r.onchange = function(){ act('comm', k, T.ok_comm); };
+        lb.appendChild(r); lb.appendChild(el('span', '', ' ' + T.comm[k])); cb.appendChild(lb);
+      });
+      card.appendChild(cb);
+      var rb = el('div', 'st-box sb-blk'); rb.appendChild(el('h3', '', T.a_req_h));
+      var ta = el('textarea'); ta.rows = 3; ta.maxLength = 280; ta.placeholder = T.a_req_ph; ta.className = 'sb-ta';
+      var rq = el('button', 'btn ghost', T.a_req_btn); rq.type = 'button';
+      rq.onclick = function(){ if (ta.value.trim().length >= 3) act('request', ta.value.trim(), T.ok_req); };
+      rb.appendChild(ta); rb.appendChild(rq); card.appendChild(rb);
+      var cc = el('div', 'sb-cancel');
+      var cn = el('button', 'sb-cancel-btn', cancelArmed ? T.a_cancel_sure : T.a_cancel); cn.type = 'button';
+      cn.onclick = function(){ if (!cancelArmed) { cancelArmed = true; render(); } else act('cancel', '', T.ok_cancel); };
+      cc.appendChild(cn); cc.appendChild(el('span', 'sb-sub', ' ' + T.a_cancel_note)); card.appendChild(cc);
+    }
+    var bot = el('div', 'st-act');
+    var rf = el('button', 'btn ghost', T.refresh); rf.type = 'button'; rf.onclick = function(){ lookup(cur.id, cur.last4); };
+    var ag = el('button', 'btn ghost', T.again); ag.type = 'button';
+    ag.onclick = function(){ res.hidden = true; form.hidden = false; $('sbLead').hidden = false; $('sbId').value = ''; $('sbLast4').value = ''; $('sbId').focus(); };
+    var tg = el('a', 'btn ghost', T.tg); tg.href = C.tg; tg.rel = 'noopener';
+    bot.appendChild(rf); bot.appendChild(ag); bot.appendChild(tg); card.appendChild(bot);
+    res.appendChild(card); res.hidden = false; form.hidden = true; $('sbLead').hidden = true;
+    window.scrollTo(0, 0);
+  }
+  function lookup(id, last4){
+    err.hidden = true; btn.disabled = true; btn.textContent = T.loading;
+    cur = { id: id, last4: last4 };
+    call({ kind: 'sub_status' }, function(d){
+      btn.disabled = false; btn.textContent = T.btn;
+      if (d && d.ok && d.found) {
+        cur.sub = d.sub; cur.id = d.sub.id;
+        try { localStorage.setItem(HINT, JSON.stringify({ s: d.sub.id, p: last4 })); } catch (e) {}
+        flash = ''; render();
+      } else if (d && d.ok) { form.hidden = false; res.hidden = true; $('sbLead').hidden = false; fail(d.locked ? T.err_lock : T.err_nf); }
+      else { form.hidden = false; res.hidden = true; $('sbLead').hidden = false; fail(T.err_net + C.tgText); }
+    });
+  }
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var i = $('sbId').value.trim().toUpperCase(), p = $('sbLast4').value.replace(/\\D/g, '');
+    if (i.length < 4 || p.length !== 4) return fail(T.err_fmt);
+    lookup(i, p);
+  });
+  $('sbLast4').addEventListener('input', function(){ this.value = this.value.replace(/\\D/g, '').slice(0, 4); });
+  forget.addEventListener('click', function(e){ e.preventDefault(); try { localStorage.removeItem(HINT); } catch (x) {} forget.hidden = true; $('sbId').value = ''; $('sbLast4').value = ''; });
+  var lg = document.querySelector('.lang'); if (lg && location.search) lg.href += location.search;
+  var q = new URLSearchParams(location.search).get('s'); q = q ? q.replace(/[^A-Za-z0-9\\-]/g, '').slice(0, 16).toUpperCase() : '';
+  var h = readHint(); if (h) forget.hidden = false;
+  if (q) $('sbId').value = q;
+  if (h && (!q || q === String(h.s).toUpperCase())) { $('sbId').value = h.s; $('sbLast4').value = h.p; lookup(h.s, h.p); }
+  else if (q) $('sbLast4').focus();
+})();
+</script>
+"""
+
+SB_CSS = """
+.sb-k{color:var(--sub)}
+.sb-sub{color:var(--sub);font-size:.84rem}
+.sb-act{margin-top:16px}
+.sb-pause{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:12px 0}
+.sb-pause label{font-size:.84rem;color:var(--sub);width:100%}
+.sb-pause input[type=date],.sb-sel,.sb-ta{padding:10px;border:1px solid var(--line);border-radius:8px;font:inherit;background:#fff;color:var(--ink)}
+.sb-blk{margin-top:14px}
+.sb-blk .btn{margin-top:8px}
+.sb-sel{width:100%}
+.sb-ta{width:100%;resize:vertical}
+.sb-radio{display:block;padding:6px 0;cursor:pointer}
+.sb-cancel{margin:22px 0 4px}
+.sb-cancel-btn{background:none;border:0;color:var(--sub);text-decoration:underline;cursor:pointer;font:inherit;padding:0}
+.sb-act .btn:disabled,.sb-blk .btn:disabled{opacity:.5;cursor:not-allowed}
+.sb-act .btn,.sb-blk .btn,.sb-pause .btn{border:1px solid var(--line);cursor:pointer;font:inherit}
+"""
+
 STATUS_HTML = """<nav class="crumbs" aria-label="breadcrumb"><a href="@@HOME@@">ZRN Coffee</a> › <span>@@H1@@</span></nav>
 <h1>@@H1@@</h1>
 <p class="lead" id="stLead">@@LEAD@@</p>
@@ -771,12 +1002,13 @@ class Site:
     def header(self, lang, alt_href):
         u = UI[lang]
         home = '/' if lang == 'uk' else '/ru/'
+        club_link = f'\n      <a href="{home}#club">Клуб</a>' if SETTINGS['sub']['on'] else ''
         return f'''<header class="site-head">
   <div class="wrap hd-in">
     <a class="hd-logo" href="{home}" aria-label="ZRN Craft Micro Roastery"><b>ZRN</b><span>{u['craft']}</span></a>
     <nav aria-label="{u['home']}">
       <a href="{home}#catalog">{u['catalog']}</a>
-      <a href="{home}#blends">{u['blends']}</a>
+      <a href="{home}#blends">{u['blends']}</a>{club_link}
       <a href="{u['pre']}/blog/">{u['blog']}</a>
     </nav>
     <a class="lang" href="{alt_href}" hreflang="{'ru' if lang == 'uk' else 'uk'}">{u['altcode']}</a>
@@ -788,6 +1020,7 @@ class Site:
     def footer(self, lang):
         u = UI[lang]
         home = '/' if lang == 'uk' else '/ru/'
+        sub_foot = (f'<a href="{u["pre"]}/subscription/">{"Моя підписка" if lang == "uk" else "Моя подписка"}</a>') if SETTINGS['sub']['on'] else ''
         return f'''</main>
 <footer class="site-foot">
   <div class="wrap">
@@ -800,6 +1033,7 @@ class Site:
       <a href="/oferta/">{u['offer']}</a>
       <a href="/privacy/">{u['privacy']}</a>
       <a href="{u['pre']}/status/">{'Статус замовлення' if lang == 'uk' else 'Статус заказа'}</a>
+      {sub_foot}
       <a href="#" data-cookie-settings>{'Налаштування cookie' if lang == 'uk' else 'Настройки cookie'}</a>
     </div>
   </div>
@@ -995,6 +1229,27 @@ class Site:
             h += tpl
             h += self.footer(lang)
             self.write(f"{u['pre'].strip('/')}/status/index.html".lstrip('/'), h)
+
+    # --- керування підпискою (/subscription/, /ru/subscription/)
+    def subscription_pages(self):
+        for lang in LANGS:
+            u, r = UI[lang], SB[lang]
+            other = 'ru' if lang == 'uk' else 'uk'
+            canonical = f"{self.url}{u['pre']}/subscription/"
+            alts = {'uk': f"{self.url}/subscription/", 'ru': f"{self.url}/ru/subscription/", 'x-default': f"{self.url}/subscription/"}
+            home = '/' if lang == 'uk' else '/ru/'
+            h = self.head(lang, r['title'], r['desc'], canonical, alts, 'website', f"{self.url}/img/og.jpg", [], robots='noindex, follow')
+            h += self.header(lang, f"{UI[other]['pre']}/subscription/")
+            tx = {k: v for k, v in r.items() if k not in ('title', 'desc')}
+            cfg = json.dumps({'sheet': self.sheet_url, 'tg': self.tg, 'tgText': self.tg.replace('https://', ''), 'lang': lang,
+                              'products': [p['name'] for p in self.prods], 't': tx}, ensure_ascii=False).replace('</', '<\\/')
+            tpl = SUB_HTML
+            for k, v in dict(HOME=home, H1=r['h1'], LEAD=r['lead'], ID=r['id'], ID_PH=r['id_ph'], LAST4=r['last4'], LAST4_PH=r['last4_ph'],
+                             BTN=r['btn'], FORGET=r['forget'], TG=self.tg, CFG=cfg).items():
+                tpl = tpl.replace('@@' + k + '@@', v)
+            h += tpl
+            h += self.footer(lang)
+            self.write(f"{u['pre'].strip('/')}/subscription/index.html".lstrip('/'), h)
 
     # --- сторінка відгуку (/review/, /ru/review/)
     def review_pages(self):
@@ -1262,11 +1517,12 @@ def main():
     site.blog_pages()
     site.review_pages()
     site.status_pages()
+    site.subscription_pages()
     site.page_404()
     site.short_links()
     site.home_ru()
     site.sitemap()
-    site.write('pages.css', CSS)
+    site.write('pages.css', CSS + SB_CSS)
     # прибираємо застарілі сторінки сортів/статей, яких більше немає в catalog.json
     keep = set(site.out)
     for base in ('coffee', 'blog', 'ru/coffee', 'ru/blog'):
