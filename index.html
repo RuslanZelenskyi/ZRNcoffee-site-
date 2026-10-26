@@ -556,10 +556,22 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
 .club-opt.on span, .club-opt.on em{color:#d8cbb0;}
 .club-opt:disabled{opacity:.4; cursor:not-allowed;}
 .club-sm{align-items:center; text-align:center;}
+.club-opt em{font-style:normal; font-size:.8rem; color:var(--gold-soft); font-weight:600;}
+.club-opt.on em{color:#e6c98a;}
+.club-safe{text-align:center; font-size:.88rem; color:var(--gold-soft); margin:0 0 18px; font-style:italic;}
+.club-hw{list-style:none; display:grid; grid-template-columns:repeat(3,1fr); gap:16px; max-width:860px; margin:0 auto 22px; padding:0;}
+.club-hw li{display:flex; flex-direction:column; gap:4px; text-align:center; align-items:center; font-size:.85rem; line-height:1.5; color:var(--sub);}
+.club-hw li b{font-family:'Fraunces',serif; font-weight:500; font-size:1.02rem; color:var(--ink);}
+.club-hw-n{width:30px; height:30px; border-radius:50%; background:var(--dark); color:#f3ead9; display:flex; align-items:center; justify-content:center; font-weight:600; font-size:.88rem;}
+.club-sentence{font-family:'Fraunces',serif; font-size:1.08rem; line-height:1.5; color:var(--ink); max-width:560px; margin:0 auto 6px;}
+.club-chips{list-style:none; display:flex; flex-wrap:wrap; gap:8px 14px; justify-content:center; margin:16px 0 0; padding:0; font-size:.8rem; color:var(--sub);}
+.club-chips li:before{content:"✓ "; color:var(--gold-soft); font-weight:700;}
+.club-more{margin:6px 0 14px; border:1px solid var(--line); border-radius:8px; padding:10px 12px; background:#fff;}
+.club-more summary{cursor:pointer; font-size:.9rem; color:var(--gold-soft); font-weight:600;}
+.club-more[open] summary{margin-bottom:12px;}
+.club-m-note{font-size:.8rem; color:var(--sub); text-align:center; margin:10px 0 0;}
 .club-select{width:100%; padding:12px; border:1px solid var(--line); border-radius:8px; font-size:16px; font-family:inherit; background:#fff; color:var(--ink);}
 .club-sum{border-top:1px solid var(--line); padding-top:18px; text-align:center;}
-.club-sum-l{display:flex; justify-content:center; align-items:baseline; gap:12px; flex-wrap:wrap; color:var(--sub); font-size:.9rem;}
-.club-sum-l b{font-family:'Fraunces',serif; font-weight:500; font-size:1.9rem; color:var(--gold-soft);}
 .club-sum-n{font-size:.82rem; color:var(--sub); margin-top:6px; line-height:1.5;}
 .club-cta{display:inline-block; margin-top:14px; background:var(--dark); color:#f3ead9; border:none; padding:13px 30px; border-radius:3px; font-size:.95rem; font-weight:600; font-family:inherit; cursor:pointer; text-decoration:none; text-align:center;}
 .club-cta:hover{background:var(--gold-soft);}
@@ -568,6 +580,10 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
 .club-perks{display:grid; grid-template-columns:repeat(3,1fr); gap:22px 28px; max-width:980px; margin:0 auto 44px;}
 .club-perk h4{font-family:'Fraunces',serif; font-weight:500; font-size:1.02rem; color:var(--gold-soft); margin-bottom:6px;}
 .club-perk p{font-size:.88rem; line-height:1.6; color:var(--sub);}
+.club-how{max-width:640px; margin:0 auto 34px; text-align:center;}
+.club-how h3{font-size:1.15rem; margin-bottom:8px;}
+.club-how p{font-size:.92rem; line-height:1.6; color:var(--sub); margin:0 0 10px;}
+.club-link-a{color:var(--gold-soft); font-weight:600; text-decoration:underline; text-underline-offset:3px;}
 .club-pay{max-width:640px; margin:0 auto 40px; border-left:3px solid var(--gold); padding:4px 0 4px 18px;}
 .club-pay h3{font-size:1.15rem; margin-bottom:8px;}
 .club-pay p{font-size:.92rem; line-height:1.6; color:var(--sub); margin:0 0 6px;}
@@ -588,6 +604,9 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
 .club-cta-a{width:100%; box-sizing:border-box;}
 @media(max-width:760px){
   .club-g2{grid-template-columns:1fr;} .club-g3{grid-template-columns:1fr;}
+  .club-hw{grid-template-columns:1fr; gap:12px;}
+  .club-hw li{flex-direction:row; flex-wrap:wrap; text-align:left; justify-content:flex-start; align-items:center; gap:4px 10px;}
+  .club-hw li > span:last-child{flex-basis:100%; padding-left:40px;}
   .club-perks{grid-template-columns:1fr; gap:18px;}
   .club-cfg{padding:16px;}
 }
@@ -931,49 +950,57 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       <p class="club-sub" data-i18n="club.sub">Кава, про яку подбали заздалегідь.</p>
       <p class="club-lead" data-i18n="club.lead">Підписка без знижок і гачків.</p>
     </div>
-    <p class="club-logic" data-i18n="club.logic">Чотири кроки: Тип → Формат → Рівень → Періодичність.</p>
+
+    <ol class="club-hw">
+      <li><span class="club-hw-n">1</span><b data-i18n="club.hw.1t">Обираєте</b><span data-i18n="club.hw.1d"></span></li>
+      <li><span class="club-hw-n">2</span><b data-i18n="club.hw.2t">Ми підтверджуємо</b><span data-i18n="club.hw.2d"></span></li>
+      <li><span class="club-hw-n">3</span><b data-i18n="club.hw.3t">Кава приходить</b><span data-i18n="club.hw.3d"></span></li>
+    </ol>
 
     <div class="club-cfg">
+      <p class="club-safe" data-i18n="club.safe">Не впевнені? Залиште як є — усе можна змінити пізніше.</p>
       <div class="club-step">
-        <div class="club-step-t" data-i18n="club.s1">1 · Тип</div>
+        <div class="club-step-t" data-i18n="club.s1">1 · Хто обирає каву?</div>
         <div class="club-grid club-g2">
-          <button type="button" class="club-opt" data-club="type" data-v="My Choice"><b data-i18n="club.mc.t">My Choice</b><span data-i18n="club.mc.d"></span></button>
-          <button type="button" class="club-opt" data-club="type" data-v="Roaster's Choice"><b data-i18n="club.rc.t">Roaster’s Choice</b><span data-i18n="club.rc.d"></span></button>
+          <button type="button" class="club-opt" data-club="type" data-v="My Choice"><b data-i18n="club.mc.t">My Choice</b><em data-i18n="club.mc.tag"></em><span data-i18n="club.mc.d"></span></button>
+          <button type="button" class="club-opt" data-club="type" data-v="Roaster's Choice"><b data-i18n="club.rc.t">Roaster’s Choice</b><em data-i18n="club.rc.tag"></em><span data-i18n="club.rc.d"></span></button>
         </div>
       </div>
       <div class="club-step">
-        <div class="club-step-t" data-i18n="club.s2">2 · Формат</div>
+        <div class="club-step-t" data-i18n="club.s2">2 · Скільки кави?</div>
         <div class="club-grid club-g3">
-          <button type="button" class="club-opt club-sm" data-club="weight" data-v="250"><b data-i18n="club.f250">Personal</b><em>250 г</em></button>
-          <button type="button" class="club-opt club-sm" data-club="weight" data-v="500"><b data-i18n="club.f500">Home</b><em>500 г</em></button>
-          <button type="button" class="club-opt club-sm" data-club="weight" data-v="1000"><b data-i18n="club.f1000">Reserve</b><em>1000 г</em></button>
+          <button type="button" class="club-opt club-sm" data-club="weight" data-v="250"><b data-i18n="club.f250">Personal</b><em>250 г</em><span data-i18n="club.f250d"></span></button>
+          <button type="button" class="club-opt club-sm" data-club="weight" data-v="500"><b data-i18n="club.f500">Home</b><em>500 г</em><span data-i18n="club.f500d"></span></button>
+          <button type="button" class="club-opt club-sm" data-club="weight" data-v="1000"><b data-i18n="club.f1000">Reserve</b><em>1000 г</em><span data-i18n="club.f1000d"></span></button>
         </div>
       </div>
       <div class="club-step" id="clubLevelRow">
-        <div class="club-step-t" data-i18n="club.s3">3 · Рівень</div>
+        <div class="club-step-t" data-i18n="club.s3">3 · Який рівень?</div>
         <div class="club-grid club-g2">
           <button type="button" class="club-opt" data-club="level" data-v="Comfort"><b data-i18n="club.lv.c">Comfort</b><span data-i18n="club.lv.cd"></span></button>
           <button type="button" class="club-opt" data-club="level" data-v="Premium"><b data-i18n="club.lv.p">Premium</b><span data-i18n="club.lv.pd"></span></button>
         </div>
       </div>
       <div class="club-step" id="clubSortRow">
-        <div class="club-step-t" data-i18n="club.s3mc">3 · Ваш сорт</div>
+        <div class="club-step-t" data-i18n="club.s3mc">3 · Яка кава?</div>
         <select id="clubSort" class="club-select" aria-label="Sort"></select>
       </div>
       <div class="club-step">
-        <div class="club-step-t" data-i18n="club.s4">4 · Періодичність</div>
+        <div class="club-step-t" data-i18n="club.s4">4 · Як часто?</div>
         <div class="club-grid club-g3">
-          <button type="button" class="club-opt club-sm" data-club="freq" data-v="10"><b data-i18n="club.q10">Кожні 10 днів</b><em data-i18n="club.q10n">від 500 г</em></button>
-          <button type="button" class="club-opt club-sm" data-club="freq" data-v="14"><b data-i18n="club.q14">Кожні 2 тижні</b></button>
-          <button type="button" class="club-opt club-sm" data-club="freq" data-v="30"><b data-i18n="club.q30">Щомісяця</b></button>
+          <button type="button" class="club-opt club-sm" data-club="freq" data-v="10"><b data-i18n="club.q10">Кожні 10 днів</b><span data-i18n="club.q10d"></span></button>
+          <button type="button" class="club-opt club-sm" data-club="freq" data-v="14"><b data-i18n="club.q14">Кожні 2 тижні</b><span data-i18n="club.q14d"></span></button>
+          <button type="button" class="club-opt club-sm" data-club="freq" data-v="30"><b data-i18n="club.q30">Щомісяця</b><span data-i18n="club.q30d"></span></button>
         </div>
       </div>
       <div class="club-sum" aria-live="polite">
-        <div class="club-sum-l"><span data-i18n="club.per">За одну відправку</span><b id="clubPrice">—</b></div>
-        <div class="club-sum-n" id="clubDeliv"></div>
+        <div class="club-sentence" id="clubSentence"></div>
         <div class="club-sum-n" id="clubNote"></div>
         <button type="button" class="club-cta" id="clubCta" data-i18n="club.cta">Оформити заявку</button>
         <div class="club-sum-n" data-i18n="club.ctaNote"></div>
+        <ul class="club-chips">
+          <li data-i18n="club.chip1"></li><li data-i18n="club.chip2"></li><li data-i18n="club.chip3"></li>
+        </ul>
       </div>
     </div>
 
@@ -988,6 +1015,12 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       <div class="club-perk"><h4 data-i18n="club.p7.t">Ваш кавовий паспорт</h4><p data-i18n="club.p7.d">Ми ведемо історію ваших лотів з першої відправки: що пили, коли, які були нотатки. З часом це складеться в особистий PDF — частину вашої кавової біографії.</p></div>
       <div class="club-perk"><h4 data-i18n="club.p8.t">Право на близькість або тишу</h4><p data-i18n="club.p8.d">У налаштуваннях підписки — простий перемикач: «Хочу більше близькості» або «Хочу менше повідомлень». Ми поважаємо і те, й інше. Без образ і без нав’язування.</p></div>
       <div class="club-perk"><h4 data-i18n="club.p9.t">Свобода до останнього</h4><p data-i18n="club.p9.d">Бажано за 3 дні до обсмажки ви ще можете змінити сорт, поставити на паузу, перейти на інший формат або скасувати — на сторінці підписки чи особистим повідомленням. Без пояснень. Без утримання.</p></div>
+    </div>
+
+    <div class="club-how">
+      <h3 data-i18n="club.how.t">Як змінити підписку</h3>
+      <p data-i18n="club.how.d"></p>
+      <a class="club-link-a" id="clubManage" href="/subscription/" data-i18n="club.how.l">Відкрити «Моя підписка» →</a>
     </div>
 
     <div class="club-pay">
@@ -1247,39 +1280,50 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       <form id="clubForm" novalidate>
         <div class="f-field"><label for="cfName" data-i18n="ck.name">Ім'я*</label><input type="text" id="cfName" required autocomplete="name" maxlength="80"></div>
         <div class="f-field"><label for="cfPhone" data-i18n="ck.phone">Телефон*</label><input type="tel" id="cfPhone" required autocomplete="tel" value="+380" inputmode="tel" placeholder="+380XXXXXXXXX"></div>
-        <div class="f-field"><label for="cfEmail" data-i18n="ck.email">Email</label><input type="email" id="cfEmail" autocomplete="email" placeholder="name@example.com"></div>
-        <div class="f-field">
-          <div class="f-label" data-i18n="ck.delivery">Спосіб доставки</div>
-          <div class="radio-row">
-            <label class="radio-opt"><input type="radio" name="cfDel" value="np" checked> <span data-i18n="ck.del.np">Нова Пошта</span></label>
-            <label class="radio-opt"><input type="radio" name="cfDel" value="ukr"> <span data-i18n="ck.del.ukr">Укрпошта</span></label>
-          </div>
-        </div>
-        <div class="f-field"><label for="cfCity" data-i18n="ck.city">Місто*</label><input type="text" id="cfCity" required maxlength="120"></div>
-        <div class="f-field"><label for="cfBranch" data-i18n="ck.branch">Відділення / поштомат / адреса*</label><input type="text" id="cfBranch" required maxlength="200"></div>
-        <div class="f-field"><label for="cfGrind" data-i18n="club.m.grind">Помел</label><select id="cfGrind" class="club-select"></select></div>
-        <div class="f-field">
-          <div class="f-label" data-i18n="ck.contact">Як з вами зв'язатися</div>
-          <div class="radio-row">
-            <label class="radio-opt"><input type="radio" name="cfContact" value="Viber" checked> <span data-i18n="ck.viaViber">Viber</span></label>
-            <label class="radio-opt"><input type="radio" name="cfContact" value="Telegram"> <span data-i18n="ck.viaTg">Telegram</span></label>
-            <label class="radio-opt"><input type="radio" name="cfContact" value="Дзвінок"> <span data-i18n="ck.viaCall">Дзвінок</span></label>
-          </div>
-        </div>
-        <div class="f-field"><label for="cfHandle" data-i18n="club.m.handle">Нік або інший номер</label><input type="text" id="cfHandle" maxlength="120"></div>
+        <div class="f-field"><label for="cfCity" data-i18n="ck.city">Місто*</label><input type="text" id="cfCity" required maxlength="120" autocomplete="address-level2"></div>
+        <div class="f-field"><label for="cfBranch" data-i18n="club.m.branch">Відділення Нової Пошти або адреса*</label><input type="text" id="cfBranch" required maxlength="200" placeholder="№15, поштомат №2348 …" data-i18n-placeholder="club.m.branchPh"></div>
         <div class="f-field">
           <div class="f-label" data-i18n="club.m.first">Оплата першої поставки</div>
           <div class="radio-row">
             <label class="radio-opt"><input type="radio" name="cfPay" value="Накладений платіж" checked> <span data-i18n="ck.pay.cod">Накладений платіж</span></label>
             <label class="radio-opt"><input type="radio" name="cfPay" value="Переказ на картку"> <span data-i18n="ck.pay.card">На картку переказом</span></label>
           </div>
-          <div class="pay-note" data-i18n="club.pay.1"></div>
         </div>
-        <div class="f-field"><label for="cfComment" data-i18n="ck.comment">Коментар</label><textarea id="cfComment" rows="2" maxlength="500"></textarea></div>
+        <div class="f-field">
+          <div class="f-label" data-i18n="club.m.comm">Режим спілкування</div>
+          <div class="radio-row">
+            <label class="radio-opt"><input type="radio" name="cfComm" value="Звичайна" checked> <span data-i18n="club.comm.n">Звичайний</span></label>
+            <label class="radio-opt"><input type="radio" name="cfComm" value="Більше близькості"> <span data-i18n="club.comm.c">Хочу більше близькості</span></label>
+            <label class="radio-opt"><input type="radio" name="cfComm" value="Менше повідомлень"> <span data-i18n="club.comm.q">Хочу менше повідомлень</span></label>
+          </div>
+        </div>
+        <details class="club-more">
+          <summary data-i18n="club.m.more">Додатково (за бажанням)</summary>
+          <div class="f-field"><label for="cfEmail" data-i18n="ck.email">Email</label><input type="email" id="cfEmail" autocomplete="email" placeholder="name@example.com"></div>
+          <div class="f-field">
+            <div class="f-label" data-i18n="ck.contact">Як з вами зв'язатися</div>
+            <div class="radio-row">
+              <label class="radio-opt"><input type="radio" name="cfContact" value="Viber" checked> <span data-i18n="ck.viaViber">Viber</span></label>
+              <label class="radio-opt"><input type="radio" name="cfContact" value="Telegram"> <span data-i18n="ck.viaTg">Telegram</span></label>
+              <label class="radio-opt"><input type="radio" name="cfContact" value="Дзвінок"> <span data-i18n="ck.viaCall">Дзвінок</span></label>
+            </div>
+          </div>
+          <div class="f-field"><label for="cfHandle" data-i18n="club.m.handle">Нік або інший номер</label><input type="text" id="cfHandle" maxlength="120"></div>
+          <div class="f-field">
+            <div class="f-label" data-i18n="ck.delivery">Спосіб доставки</div>
+            <div class="radio-row">
+              <label class="radio-opt"><input type="radio" name="cfDel" value="np" checked> <span data-i18n="ck.del.np">Нова Пошта</span></label>
+              <label class="radio-opt"><input type="radio" name="cfDel" value="ukr"> <span data-i18n="ck.del.ukr">Укрпошта</span></label>
+            </div>
+          </div>
+          <div class="f-field"><label for="cfGrind" data-i18n="club.m.grind">Помел</label><select id="cfGrind" class="club-select"></select></div>
+          <div class="f-field"><label for="cfComment" data-i18n="ck.comment">Коментар</label><textarea id="cfComment" rows="2" maxlength="500"></textarea></div>
+        </details>
         <div style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden" aria-hidden="true"><input type="checkbox" id="cfBot" tabindex="-1" autocomplete="off"></div>
         <label class="ck-check" for="cfConsent"><input type="checkbox" id="cfConsent"> <span data-i18n-html="ck.consent"></span></label>
         <div class="form-error" id="clubErr" role="alert" hidden></div>
         <button type="submit" class="club-cta" id="clubSubmit" data-i18n="club.m.send">Надіслати заявку</button>
+        <p class="club-m-note" data-i18n="club.ctaNote"></p>
       </form>
     </div>
     <div id="clubOkView" hidden>
@@ -1338,7 +1382,7 @@ window.addEventListener('load', syncHeaderHeight);
    ТОВАРИ — редагуйте тут: ціна, назва, нотки, опис.
    roastLevel: 1-5 (скільки крапок закрашено на етикетці)
    ============================================================ */
-/*SETTINGS:START*/const ZRN_SET = {"freeShip": 1400, "heroW": 200, "heroP": 260, "sub": {"on": true, "free": 600, "comfort": 135, "premium": 145, "lead": 3}};/*SETTINGS:END*/
+/*SETTINGS:START*/const ZRN_SET = {"freeShip": 1400, "heroW": 200, "heroP": 260, "sub": {"on": true}};/*SETTINGS:END*/
 function zrnTok(v){ return String(v).replace(/\{free\}/g, ZRN_SET.freeShip).replace(/\{heroW\}/g, ZRN_SET.heroW).replace(/\{heroP\}/g, ZRN_SET.heroP); }
 
 /* ========== I18N UA/RU ========== */
@@ -1535,11 +1579,11 @@ uk: {
   "club.sub": "Кава, про яку подбали заздалегідь.",
   "club.lead": "Підписка без знижок і гачків. Ви обираєте ритм — ми дбаємо про решту. Кава просто з’являється: регулярно, передбачувано, без вашого залучення.",
   "club.logic": "Чотири кроки: Тип → Формат → Рівень → Періодичність. Усе можна змінити, поки кава ще не в роботі.",
-  "club.s1": "1 · Тип",
-  "club.s2": "2 · Формат",
-  "club.s3": "3 · Рівень",
-  "club.s3mc": "3 · Ваш сорт",
-  "club.s4": "4 · Періодичність",
+  "club.s1": "1 · Хто обирає каву?",
+  "club.s2": "2 · Скільки кави?",
+  "club.s3": "3 · Який рівень?",
+  "club.s3mc": "3 · Яка кава?",
+  "club.s4": "4 · Як часто?",
   "club.mc.t": "My Choice",
   "club.mc.d": "Ви обираєте сорт з нашого каталогу — щоразу той самий або інший. Змінити можна до останнього.",
   "club.rc.t": "Roaster’s Choice",
@@ -1554,13 +1598,39 @@ uk: {
   "club.q10": "Кожні 10 днів",
   "club.q14": "Кожні 2 тижні",
   "club.q30": "Щомісяця",
-  "club.q10n": "від 500 г",
   "club.sortPh": "Оберіть сорт",
-  "club.per": "За одну відправку",
-  "club.free": "Доставка безкоштовна",
-  "club.paid": "Доставка — за тарифом перевізника (безкоштовно від {sf} ₴)",
-  "club.noteMC": "Ціна — як у каталозі за 100 г, без знижок і націнок.",
-  "club.noteRC": "Ціна фіксована — яким би лотом ми вас не здивували.",
+  "club.noteMC": "Ціна — як на сайті для обраного сорту.",
+  "club.noteRC": "Ціну узгоджуємо перед кожною обсмажкою — без сюрпризів.",
+  "club.how.t": "Як змінити підписку",
+  "club.how.d": "У кожної підписки є особиста сторінка «Моя підписка». Увійти можна за номером підписки (надішлемо його після заявки) і чотирма останніми цифрами телефону. Там: пропустити відправку, поставити паузу, змінити сорт, обрати режим спілкування, скасувати. Посилання є в кожному нашому листі. А ще можна просто написати нам — зробимо самі.",
+  "club.how.l": "Відкрити «Моя підписка» →",
+  "club.m.comm": "Режим спілкування",
+  "club.comm.n": "Звичайний",
+  "club.comm.c": "Хочу більше близькості",
+  "club.comm.q": "Хочу менше повідомлень",
+  "club.mc.tag": "Я сам обираю сорт",
+  "club.rc.tag": "Довіряю роастмайстру",
+  "club.f250d": "≈ 16 чашок · для одного",
+  "club.f500d": "≈ 33 чашки · для двох або родини",
+  "club.f1000d": "≈ 66 чашок · для великої родини чи офісу",
+  "club.q10d": "для справжніх кавоманів",
+  "club.q14d": "золота середина",
+  "club.q30d": "спокійний ритм",
+  "club.hw.1t": "Ви обираєте",
+  "club.hw.1d": "Тип, розмір і ритм — це займає хвилину.",
+  "club.hw.2t": "Ми підтверджуємо",
+  "club.hw.2d": "Зв’яжемося з вами й домовимось про дату першої відправки. Нічого не списується.",
+  "club.hw.3t": "Кава приходить",
+  "club.hw.3d": "За 1–2 дні до обсмажки надішлемо суму. Після оплати обсмажуємо й відправляємо.",
+  "club.safe": "Не впевнені? Залиште як є — усе можна змінити пізніше.",
+  "club.chip1": "Нічого не списується без вашого підтвердження",
+  "club.chip2": "Пауза чи скасування — без пояснень",
+  "club.chip3": "Сорт можна змінити до обсмажки",
+  "club.sum.mc": "{q} ми надсилатимемо вам {w} г кави — {sort}.",
+  "club.sum.rc": "{q} ми надсилатимемо вам {w} г кави, яку обирає роастмайстер (рівень {lv}).",
+  "club.m.branch": "Відділення Нової Пошти або адреса*",
+  "club.m.branchPh": "Наприклад: №15 або поштомат №2348",
+  "club.m.more": "Додатково (за бажанням)",
   "club.cta": "Оформити заявку",
   "club.ctaNote": "Заявка — це не оплата. Ми зв’яжемося, уточнимо деталі й призначимо першу відправку.",
   "club.perks": "Що отримує учасник клубу",
@@ -1800,11 +1870,11 @@ ru: {
   "club.sub": "Кофе, о котором позаботились заранее.",
   "club.lead": "Подписка без скидок и крючков. Вы выбираете ритм — мы заботимся об остальном. Кофе просто появляется: регулярно, предсказуемо, без вашего участия.",
   "club.logic": "Четыре шага: Тип → Формат → Уровень → Периодичность. Всё можно изменить, пока кофе ещё не в работе.",
-  "club.s1": "1 · Тип",
-  "club.s2": "2 · Формат",
-  "club.s3": "3 · Уровень",
-  "club.s3mc": "3 · Ваш сорт",
-  "club.s4": "4 · Периодичность",
+  "club.s1": "1 · Кто выбирает кофе?",
+  "club.s2": "2 · Сколько кофе?",
+  "club.s3": "3 · Какой уровень?",
+  "club.s3mc": "3 · Какой кофе?",
+  "club.s4": "4 · Как часто?",
   "club.mc.t": "My Choice",
   "club.mc.d": "Вы выбираете сорт из нашего каталога — каждый раз один и тот же или другой. Изменить можно до последнего.",
   "club.rc.t": "Roaster’s Choice",
@@ -1819,13 +1889,39 @@ ru: {
   "club.q10": "Каждые 10 дней",
   "club.q14": "Каждые 2 недели",
   "club.q30": "Каждый месяц",
-  "club.q10n": "от 500 г",
   "club.sortPh": "Выберите сорт",
-  "club.per": "За одну отправку",
-  "club.free": "Доставка бесплатна",
-  "club.paid": "Доставка — по тарифу перевозчика (бесплатно от {sf} ₴)",
-  "club.noteMC": "Цена — как в каталоге за 100 г, без скидок и наценок.",
-  "club.noteRC": "Цена фиксирована — каким бы лотом мы вас ни удивили.",
+  "club.noteMC": "Цена — как на сайте для выбранного сорта.",
+  "club.noteRC": "Цену согласуем перед каждой обжаркой — без сюрпризов.",
+  "club.how.t": "Как изменить подписку",
+  "club.how.d": "У каждой подписки есть личная страница «Моя подписка». Войти можно по номеру подписки (пришлём его после заявки) и четырём последним цифрам телефона. Там: пропустить отправку, поставить паузу, сменить сорт, выбрать режим общения, отменить. Ссылка есть в каждом нашем письме. А ещё можно просто написать нам — сделаем сами.",
+  "club.how.l": "Открыть «Моя подписка» →",
+  "club.m.comm": "Режим общения",
+  "club.comm.n": "Обычный",
+  "club.comm.c": "Хочу больше близости",
+  "club.comm.q": "Хочу меньше сообщений",
+  "club.mc.tag": "Я сам выбираю сорт",
+  "club.rc.tag": "Доверяю роастмастеру",
+  "club.f250d": "≈ 16 чашек · для одного",
+  "club.f500d": "≈ 33 чашки · для двоих или семьи",
+  "club.f1000d": "≈ 66 чашек · для большой семьи или офиса",
+  "club.q10d": "для настоящих кофеманов",
+  "club.q14d": "золотая середина",
+  "club.q30d": "спокойный ритм",
+  "club.hw.1t": "Вы выбираете",
+  "club.hw.1d": "Тип, размер и ритм — это займёт минуту.",
+  "club.hw.2t": "Мы подтверждаем",
+  "club.hw.2d": "Свяжемся с вами и договоримся о дате первой отправки. Ничего не списывается.",
+  "club.hw.3t": "Кофе приходит",
+  "club.hw.3d": "За 1–2 дня до обжарки пришлём сумму. После оплаты обжариваем и отправляем.",
+  "club.safe": "Не уверены? Оставьте как есть — всё можно изменить позже.",
+  "club.chip1": "Ничего не списывается без вашего подтверждения",
+  "club.chip2": "Пауза или отмена — без объяснений",
+  "club.chip3": "Сорт можно сменить до обжарки",
+  "club.sum.mc": "{q} мы будем отправлять вам {w} г кофе — {sort}.",
+  "club.sum.rc": "{q} мы будем отправлять вам {w} г кофе, который выбирает роастмастер (уровень {lv}).",
+  "club.m.branch": "Отделение Новой Почты или адрес*",
+  "club.m.branchPh": "Например: №15 или почтомат №2348",
+  "club.m.more": "Дополнительно (по желанию)",
   "club.cta": "Оформить заявку",
   "club.ctaNote": "Заявка — это не оплата. Мы свяжемся, уточним детали и назначим первую отправку.",
   "club.perks": "Что получает участник клуба",
@@ -4072,28 +4168,18 @@ const CLUB = {type:'My Choice', weight:500, level:'Comfort', freq:14, sort:''};
 function clubSet(){ return (typeof ZRN_SET!=='undefined' && ZRN_SET.sub) || {}; }
 function clubList(){ return (typeof ALL_PRODUCTS!=='undefined' && ALL_PRODUCTS) || []; }
 function clubRate(p){ return p.w2 ? p.price2/p.w2*100 : p.price1/p.w1*100; }
-function clubLevelRate(level){
-  const set = clubSet();
-  const v = Number(level==='Premium' ? set.premium : set.comfort);
-  if(v > 0) return v;
-  const rates = clubList().map(clubRate).sort((a,b)=>a-b);
-  if(!rates.length) return 0;
-  if(level==='Premium') return Math.ceil(rates[rates.length-1] / 5) * 5;
-  return Math.round(rates[Math.ceil(rates.length/2)-1] / 5) * 5;
-}
+/* Ціна клієнту НЕ показується. Для My Choice рахуємо лише орієнтир для власника (ціна сорту за 100 г × вага); для Roaster’s Choice — 0 (суму узгоджуємо перед обсмажкою). */
 function clubPrice(){
-  let rate = 0;
-  if(CLUB.type === 'My Choice'){
-    const p = clubList().find(x=>x.name === CLUB.sort);
-    rate = p ? clubRate(p) : 0;
-  } else rate = clubLevelRate(CLUB.level);
-  return rate ? Math.round(rate * CLUB.weight / 100 / 5) * 5 : 0;
+  if(CLUB.type !== 'My Choice') return 0;
+  const p = clubList().find(x=>x.name === CLUB.sort);
+  return p ? Math.round(clubRate(p) * CLUB.weight / 100 / 5) * 5 : 0;
+}
+function clubSentenceText(){
+  const mc = CLUB.type === 'My Choice';
+  return (mc ? t('club.sum.mc') : t('club.sum.rc')).replace('{q}', t('club.q' + CLUB.freq)).replace('{w}', CLUB.weight).replace('{sort}', CLUB.sort || '').replace('{lv}', CLUB.level);
 }
 function clubPlanText(){
-  const lv = CLUB.type === 'My Choice' ? CLUB.sort : (CLUB.level);
-  const fm = {250:'Personal', 500:'Home', 1000:'Reserve'}[CLUB.weight];
-  const fr = t('club.q' + CLUB.freq);
-  return (CLUB.type === 'My Choice' ? 'My Choice' : 'Roaster’s Choice') + ' · ' + lv + '<br>' + fm + ' · ' + CLUB.weight + ' г · ' + fr + '<br><b>' + clubPrice() + ' ₴</b> / ' + t('club.per').toLowerCase();
+  return clubSentenceText() + '<br><span class="club-sum-n">' + (CLUB.type === 'My Choice' ? t('club.noteMC') : t('club.noteRC')) + '</span>';
 }
 function clubRender(){
   const sec = document.getElementById('club');
@@ -4102,32 +4188,29 @@ function clubRender(){
   const sel = document.getElementById('clubSort');
   if(sel){
     if(sel.options.length !== list.length || sel.getAttribute('data-ready') !== '1'){
-      sel.innerHTML = list.map(p=>'<option value="' + String(p.name).replace(/"/g,'&quot;') + '">' + p.name + ' — ' + Math.round(clubRate(p)) + ' ₴ / 100 г</option>').join('');
+      sel.innerHTML = list.map(p=>'<option value="' + String(p.name).replace(/"/g,'&quot;') + '">' + p.name + '</option>').join('');
       sel.setAttribute('data-ready','1');
     }
     if(!CLUB.sort && list.length) CLUB.sort = list[0].name;
     sel.value = CLUB.sort;
   }
-  if(CLUB.weight < 500 && CLUB.freq === 10) CLUB.freq = 14;
   sec.querySelectorAll('[data-club]').forEach(b=>{
     const k = b.getAttribute('data-club'), v = b.getAttribute('data-v');
     const on = String(CLUB[k]) === v;
     b.classList.toggle('on', on);
     b.setAttribute('aria-pressed', on ? 'true' : 'false');
-    if(k === 'freq' && v === '10') b.disabled = CLUB.weight < 500;
   });
   const mc = CLUB.type === 'My Choice';
   document.getElementById('clubLevelRow').style.display = mc ? 'none' : '';
   document.getElementById('clubSortRow').style.display = mc ? '' : 'none';
-  const price = clubPrice();
-  document.getElementById('clubPrice').textContent = price ? price + ' ₴' : '—';
-  const free = Number(clubSet().free) || 0;
-  document.getElementById('clubDeliv').textContent = price && free && price >= free ? t('club.free') : t('club.paid').replace('{sf}', free || '');
+  const sen = document.getElementById('clubSentence');
+  if(sen) sen.textContent = clubSentenceText();
   document.getElementById('clubNote').textContent = mc ? t('club.noteMC') : t('club.noteRC');
-  ['clubCta','clubCta2'].forEach(id=>{ const b = document.getElementById(id); if(b) b.disabled = !price; });
+  const cta = document.getElementById('clubCta'); if(cta) cta.disabled = mc && !CLUB.sort;
+  const mg = document.getElementById('clubManage'); if(mg) mg.setAttribute('href', (currentLang === 'ru' ? '/ru' : '') + '/subscription/');
 }
 function clubOpenModal(){
-  if(!clubPrice()) return;
+  if(CLUB.type === 'My Choice' && !CLUB.sort) return;
   const ov = document.getElementById('clubOverlay');
   document.getElementById('clubModSum').innerHTML = clubPlanText();
   document.getElementById('clubFormView').hidden = false;
@@ -4149,7 +4232,7 @@ function clubOpenModal(){
   }catch(e){}
   ov.classList.add('open');
   document.body.style.overflow = 'hidden';
-  if(window.zrnTrack) zrnTrack('begin_checkout', {currency:'UAH', value:clubPrice(), items:[{item_id:'club', item_name:'Club ' + CLUB.type, price:clubPrice(), quantity:1}]});
+  if(window.zrnTrack) zrnTrack('begin_checkout', {items:[{item_id:'club', item_name:'Club ' + CLUB.type, quantity:1}]});
 }
 function clubCloseModal(){
   const ov = document.getElementById('clubOverlay');
@@ -4173,7 +4256,7 @@ function clubSubmit(e){
   if(!document.getElementById('cfConsent').checked) return fail('club.m.errConsent');
   err.hidden = true;
   if(document.getElementById('cfBot').checked){ clubShowOk('SUB-0000'); return; }   /* бот: вдаємо успіх */
-  const price = clubPrice();
+  const price = clubPrice();   /* лише орієнтир для власника */
   const attr = (window.zrnAttribution ? zrnAttribution() : {source:''});
   const phone = normalizeUaPhone(phoneRaw);
   const delCode = (document.querySelector('input[name="cfDel"]:checked')||{}).value || 'np';
@@ -4185,7 +4268,7 @@ function clubSubmit(e){
     type:CLUB.type, weight:CLUB.weight, freq:CLUB.freq,
     level:CLUB.type === 'My Choice' ? '' : CLUB.level, sort:CLUB.type === 'My Choice' ? CLUB.sort : '',
     grind:document.getElementById('cfGrind').value, payment:(document.querySelector('input[name="cfPay"]:checked')||{}).value || 'Накладений платіж',
-    comment:document.getElementById('cfComment').value.trim(), consent:true, price:price, lang:currentLang, source:attr.source || ''
+    comment:document.getElementById('cfComment').value.trim(), consent:true, price:price, comm:(document.querySelector('input[name="cfComm"]:checked')||{}).value || 'Звичайна', lang:currentLang, source:attr.source || ''
   };
   const btn = document.getElementById('clubSubmit');
   btn.disabled = true; btn.textContent = t('club.m.sending');
@@ -4196,7 +4279,7 @@ function clubSubmit(e){
     .then(res=>{
       if(!(res && res.ok && res.id)) throw new Error('bad');
       try{ localStorage.setItem('zrn_sub_hint', JSON.stringify({s:res.id, p:phone.replace(/\D/g,'').slice(-4)})); }catch(x){}
-      if(window.zrnTrack) zrnTrack('generate_lead', {method:'club', value:price, currency:'UAH'});
+      if(window.zrnTrack) zrnTrack('generate_lead', {method:'club'});
       clubShowOk(res.id);
     })
     .catch(()=>fail('club.m.err'))
