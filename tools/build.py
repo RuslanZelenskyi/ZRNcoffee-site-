@@ -89,7 +89,7 @@ def load():
 
 
 # ------------------------------------------------------------------ ціни, ваги і налаштування з Google Таблиці
-SETTINGS = {'freeShip': 1400, 'heroW': 200, 'heroP': 260, 'sub': {'on': True, 'free': 600, 'comfort': 0, 'premium': 0, 'lead': 3}}   # заповнюється в apply_sheet()
+SETTINGS = {'freeShip': 1400, 'heroW': 200, 'heroP': 260, 'sub': {'on': True}}   # заповнюється в apply_sheet()
 
 
 def find_sheet_url():
@@ -205,22 +205,9 @@ def apply_sheet(cat):
         hw = max(set(ws), key=lambda w: (ws.count(w), -w))
     if not hp:
         hp = min(p['price1'] for p in cat['products'] if p['w1'] == hw)
-    # Клуб (підписка): порожні клітинки → автоматично (Comfort = медіана ціни за 100 г, Premium = верхня межа)
-    rates = sorted((p['price2'] / p['w2'] if p.get('w2') else p['price1'] / p['w1']) * 100 for p in cat['products'])
-    def rate_at(q):
-        # Comfort — медіана (до 5 ₴), Premium — верхня межа асортименту (вгору до 5 ₴)
-        if not rates:
-            return 0
-        if q >= 1:
-            return int(-(-rates[-1] // 5) * 5)
-        return int(round(rates[(len(rates) - 1) // 2 if len(rates) % 2 else len(rates) // 2 - 1] / 5) * 5)
+    # Клуб (підписка): на сайті лише перемикач «показувати блок» (Так/Ні); решта налаштувань потрібна лише скрипту таблиці
     off = str(st.get('subOn', '')).strip().lower() in ('ні', 'нет', 'no', 'off', 'false', '0')
-    SETTINGS.update({'freeShip': free, 'heroW': hw, 'heroP': hp, 'sub': {
-        'on': not off,
-        'free': posint(st.get('subFree')) or 600,
-        'comfort': posint(st.get('subComfort')) or rate_at(0.5),
-        'premium': posint(st.get('subPremium')) or rate_at(1),
-        'lead': posint(st.get('subLead')) or 3}})
+    SETTINGS.update({'freeShip': free, 'heroW': hw, 'heroP': hp, 'sub': {'on': not off}})
     cat['settings'] = dict(SETTINGS)
     return cat
 
@@ -574,17 +561,18 @@ SB = {
   err_locked='Відправка вже в роботі — тут змінити не вийде. Напишіть нам, і ми щось придумаємо.', err_act='Не вдалося виконати дію. Спробуйте ще раз або напишіть нам.',
   st_new='Заявку отримано', st_new_p='Ми зв’яжемося з вами, підтвердимо умови та призначимо першу відправку. Поки нічого не оплачується.',
   st_act='Активна', st_pause='На паузі', st_cancel='Скасована', st_cancel_p='Підписку скасовано. Дякуємо, що були з нами. Двері завжди відчинені — оформити нову можна будь-коли.',
-  plan_h='Ваш план', type='Тип', fmt='Формат', level='Рівень', sort='Сорт', freq='Періодичність', price='За відправку', grind='Помел', club_h='Статус у клубі', ships='Відправок',
+  plan_h='Ваш план', type='Тип', fmt='Формат', level='Рівень', sort='Сорт', freq='Періодичність', grind='Помел', club_h='Статус у клубі', ships='Відправок',
   freq_t={'10': 'Кожні 10 днів', '14': 'Кожні 2 тижні', '30': 'Щомісяця'},
   next_h='Наступна відправка', next_none='Дату призначимо після підтвердження.', next_sort='Сорт цієї відправки', next_sort_none='роастмайстер обере сам', skipped='Цю відправку пропущено за вашим проханням.',
   pause_until='Пауза до', locked_note='До обсмажки менше ніж {lead} дні — зміни вже не приймаємо тут. Напишіть нам.',
   a_skip='Пропустити наступну відправку', a_unskip='Не пропускати наступну відправку', a_pause='Поставити на паузу', a_pause_date='Пауза до (необов’язково)', a_resume='Відновити підписку',
+  a_addr_h='Змінити відділення або адресу', a_addr_now='Зараз', a_addr_city='Місто', a_addr_branch='Відділення / поштомат / адреса', a_addr_save='Зберегти адресу', a_addr_note='Якщо відправка ще не пішла, оновимо адресу і в поточному замовленні.', ok_addr='Готово: адресу збережено.', del_np='Нова Пошта', del_ukr='Укрпошта',
   a_sort='Змінити сорт', a_sort_save='Зберегти сорт', a_comm_h='Як нам з вами спілкуватися', a_req_h='Особливий ритм, інший формат, окрема пропозиція', a_req_ph='Напишіть, що вам потрібно — відповімо особисто', a_req_btn='Надіслати',
   a_cancel='Скасувати підписку', a_cancel_sure='Точно скасувати? Натисніть ще раз', a_cancel_note='Без пояснень і без утримання.',
   comm={'Звичайна': 'Звичайно', 'Більше близькості': 'Хочу більше близькості', 'Менше повідомлень': 'Хочу менше повідомлень'},
   ok_skip='Готово: наступну відправку пропустимо.', ok_unskip='Готово: відправку повернуто в план.', ok_pause='Готово: підписка на паузі.', ok_resume='Готово: підписку відновлено.',
   ok_sort='Готово: сорт змінено.', ok_comm='Збережено.', ok_req='Дякуємо! Ми відповімо особисто.', ok_cancel='Підписку скасовано.',
-  refresh='Оновити', again='Інша підписка', tg='Написати в Telegram', join='Оформити підписку', pay_h='Оплата',
+  demo='Демо-режим: так клієнт бачить свою сторінку. Нічого не зберігається і нікуди не надсилається.', refresh='Оновити', again='Інша підписка', tg='Написати в Telegram', join='Оформити підписку', pay_h='Оплата',
   pay_t='За 1–2 дні до обсмажки надішлемо суму до сплати. Після підтвердження оплати обсмажуємо й відправляємо.'),
  'ru': dict(
   title='Моя подписка | Клуб ZRN', desc='Управление подпиской Клуба ZRN: пауза, пропуск, смена сорта.',
@@ -596,17 +584,18 @@ SB = {
   err_locked='Отправка уже в работе — здесь изменить не получится. Напишите нам, и мы что-нибудь придумаем.', err_act='Не удалось выполнить действие. Попробуйте ещё раз или напишите нам.',
   st_new='Заявка получена', st_new_p='Мы свяжемся с вами, подтвердим условия и назначим первую отправку. Пока ничего не оплачивается.',
   st_act='Активна', st_pause='На паузе', st_cancel='Отменена', st_cancel_p='Подписка отменена. Спасибо, что были с нами. Двери всегда открыты — оформить новую можно в любой момент.',
-  plan_h='Ваш план', type='Тип', fmt='Формат', level='Уровень', sort='Сорт', freq='Периодичность', price='За отправку', grind='Помол', club_h='Статус в клубе', ships='Отправок',
+  plan_h='Ваш план', type='Тип', fmt='Формат', level='Уровень', sort='Сорт', freq='Периодичность', grind='Помол', club_h='Статус в клубе', ships='Отправок',
   freq_t={'10': 'Каждые 10 дней', '14': 'Каждые 2 недели', '30': 'Каждый месяц'},
   next_h='Следующая отправка', next_none='Дату назначим после подтверждения.', next_sort='Сорт этой отправки', next_sort_none='роастмастер выберет сам', skipped='Эта отправка пропущена по вашей просьбе.',
   pause_until='Пауза до', locked_note='До обжарки меньше {lead} дней — изменения здесь уже не принимаем. Напишите нам.',
   a_skip='Пропустить следующую отправку', a_unskip='Не пропускать следующую отправку', a_pause='Поставить на паузу', a_pause_date='Пауза до (необязательно)', a_resume='Возобновить подписку',
+  a_addr_h='Изменить отделение или адрес', a_addr_now='Сейчас', a_addr_city='Город', a_addr_branch='Отделение / почтомат / адрес', a_addr_save='Сохранить адрес', a_addr_note='Если отправка ещё не ушла, обновим адрес и в текущем заказе.', ok_addr='Готово: адрес сохранён.', del_np='Новая Почта', del_ukr='Укрпочта',
   a_sort='Сменить сорт', a_sort_save='Сохранить сорт', a_comm_h='Как нам с вами общаться', a_req_h='Особый ритм, другой формат, отдельное предложение', a_req_ph='Напишите, что вам нужно — ответим лично', a_req_btn='Отправить',
   a_cancel='Отменить подписку', a_cancel_sure='Точно отменить? Нажмите ещё раз', a_cancel_note='Без объяснений и без удержания.',
   comm={'Звичайна': 'Как обычно', 'Більше близькості': 'Хочу больше близости', 'Менше повідомлень': 'Хочу меньше сообщений'},
   ok_skip='Готово: следующую отправку пропустим.', ok_unskip='Готово: отправка возвращена в план.', ok_pause='Готово: подписка на паузе.', ok_resume='Готово: подписка возобновлена.',
   ok_sort='Готово: сорт изменён.', ok_comm='Сохранено.', ok_req='Спасибо! Мы ответим лично.', ok_cancel='Подписка отменена.',
-  refresh='Обновить', again='Другая подписка', tg='Написать в Telegram', join='Оформить подписку', pay_h='Оплата',
+  demo='Демо-режим: так клиент видит свою страницу. Ничего не сохраняется и никуда не отправляется.', refresh='Обновить', again='Другая подписка', tg='Написать в Telegram', join='Оформить подписку', pay_h='Оплата',
   pay_t='За 1–2 дня до обжарки пришлём сумму к оплате. После подтверждения оплаты обжариваем и отправляем.'),
 }
 
@@ -627,22 +616,40 @@ SUB_HTML = """<nav class="crumbs" aria-label="breadcrumb"><a href="@@HOME@@">ZRN
   var C = @@CFG@@, T = C.t;
   var $ = function(id){ return document.getElementById(id); };
   var form = $('sbForm'), err = $('sbErr'), btn = $('sbBtn'), res = $('sbRes'), forget = $('sbForget');
-  var HINT = 'zrn_sub_hint', cur = null, flash = '', cancelArmed = false;
+  var HINT = 'zrn_sub_hint', cur = null, flash = '', cancelArmed = false, demo = false;
   function el(tag, cls, txt){ var e = document.createElement(tag); if (cls) e.className = cls; if (txt !== undefined && txt !== null) e.textContent = txt; return e; }
   function readHint(){ try { var h = JSON.parse(localStorage.getItem(HINT)); return (h && h.s && h.p) ? h : null; } catch (e) { return null; } }
   function fail(m){ err.textContent = m; err.hidden = false; }
   function dmy(s){ var m = /^(\\d{4})-(\\d{2})-(\\d{2})/.exec(s || ''); return m ? m[3] + '.' + m[2] + '.' + m[1] : (s || ''); }
   function money(v){ return Number(v).toLocaleString(C.lang === 'ru' ? 'ru-RU' : 'uk-UA') + ' ₴'; }
   function row(box, k, v){ if (v === '' || v === null || v === undefined) return; var p = el('p'); p.appendChild(el('span', 'sb-k', k + ': ')); p.appendChild(el('b', '', v)); box.appendChild(p); }
+  var DEMO = { id: 'SUB-0000', status: 'Активна', type: 'My Choice', weight: 500, format: 'Home', level: '—', sort: C.products[0] || '', grind: 'Зернова', freq: 14,
+               next: '', nextSort: '', skip: '', pauseUntil: '', comm: 'Звичайна', club: 'Новачок клубу', count: 2, locked: false, lead: 3,
+               delivery: 'Нова Пошта', city: 'Київ', branch: 'Відділення №15' };
+  (function(){ var d = new Date(); d.setDate(d.getDate() + 9); DEMO.next = d.toISOString().slice(0, 10); })();
+  function demoCall(p, cb){
+    var v = p.value || '';
+    if (p.action === 'skip') DEMO.skip = DEMO.skip ? '' : 'Так';
+    if (p.action === 'pause') { DEMO.status = 'Пауза'; DEMO.pauseUntil = v; }
+    if (p.action === 'resume') { DEMO.status = 'Активна'; DEMO.pauseUntil = ''; }
+    if (p.action === 'sort') DEMO.sort = v;
+    if (p.action === 'comm') DEMO.comm = v;
+    if (p.action === 'cancel') DEMO.status = 'Скасована';
+    if (p.action === 'address') { DEMO.delivery = p.delivery || DEMO.delivery; DEMO.city = p.city; DEMO.branch = p.branch; }
+    setTimeout(function(){ cb({ ok: true, found: true, sub: JSON.parse(JSON.stringify(DEMO)) }); }, 150);
+  }
   function call(payload, cb){
+    if (demo) return demoCall(payload, cb);
     var b = { kind: payload.kind, id: cur.id, last4: cur.last4 };
     for (var k in payload) if (k !== 'kind') b[k] = payload[k];
     fetch(C.sheet, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(b) })
       .then(function(r){ return r.json(); }).then(cb).catch(function(){ cb(null); });
   }
-  function act(action, value, okMsg){
+  function act(action, value, okMsg, extra){
     flash = '';
-    call({ kind: 'sub_action', action: action, value: value || '' }, function(d){
+    var pl = { kind: 'sub_action', action: action, value: value || '' };
+    if (extra) for (var xk in extra) pl[xk] = extra[xk];
+    call(pl, function(d){
       if (d && d.ok && d.found && d.sub) { cur.sub = d.sub; flash = okMsg; cancelArmed = false; render(); }
       else { flash = '!' + ((d && d.error === 'locked') ? T.err_locked : T.err_act); render(); }
     });
@@ -650,6 +657,7 @@ SUB_HTML = """<nav class="crumbs" aria-label="breadcrumb"><a href="@@HOME@@">ZRN
   function render(){
     var s = cur.sub; res.textContent = '';
     var card = el('div', 'st-card');
+    if (demo) card.appendChild(el('div', 'st-banner', T.demo));
     var head = el('div', 'st-head');
     head.appendChild(el('div', 'st-num', s.id));
     var stTxt = { 'Нова заявка': T.st_new, 'Активна': T.st_act, 'Пауза': T.st_pause, 'Скасована': T.st_cancel }[s.status] || s.status;
@@ -664,7 +672,6 @@ SUB_HTML = """<nav class="crumbs" aria-label="breadcrumb"><a href="@@HOME@@">ZRN
     row(plan, T.fmt, s.format + ' · ' + s.weight + ' г');
     if (s.type === 'My Choice') row(plan, T.sort, s.sort); else row(plan, T.level, s.level);
     row(plan, T.freq, T.freq_t[String(s.freq)] || s.freq);
-    row(plan, T.price, money(s.price));
     row(plan, T.grind, s.grind);
     g.appendChild(plan);
     var nx = el('div', 'st-box'); nx.appendChild(el('h3', '', T.next_h));
@@ -704,6 +711,15 @@ SUB_HTML = """<nav class="crumbs" aria-label="breadcrumb"><a href="@@HOME@@">ZRN
         sv.onclick = function(){ act('sort', sel.value, T.ok_sort); };
         sb.appendChild(sel); sb.appendChild(sv); card.appendChild(sb);
       }
+      var ab = el('div', 'st-box sb-blk'); ab.appendChild(el('h3', '', T.a_addr_h));
+      ab.appendChild(el('p', 'sb-sub', T.a_addr_now + ': ' + [s.delivery, s.city, s.branch].filter(Boolean).join(', ')));
+      var dsel = el('select', 'sb-sel');
+      [['Нова Пошта', T.del_np], ['Укрпошта', T.del_ukr]].forEach(function(x){ var o = el('option', '', x[1]); o.value = x[0]; if (x[0] === s.delivery) o.selected = true; dsel.appendChild(o); });
+      var ci = el('input', 'sb-in'); ci.type = 'text'; ci.placeholder = T.a_addr_city; ci.value = s.city || ''; ci.maxLength = 120; ci.setAttribute('aria-label', T.a_addr_city);
+      var bi = el('input', 'sb-in'); bi.type = 'text'; bi.placeholder = T.a_addr_branch; bi.value = s.branch || ''; bi.maxLength = 200; bi.setAttribute('aria-label', T.a_addr_branch);
+      var asv = el('button', 'btn ghost', T.a_addr_save); asv.type = 'button';
+      asv.onclick = function(){ if (ci.value.trim().length < 2 || !bi.value.trim()) return; act('address', '', T.ok_addr, { delivery: dsel.value, city: ci.value.trim(), branch: bi.value.trim() }); };
+      ab.appendChild(dsel); ab.appendChild(ci); ab.appendChild(bi); ab.appendChild(asv); ab.appendChild(el('p', 'sb-sub', T.a_addr_note)); card.appendChild(ab);
       var cb = el('div', 'st-box sb-blk'); cb.appendChild(el('h3', '', T.a_comm_h));
       Object.keys(T.comm).forEach(function(k){
         var lb = el('label', 'sb-radio'); var r = el('input'); r.type = 'radio'; r.name = 'sbComm'; r.value = k; r.checked = (s.comm || 'Звичайна') === k;
@@ -752,6 +768,7 @@ SUB_HTML = """<nav class="crumbs" aria-label="breadcrumb"><a href="@@HOME@@">ZRN
   $('sbLast4').addEventListener('input', function(){ this.value = this.value.replace(/\\D/g, '').slice(0, 4); });
   forget.addEventListener('click', function(e){ e.preventDefault(); try { localStorage.removeItem(HINT); } catch (x) {} forget.hidden = true; $('sbId').value = ''; $('sbLast4').value = ''; });
   var lg = document.querySelector('.lang'); if (lg && location.search) lg.href += location.search;
+  if (new URLSearchParams(location.search).has('demo')) { demo = true; cur = { id: DEMO.id, last4: '0000', sub: JSON.parse(JSON.stringify(DEMO)) }; form.hidden = true; render(); return; }
   var q = new URLSearchParams(location.search).get('s'); q = q ? q.replace(/[^A-Za-z0-9\\-]/g, '').slice(0, 16).toUpperCase() : '';
   var h = readHint(); if (h) forget.hidden = false;
   if (q) $('sbId').value = q;
@@ -771,6 +788,7 @@ SB_CSS = """
 .sb-blk{margin-top:14px}
 .sb-blk .btn{margin-top:8px}
 .sb-sel{width:100%}
+.sb-in{width:100%;margin-top:8px;padding:10px;border:1px solid var(--line);border-radius:8px;font:inherit;background:#fff;color:var(--ink)}
 .sb-ta{width:100%;resize:vertical}
 .sb-radio{display:block;padding:6px 0;cursor:pointer}
 .sb-cancel{margin:22px 0 4px}
