@@ -791,6 +791,13 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
 .np-list li:hover, .np-list li.on{background:rgba(169,121,47,.14);}
 .np-list li.np-msg{color:var(--sub); cursor:default; font-size:.9rem;}
 .np-list li.np-msg:hover{background:none;}
+.pwa{position:fixed;left:10px;right:10px;bottom:10px;z-index:44;max-width:520px;margin:0 auto;display:none;gap:10px 14px;align-items:center;flex-wrap:wrap;padding:12px 14px;background:#1f1912;color:#f3ead9;border-radius:12px;box-shadow:0 8px 26px rgba(0,0,0,.3);font-size:.85rem;line-height:1.4}
+.pwa.on{display:flex}
+.pwa-t{flex:1 1 220px;min-width:0}.pwa-t b{display:block;font-size:.92rem;color:#e6c98a;margin-bottom:2px}
+.pwa-b{display:flex;align-items:center;gap:12px;margin-left:auto}
+.pwa button{font:inherit;cursor:pointer;min-height:38px}
+.pwa-y{font-weight:600;padding:8px 18px;border-radius:9px;border:0;background:#c9a24d;color:#1f1912}
+.pwa-n{background:none;border:0;color:#f3ead9;opacity:.8;text-decoration:underline;padding:8px 4px}
 </style>
 <script type="application/ld+json">
 {
@@ -1137,6 +1144,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
         <a href="https://t.me/zrncoffee" target="_blank">Telegram</a>
         <a href="mailto:zrncoffee@gmail.com" data-i18n="foot.mail">Написати на пошту</a>
         <a href="/blog/" data-seo="blog/" onclick="openBlogOverlay();return false;" data-i18n="nav.blog">Блог</a>
+        <a href="#" data-pwa-install hidden data-i18n="pwa.foot">Встановити застосунок ZRN</a>
       </div>
       <div class="foot-contacts foot-legal" style="margin-top:6px">
         <a href="/oferta/" data-i18n="foot.oferta">Публічна оферта</a>
@@ -1263,6 +1271,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       <p class="confirm-extra" data-i18n="ck.confirmExtra">Ми відповімо вам протягом 1–2 годин у робочий час.</p>
       <p class="confirm-extra" data-i18n-html="ck.reviewAsk">Коли спробуєте каву — <a href="/review/">залишіть відгук</a>. Нам важлива ваша думка.</p>
       <a class="confirm-status" id="confirmStatusBtn" href="/status/" data-i18n="ck.statusBtn">Стежити за статусом замовлення</a>
+      <p class="confirm-extra"><a href="#" data-pwa-install hidden data-i18n="pwa.inline">📲 Додати ZRN на екран телефону</a></p>
       <button class="checkout" id="closeConfirmBtn" data-i18n="ck.close">Закрити</button>
     </div>
   </div>
@@ -1331,6 +1340,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       <p class="club-ok-id" id="clubOkIdRow"><span data-i18n="club.ok.id">Номер вашої підписки:</span> <b id="clubOkId"></b></p>
       <p class="club-m-p" id="clubOkText" data-i18n="club.ok.text"></p>
       <a class="club-cta club-cta-a" id="clubOkManage" href="/subscription/" data-i18n="club.ok.manage">Керувати підпискою</a>
+      <p class="confirm-extra" style="text-align:center"><a href="#" data-pwa-install hidden data-i18n="pwa.inline">📲 Додати ZRN на екран телефону</a></p>
       <button type="button" class="club-link" id="clubOkClose" data-i18n="club.ok.close">Закрити</button>
     </div>
   </div>
@@ -1369,6 +1379,10 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
   </div>
 </div>
 
+<div class="pwa" id="pwaBar" role="dialog" aria-live="polite">
+  <div class="pwa-t"><b data-i18n="pwa.title">Додайте ZRN на екран телефону</b><span id="pwaText" data-i18n="pwa.text">Свіжа кава, статус замовлення й підписка — одним дотиком, без пошуку сайту.</span></div>
+  <div class="pwa-b"><button type="button" class="pwa-y" id="pwaYes" data-i18n="pwa.install">Встановити</button><button type="button" class="pwa-n" id="pwaNo" data-i18n="pwa.later">Не зараз</button></div>
+</div>
 <script>
 function syncHeaderHeight(){
   const h = document.getElementById('siteHeader');
@@ -1376,6 +1390,7 @@ function syncHeaderHeight(){
 }
 syncHeaderHeight();
 window.addEventListener('resize', syncHeaderHeight);
+
 window.addEventListener('load', syncHeaderHeight);
 
 /* ============================================================
@@ -1678,7 +1693,16 @@ uk: {
   "club.ok.id": "Номер вашої підписки:",
   "club.ok.text": "Ми зв’яжемося з вами найближчим часом, підтвердимо умови та дату першої відправки. Поки нічого не оплачується. Збережіть номер — за ним можна керувати підпискою.",
   "club.ok.manage": "Керувати підпискою",
-  "club.ok.close": "Закрити"
+  "club.ok.close": "Закрити",
+  "pwa.title": "Додайте ZRN на екран телефону",
+  "pwa.text": "Свіжа кава, статус замовлення й підписка — одним дотиком, без пошуку сайту.",
+  "pwa.install": "Встановити",
+  "pwa.later": "Не зараз",
+  "pwa.ios": "Натисніть «Поділитися» ⬆ і оберіть «На екран «Додому»».",
+  "pwa.textOrder": "Статус вашого замовлення й наступна партія — одним дотиком з екрана телефону.",
+  "pwa.textSub": "Пропуск, пауза чи зміна сорту підписки — одним дотиком, без пошуку сайту.",
+  "pwa.foot": "Встановити застосунок ZRN",
+  "pwa.inline": "📲 Додати ZRN на екран телефону"
 },
 ru: {
   'meta.title': 'Свежеобжаренный кофе в зёрнах — купить в Украине | ZRN Coffee',
@@ -1971,7 +1995,16 @@ ru: {
   "club.ok.id": "Номер вашей подписки:",
   "club.ok.text": "Мы свяжемся с вами в ближайшее время, подтвердим условия и дату первой отправки. Пока ничего не оплачивается. Сохраните номер — по нему можно управлять подпиской.",
   "club.ok.manage": "Управлять подпиской",
-  "club.ok.close": "Закрыть"
+  "club.ok.close": "Закрыть",
+  "pwa.title": "Добавьте ZRN на экран телефона",
+  "pwa.text": "Свежий кофе, статус заказа и подписка — одним касанием, без поиска сайта.",
+  "pwa.install": "Установить",
+  "pwa.later": "Не сейчас",
+  "pwa.ios": "Нажмите «Поделиться» ⬆ и выберите «На экран «Домой»».",
+  "pwa.textOrder": "Статус вашего заказа и следующая партия — одним касанием с экрана телефона.",
+  "pwa.textSub": "Пропуск, пауза или смена сорта подписки — одним касанием, без поиска сайта.",
+  "pwa.foot": "Установить приложение ZRN",
+  "pwa.inline": "📲 Добавить ZRN на экран телефона"
 }
 };
 
@@ -4000,6 +4033,7 @@ Telegram: ${TG_CONTACT}
     if(accepted){
       const finalNumber = shownNumber || orderNumber;
       if(window.zrnPurchase) zrnPurchase(finalNumber, total, zrnCartItems());
+      if(window.zrnInstallOffer) zrnInstallOffer('order');
       try{ localStorage.setItem('zrn_checkout', JSON.stringify({name, phone: phoneNorm, email, delivery, city, branch})); }catch(err){}
       document.getElementById('confirmText').innerHTML = (contactMethod==='call' ? t('ck.okCall') : t('ck.okMsg')).replace('{n}', finalNumber);
       const cm = document.getElementById('confirmMail');
@@ -4316,6 +4350,7 @@ Email: ${payload.email || '—'}
     if(!mailOk && !id){ fail('club.m.err'); return; }          /* не дійшло жодним шляхом */
     if(id){ try{ localStorage.setItem('zrn_sub_hint', JSON.stringify({s:id, p:phone.replace(/\D/g,'').slice(-4)})); }catch(x){} }
     if(window.zrnTrack) zrnTrack('generate_lead', {method:'club'});
+    if(window.zrnInstallOffer) zrnInstallOffer('sub');
     clubShowOk(id);
   });
 }
@@ -4522,6 +4557,56 @@ if(typeof showReorderBox==='function') showReorderBox();
   else if(h==='blog' && typeof openBlogOverlay==='function'){ openBlogOverlay(); }
 })();
 
+/* ===== Встановлення як застосунок (PWA) =====
+   Коли показуємо банер: після замовлення/підписки (з текстом під ситуацію) і на 2-му та наступних візитах.
+   На 1-му візиті банер НЕ з'являється. «Не зараз» — мовчимо 30 днів. Посилання «Встановити застосунок»
+   (футер і вікна підтвердження) доступні завжди, коли браузер це вміє, — без нав'язування. */
+(function(){
+  const KEY_DIS='zrn_pwa_dis', KEY_VIS='zrn_pwa_vis';
+  let deferred=null, shown=false, ios=false, installable=false;
+  function ls(k,v){ try{ if(v===undefined) return localStorage.getItem(k); localStorage.setItem(k,v); }catch(e){} return null; }
+  const standalone = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone===true;
+  const ua = navigator.userAgent||'';
+  ios = /iPhone|iPad|iPod/.test(ua) && /Safari/.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS|FBAN|FBAV|Instagram|Line\//.test(ua);
+  const mobile = window.matchMedia && matchMedia('(max-width: 820px)').matches;
+  if('serviceWorker' in navigator){ window.addEventListener('load', function(){ try{ navigator.serviceWorker.register('/sw.js').catch(function(){}); }catch(e){} }); }
+  if(standalone || !mobile) return;
+  const bar=document.getElementById('pwaBar'); if(!bar) return;
+  const txt=document.getElementById('pwaText'), yes=document.getElementById('pwaYes');
+  function refreshLinks(){ installable = !!deferred || ios; document.querySelectorAll('[data-pwa-install]').forEach(function(a){ a.hidden = !installable; }); }
+  window.addEventListener('beforeinstallprompt', function(e){ e.preventDefault(); deferred=e; refreshLinks(); });
+  window.addEventListener('appinstalled', function(){ ls(KEY_DIS, String(Date.now()+3650*864e5)); deferred=null; hide(); refreshLinks(); });
+  function dismissed(){ const v=Number(ls(KEY_DIS)||0); return v && Date.now()<v; }
+  function hide(){ bar.classList.remove('on'); }
+  function later(){ ls(KEY_DIS, String(Date.now()+30*864e5)); hide(); }
+  function setText(key){ txt.setAttribute('data-i18n', key); txt.textContent=t(key); }
+  function doInstall(){
+    if(deferred){ const d=deferred; d.prompt(); d.userChoice.then(function(c){ ls(KEY_DIS, String(Date.now()+(c&&c.outcome==='accepted'?3650:30)*864e5)); deferred=null; hide(); refreshLinks(); }).catch(hide); }
+  }
+  document.getElementById('pwaNo').addEventListener('click', later);
+  yes.addEventListener('click', doInstall);
+  document.addEventListener('click', function(e){
+    const a=e.target.closest && e.target.closest('[data-pwa-install]'); if(!a) return;
+    e.preventDefault();
+    if(deferred) doInstall(); else if(ios){ setText('pwa.ios'); yes.style.display='none'; bar.classList.add('on'); }
+  });
+  function tryShow(kind){
+    if(shown || dismissed()) return;
+    if(!installable) return;                             /* браузер не вміє встановлення — мовчимо */
+    if(document.querySelector('.zrn-ck')) return;        /* спочатку cookie-банер */
+    shown=true;
+    if(deferred){ yes.style.display=''; setText(kind==='order'?'pwa.textOrder':kind==='sub'?'pwa.textSub':'pwa.text'); }
+    else { yes.style.display='none'; setText('pwa.ios'); }
+    bar.classList.add('on');
+  }
+  function schedule(ms, kind){ setTimeout(function(){ let n=0; (function w(){ tryShow(kind); if(!shown && n++<20) setTimeout(w,1500); })(); }, ms); }
+  refreshLinks();
+  /* візити: рахуємо один раз за сесію; на 1-му візиті банер мовчить */
+  let visits=Number(ls(KEY_VIS)||0);
+  try{ if(!sessionStorage.getItem('zrn_pwa_s')){ sessionStorage.setItem('zrn_pwa_s','1'); visits++; ls(KEY_VIS,String(visits)); } }catch(e){}
+  if(visits>=2) schedule(12000, 'visit');
+  window.zrnInstallOffer = function(kind){ schedule(6000, kind||'order'); };   /* після замовлення / підписки */
+})();
 </script>
 </body>
 </html>
