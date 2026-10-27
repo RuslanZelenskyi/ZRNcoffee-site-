@@ -1328,8 +1328,8 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
     </div>
     <div id="clubOkView" hidden>
       <h3 class="club-m-h" data-i18n="club.ok.t">Заявку прийнято</h3>
-      <p class="club-ok-id"><span data-i18n="club.ok.id">Номер вашої підписки:</span> <b id="clubOkId"></b></p>
-      <p class="club-m-p" data-i18n="club.ok.text"></p>
+      <p class="club-ok-id" id="clubOkIdRow"><span data-i18n="club.ok.id">Номер вашої підписки:</span> <b id="clubOkId"></b></p>
+      <p class="club-m-p" id="clubOkText" data-i18n="club.ok.text"></p>
       <a class="club-cta club-cta-a" id="clubOkManage" href="/subscription/" data-i18n="club.ok.manage">Керувати підпискою</a>
       <button type="button" class="club-link" id="clubOkClose" data-i18n="club.ok.close">Закрити</button>
     </div>
@@ -1632,6 +1632,7 @@ uk: {
   "club.m.branchPh": "Наприклад: №15 або поштомат №2348",
   "club.m.more": "Додатково (за бажанням)",
   "club.m.consentNote": "Надсилаючи заявку, ви погоджуєтесь з <a href=\"/oferta/\" target=\"_blank\" rel=\"noopener\">офертою</a> та <a href=\"/privacy/\" target=\"_blank\" rel=\"noopener\">політикою конфіденційності</a>.",
+  "club.ok.textNoId": "Ми отримали вашу заявку й зв’яжемося з вами найближчим часом, щоб підтвердити умови та дату першої відправки. Номер підписки надішлемо в повідомленні. Поки нічого не оплачується.",
   "club.cta": "Оформити заявку",
   "club.ctaNote": "Заявка — це не оплата. Ми зв’яжемося, уточнимо деталі й призначимо першу відправку.",
   "club.perks": "Що отримує учасник клубу",
@@ -1924,6 +1925,7 @@ ru: {
   "club.m.branchPh": "Например: №15 или почтомат №2348",
   "club.m.more": "Дополнительно (по желанию)",
   "club.m.consentNote": "Отправляя заявку, вы соглашаетесь с <a href=\"/oferta/\" target=\"_blank\" rel=\"noopener\">офертой</a> и <a href=\"/privacy/\" target=\"_blank\" rel=\"noopener\">политикой конфиденциальности</a>.",
+  "club.ok.textNoId": "Мы получили вашу заявку и свяжемся с вами в ближайшее время, чтобы подтвердить условия и дату первой отправки. Номер подписки пришлём в сообщении. Пока ничего не оплачивается.",
   "club.cta": "Оформить заявку",
   "club.ctaNote": "Заявка — это не оплата. Мы свяжемся, уточним детали и назначим первую отправку.",
   "club.perks": "Что получает участник клуба",
@@ -4281,24 +4283,51 @@ function clubSubmit(e){
   };
   const btn = document.getElementById('clubSubmit');
   btn.disabled = true; btn.textContent = t('club.m.sending');
+  const planTxt = (payload.type === 'My Choice' ? 'My Choice · ' + payload.sort : "Roaster's Choice · " + payload.level) + ' · ' + payload.weight + ' г · кожні ' + payload.freq + ' дн.';
+  const message =
+`Нова заявка на підписку (Клуб ZRN)
+
+План: ${planTxt}
+Помел: ${payload.grind}
+Ім'я: ${name}
+Телефон: ${phone}
+Email: ${payload.email || '—'}
+Зв'язок: ${payload.contactMethod}${payload.contactHandle ? ' — ' + payload.contactHandle : ''}
+Доставка: ${payload.delivery}, ${city}, ${branch}
+Оплата першої поставки: ${payload.payment}
+Режим спілкування: ${payload.comm}
+Орієнтир суми: ${price ? price + ' ₴' : 'узгодити'}
+Коментар: ${payload.comment || '—'}
+Джерело: ${payload.source || '—'}`;
+  /* 1) Web3Forms — лист вам на пошту (як із замовленнями); ніколи не reject */
+  const w3Req = fetch('https://api.web3forms.com/submit', {
+    method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'},
+    body: JSON.stringify({access_key:WEB3FORMS_KEY, subject:'Нова заявка на підписку — ZRN Coffee', from_name:'ZRN Coffee — сайт', name:name, phone:phone, email:payload.email || undefined, message:message, botcheck:false})
+  }).then(r=>r.json()).then(r=>!!(r && r.success)).catch(()=>false);
+  /* 2) Google Таблиця (лист «Підписки») — повертає номер підписки; ніколи не reject */
   const ctrl = (typeof AbortController!=='undefined') ? new AbortController() : null;
   const timer = ctrl ? setTimeout(()=>ctrl.abort(), 20000) : null;
-  fetch(ORDER_SHEET_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(payload), signal:ctrl ? ctrl.signal : undefined})
-    .then(r=>r.json())
-    .then(res=>{
-      if(!(res && res.ok && res.id)) throw new Error('bad');
-      try{ localStorage.setItem('zrn_sub_hint', JSON.stringify({s:res.id, p:phone.replace(/\D/g,'').slice(-4)})); }catch(x){}
-      if(window.zrnTrack) zrnTrack('generate_lead', {method:'club'});
-      clubShowOk(res.id);
-    })
-    .catch(()=>fail('club.m.err'))
-    .then(()=>{ if(timer) clearTimeout(timer); btn.disabled = false; btn.textContent = t('club.m.send'); });
+  const sheetReq = fetch(ORDER_SHEET_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body:JSON.stringify(payload), signal:ctrl ? ctrl.signal : undefined})
+    .then(r=>r.json()).then(res=>(res && res.ok && res.id) ? res.id : '').catch(()=>'');
+  Promise.all([w3Req, sheetReq]).then(function(r){
+    if(timer) clearTimeout(timer);
+    btn.disabled = false; btn.textContent = t('club.m.send');
+    const mailOk = r[0], id = r[1];
+    if(!mailOk && !id){ fail('club.m.err'); return; }          /* не дійшло жодним шляхом */
+    if(id){ try{ localStorage.setItem('zrn_sub_hint', JSON.stringify({s:id, p:phone.replace(/\D/g,'').slice(-4)})); }catch(x){} }
+    if(window.zrnTrack) zrnTrack('generate_lead', {method:'club'});
+    clubShowOk(id);
+  });
 }
 function clubShowOk(id){
   document.getElementById('clubFormView').hidden = true;
   document.getElementById('clubOkView').hidden = false;
   document.getElementById('clubOkId').textContent = id;
-  document.getElementById('clubOkManage').setAttribute('href', (currentLang === 'ru' ? '/ru' : '') + '/subscription/?s=' + encodeURIComponent(id));
+  document.getElementById('clubOkIdRow').style.display = id ? '' : 'none';
+  const ot = document.getElementById('clubOkText'); if(ot){ ot.setAttribute('data-i18n', id ? 'club.ok.text' : 'club.ok.textNoId'); ot.textContent = t(id ? 'club.ok.text' : 'club.ok.textNoId'); }
+  const mg = document.getElementById('clubOkManage');
+  mg.style.display = id ? '' : 'none';
+  if(id) mg.setAttribute('href', (currentLang === 'ru' ? '/ru' : '') + '/subscription/?s=' + encodeURIComponent(id));
 }
 (function clubInit(){
   const sec = document.getElementById('club');
