@@ -815,7 +815,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       "name": "ZRN Coffee",
       "alternateName": "ZRN",
       "url": "https://zrncoffee.com.ua/",
-      "logo": "https://zrncoffee.com.ua/img/zrn-logo.webp",
+      "logo": "https://zrncoffee.com.ua/icon-512.png",
       "description": "Мікроростерня свіжообсмаженої кави. Моносорти та авторські бленди. Обсмаження під замовлення.",
       "email": "zrncoffee@gmail.com",
       "address": {
@@ -3161,7 +3161,7 @@ function renderGrid(containerId, list){
   el.innerHTML = list.map((p,idx)=>{ const first = (containerId==='grid' && idx<4); return `
     <div class="card${first?' in':''}" id="${p.id}" data-open="${p.id}" style="--accent:${p.accent||'#a9792f'}">
       ${p.badge?`<div class="card-badge badge-${p.badgeType}">${dispBadge(p.badge)}</div>`:''}
-      <img src="${p.img}" alt="${p.alt || ('Кава ' + p.name + ' ZRN')}" ${first?'':'loading="lazy" '}decoding="async">
+      <img src="${p.img}" alt="${p.alt || ('Кава ' + p.name + ' ZRN')}" loading="lazy" decoding="async">
       <div class="card-body">
         ${p.ratio?`<div class="card-ratio">${p.ratio}</div>`:''}
         ${p.kicker?`<div class="blend-kicker">${p.kicker}</div>`:''}
