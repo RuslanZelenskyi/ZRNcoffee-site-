@@ -40,6 +40,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,340;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" as="image" href="/img/brush.webp" imagesrcset="/img/brush-340.webp 340w, /img/brush.webp 440w" imagesizes="(min-width:860px) 200px, min(50vw,190px)" fetchpriority="high">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,340;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap"></noscript>
 <style>
 :root{
@@ -242,7 +243,7 @@ nav.hd-links a.nav-active::after{
   -webkit-mask-size:100% 300%; mask-size:100% 300%;
   -webkit-mask-position:0 200%; mask-position:0 200%;
   -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
-  animation:paint 1.2s cubic-bezier(.6,.05,.2,1) forwards 1.05s;
+  animation:paint 1.2s cubic-bezier(.6,.05,.2,1) forwards .45s;
 }
 .brushwrap img{
   width:100%; height:auto; display:block;
@@ -898,7 +899,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
     <button class="hero-cta" onclick="scrollToSel('#catalog')" data-i18n="hero.cta">Обрати каву</button>
   </div>
   <div class="brushwrap">
-    <div class="brushclip"><img src="/img/brush.webp" width="440" height="1265" alt="" decoding="async" fetchpriority="low"></div>
+    <div class="brushclip"><img src="/img/brush.webp" srcset="/img/brush-340.webp 340w, /img/brush.webp 440w" sizes="(min-width:860px) 200px, min(50vw,190px)" width="440" height="1265" alt="" decoding="async" fetchpriority="high"></div>
     <div class="brush-caption" data-i18n="hero.brush">Мрій · Кохай · Твори</div>
   </div>
   <div class="scrollcue"><span class="chev"></span></div>
