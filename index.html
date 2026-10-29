@@ -363,7 +363,7 @@ section{padding:56px 0;}
   html.view-grid .card-body h3{font-size:.92rem; line-height:1.25;}
   html.view-grid .card-notes{font-size:.74rem; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
   html.view-grid .fresh-badge, html.view-grid .brew-tags, html.view-grid .card-ratio, html.view-grid .blend-kicker, html.view-grid .price-sec[style]{display:none;}
-  html.view-grid .card-badge{top:7px; left:7px; padding:3px 8px; font-size:.68rem;}
+  html.view-grid .card-badge{top:6px; left:6px; padding:2px 6px; font-size:.6rem; letter-spacing:.01em; white-space:nowrap; max-width:calc(100% - 12px); overflow:hidden; text-overflow:ellipsis;}
   html.view-grid .price-row{flex-direction:column; align-items:stretch; padding-top:8px; gap:6px;}
   html.view-grid .price-row .add{width:100%; min-height:38px;}
   html.view-grid .price{font-size:.98rem;}
@@ -942,7 +942,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
     <div class="order-steps">
       <span data-i18n="hero.s1">Ви обираєте</span><span class="arrow">→</span><span data-i18n="hero.s2">Ми обсмажуємо</span><span class="arrow">→</span><span data-i18n="hero.s3">Пакуємо</span><span class="arrow">→</span><span data-i18n="hero.s4">Відправляємо</span>
     </div>
-    <button class="hero-cta" onclick="scrollToSel('#catalog')" data-i18n="hero.cta">Обрати каву</button>
+    <button class="hero-cta" onclick="scrollToSel(document.getElementById('sets')&&!document.getElementById('sets').hidden?'#sets':'#catalog')" data-i18n="hero.cta">Обрати каву</button>
   </div>
   <div class="brushwrap">
     <div class="brushclip"><img src="/img/brush.webp" srcset="/img/brush-340.webp 340w, /img/brush.webp 440w" sizes="(min-width:860px) 200px, min(50vw,190px)" width="440" height="1265" alt="" decoding="async" fetchpriority="high"></div>
