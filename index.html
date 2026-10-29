@@ -324,6 +324,44 @@ section{padding:56px 0;}
 .card-link:focus-visible{outline:none;}
 .card-link:focus-visible::after{outline:2px solid var(--gold-bright); outline-offset:-3px; border-radius:inherit;}
 .card .add{position:relative; z-index:2;}
+/* набори знайомства */
+.sets-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:20px;}
+.set-thumbs{display:grid; grid-template-columns:repeat(var(--n,3),minmax(0,1fr)); background:var(--dark); gap:2px;}
+.set-thumbs img{aspect-ratio:1/1 !important; width:100%; height:auto; object-fit:cover; display:block;}
+.set-thumbs .more{display:flex; align-items:center; justify-content:center; color:#e6c98a; font-family:'Fraunces',serif; font-size:1.3rem; background:#2a2217; aspect-ratio:1/1;}
+.set-comp{font-size:.8rem; color:var(--ink); line-height:1.4;}
+.set-worth{margin-top:2px;}
+.set-worth s{opacity:.8;}
+.set-list{display:flex; flex-direction:column; gap:8px; margin:0 0 14px; padding:12px 14px; background:rgba(42,34,23,.04); border-radius:10px; border:1px solid var(--line);}
+.set-row{display:flex; align-items:center; gap:10px; font-size:.88rem; line-height:1.3;}
+#genericModal .set-row img{width:44px; height:44px; aspect-ratio:auto; border-radius:6px; object-fit:cover; flex:none; background:var(--dark); box-shadow:none;}
+.set-row > span:nth-child(2){min-width:0;}
+.set-row small{display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden;}
+.set-card .fresh-badge{text-transform:none; letter-spacing:.02em;}
+.set-row b{display:block; font-weight:600;}
+.set-row small{color:var(--sub); font-size:.75rem;}
+.set-row .w{margin-left:auto; white-space:nowrap; color:var(--gold-soft); font-weight:600;}
+.set-collage{display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:2px; aspect-ratio:1/1; border-radius:8px; overflow:hidden; background:var(--dark); box-shadow:0 0 0 2px color-mix(in srgb, var(--accent,#a9792f) 55%, transparent);}
+.set-collage img{width:100% !important; height:100% !important; aspect-ratio:auto !important; border-radius:0 !important; box-shadow:none !important; object-fit:cover;}
+.set-collage[data-n="2"]{grid-template-rows:1fr;}
+.set-collage[data-n="3"] img:first-child{grid-row:span 2;}
+@media(max-width:600px){ #genericModal .modal-grid > .set-collage{position:absolute; top:2px; left:18px; width:110px; height:110px;} }
+/* вигляд каталогу на телефоні: великі картки (за замовч.) або сітка 2 в ряд */
+.view-switch{display:none; gap:0; border:1px solid var(--line); border-radius:8px; overflow:hidden; align-self:center;}
+.view-switch button{font:inherit; font-size:.78rem; padding:7px 12px; border:0; background:transparent; color:var(--sub); cursor:pointer; min-height:36px;}
+.view-switch button[aria-pressed="true"]{background:var(--dark); color:#f3ead9;}
+@media(max-width:640px){
+  .view-switch{display:flex;}
+  html.view-grid .grid{grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px;}
+  html.view-grid .card-body{padding:10px 10px 12px; gap:3px;}
+  html.view-grid .card-body h3{font-size:.92rem; line-height:1.25;}
+  html.view-grid .card-notes{font-size:.74rem; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
+  html.view-grid .fresh-badge, html.view-grid .brew-tags, html.view-grid .card-ratio, html.view-grid .blend-kicker, html.view-grid .price-sec[style]{display:none;}
+  html.view-grid .card-badge{top:7px; left:7px; padding:3px 8px; font-size:.68rem;}
+  html.view-grid .price-row{flex-direction:column; align-items:stretch; padding-top:8px; gap:6px;}
+  html.view-grid .price-row .add{width:100%; min-height:38px;}
+  html.view-grid .price{font-size:.98rem;}
+}
 .add{background:var(--dark); color:#f3ead9; border:none; padding:7px 13px; border-radius:3px; font-size:.78rem; cursor:pointer;}
 .add:hover{background:var(--gold-soft);}
 
@@ -942,8 +980,16 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
 </div>
 </noscript>
 <div class="wrap">
+  <section id="sets" hidden>
+    <div class="section-head">
+      <div><h2 data-i18n="sets.title">Набори знайомства</h2><div class="section-sub" data-i18n="sets.sub">Кілька сортів по трохи — щоб порівняти смак і знайти свою каву.</div></div>
+    </div>
+    <div class="sets-grid" id="setGrid"></div>
+  </section>
+
   <section id="catalog">
     <div class="section-head">
+      <div class="view-switch" id="viewSwitch" role="group" data-i18n-aria="view.label" aria-label="Вигляд каталогу"><button type="button" data-view="big" aria-pressed="true" data-i18n="view.big">▭ Великі</button><button type="button" data-view="grid" aria-pressed="false" data-i18n="view.grid">▦ Сітка</button></div>
       <div><h2 data-i18n="catalog.title">Моносорти кави</h2><div class="section-sub" data-i18n="catalog.sub">Одне походження — один характер. Обсмажуємо малими партіями, щоб у чашці відчувався регіон, а не «просто кава».</div></div>
     </div>
     <div class="grid" id="grid"></div>
@@ -1700,6 +1746,19 @@ uk: {
   "club.ok.text": "Ми зв’яжемося з вами найближчим часом, підтвердимо умови та дату першої відправки. Поки нічого не оплачується. Збережіть номер — за ним можна керувати підпискою.",
   "club.ok.manage": "Керувати підпискою",
   "club.ok.close": "Закрити",
+  "sets.title": "Набори знайомства",
+  "sets.sub": "Кілька сортів по трохи — щоб порівняти смак і знайти свою каву.",
+  "sets.choose": "Обрати",
+  "sets.contains": "Склад набору",
+  "sets.pack": "{n} × {w} г",
+  "sets.packMix": "{n} сорти",
+  "sets.each": "кожен",
+  "sets.separately": "окремо ≈",
+  "sets.save": "Економія {n} ₴ порівняно з окремими пачками",
+  "sets.unit": "набір",
+  "view.label": "Вигляд каталогу",
+  "view.big": "▭ Великі",
+  "view.grid": "▦ Сітка",
   "pwa.title": "Додайте ZRN на екран телефону",
   "pwa.text": "Свіжа кава, статус замовлення й підписка — одним дотиком, без пошуку сайту.",
   "pwa.install": "Встановити",
@@ -2002,6 +2061,19 @@ ru: {
   "club.ok.text": "Мы свяжемся с вами в ближайшее время, подтвердим условия и дату первой отправки. Пока ничего не оплачивается. Сохраните номер — по нему можно управлять подпиской.",
   "club.ok.manage": "Управлять подпиской",
   "club.ok.close": "Закрыть",
+  "sets.title": "Наборы знакомства",
+  "sets.sub": "Несколько сортов понемногу — чтобы сравнить вкус и найти свой кофе.",
+  "sets.choose": "Выбрать",
+  "sets.contains": "Состав набора",
+  "sets.pack": "{n} × {w} г",
+  "sets.packMix": "{n} сорта",
+  "sets.each": "каждый",
+  "sets.separately": "отдельно ≈",
+  "sets.save": "Экономия {n} ₴ по сравнению с отдельными пачками",
+  "sets.unit": "набор",
+  "view.label": "Вид каталога",
+  "view.big": "▭ Крупные",
+  "view.grid": "▦ Сетка",
   "pwa.title": "Добавьте ZRN на экран телефона",
   "pwa.text": "Свежий кофе, статус заказа и подписка — одним касанием, без поиска сайта.",
   "pwa.install": "Установить",
@@ -2704,6 +2776,8 @@ const BLENDS = [
   "price2": 695
  }
 ];
+const SETS = [];
+const SET_I18N = {};
 const BLOG = [
  {
   "id": "brew-guide",
@@ -3010,6 +3084,7 @@ function setLanguage(lang, opts){
   if(typeof renderGrid === 'function' && typeof PRODUCTS !== 'undefined'){
     renderGrid('grid', PRODUCTS);
     renderGrid('blendGrid', BLENDS);
+    if(typeof renderSets==='function') renderSets();
   }
   if(typeof renderCart === 'function') renderCart();
   if(typeof renderDeliveryPayment === 'function') renderDeliveryPayment();
@@ -3020,7 +3095,8 @@ function setLanguage(lang, opts){
     const hash = location.hash.replace('#','');
     let st = window._modalUIState || null;
     if(!st && hash) st = {id: hash};
-    if(st && st.id && typeof openProduct === 'function') openProduct(st.id, st);
+    if(st && st.id && String(st.id).indexOf('set-')===0 && typeof openSet === 'function') openSet(st.id, st);
+    else if(st && st.id && typeof openProduct === 'function') openProduct(st.id, st);
   }
   // refresh open blog post
   if(document.getElementById('blogOverlay')?.classList.contains('open')){
@@ -3115,6 +3191,7 @@ window.addEventListener('scroll', ()=>{
 window.addEventListener('load', updateNavFromScroll);
 
 const ALL_PRODUCTS = [...PRODUCTS, ...BLENDS];
+var SET_PRODS = [];   /* набори як «товари» для кошика; будуються в renderSets() під поточну мову */
 
 /* JSON-LD: каталог товарів генерується з PRODUCTS і BLENDS */
 (function(){
@@ -3191,8 +3268,156 @@ const revealObserver = new IntersectionObserver((entries)=>{
   entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); revealObserver.unobserve(en.target); } });
 },{threshold:.12});
 
+
+/* ===== Набори знайомства: дані з листа «Набори» (генеруються збіркою у блок SETS) ===== */
+function setTx(sd, f){
+  const pack = (typeof SET_I18N!=='undefined' && SET_I18N[sd.id]) ? SET_I18N[sd.id] : null;
+  return (currentLang==='ru' && pack && pack[f]) ? pack[f] : (sd[f] || '');
+}
+function setPack(sd){
+  const ws = sd.items.map(i=>i.w), same = ws.every(w=>w===ws[0]);
+  return same ? t('sets.pack').replace('{n}', ws.length).replace('{w}', ws[0]) : t('sets.packMix').replace('{n}', ws.length);
+}
+function buildSetProds(){
+  SET_PRODS = (typeof SETS!=='undefined' ? SETS : []).map(sd=>{
+    const comps = sd.items.map(i=>({p: ALL_PRODUCTS.find(x=>x.id===i.id), w: i.w})).filter(c=>c.p);
+    if(comps.length !== sd.items.length) return null;      /* сорт зник із каталогу — набір не показуємо */
+    return {
+      id: sd.id, isSet: true, name: setTx(sd,'name'), alt: setTx(sd,'name'), img: comps[0].p.img, accent: '#a9792f',
+      w1: 0, w2: 0, price1: sd.price, price2: sd.price, worth: sd.worth||0, badge: setTx(sd,'badge'), desc: setTx(sd,'desc'),
+      wlabel: setPack(sd), comps: comps,
+      contents: comps.map(c=>c.p.name+' '+c.w+' г').join(' + ')
+    };
+  }).filter(Boolean);
+}
+function renderSets(){
+  buildSetProds();
+  const sec = document.getElementById('setGrid') && document.getElementById('sets');
+  if(!sec) return;
+  const grid = document.getElementById('setGrid');
+  sec.hidden = !SET_PRODS.length;
+  if(!SET_PRODS.length){ grid.innerHTML=''; return; }
+  grid.innerHTML = SET_PRODS.map(sp=>{
+    const shown = sp.comps.slice(0,4), more = sp.comps.length-shown.length;
+    return `<div class="card in set-card" id="${sp.id}" data-open-set="${sp.id}" style="--accent:#a9792f">
+      ${sp.badge?`<div class="card-badge badge-new">${sp.badge}</div>`:''}
+      <div class="set-thumbs" style="--n:${shown.length+(more>0?1:0)}">${shown.map(c=>`<img src="${c.p.img}" alt="" loading="lazy" decoding="async">`).join('')}${more>0?`<div class="more">+${more}</div>`:''}</div>
+      <div class="card-body">
+        <h3><a class="card-link" href="#" onclick="event.preventDefault()">${sp.name}</a></h3>
+        <div class="fresh-badge">${sp.wlabel}</div>
+        <div class="set-comp">${sp.comps.map(c=>c.p.name).join(' · ')}</div>
+        ${sp.desc?`<div class="card-notes">${sp.desc}</div>`:''}
+        <div class="price-row">
+          <div>
+            <div class="price">${sp.price1} ₴</div>
+            ${sp.worth?`<div class="price-sec set-worth">${t('sets.separately')} <s>${sp.worth} ₴</s></div>`:''}
+          </div>
+          <button class="add" data-set="${sp.id}">${t('sets.choose')}</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  grid.querySelectorAll('.set-card').forEach(c=>{
+    c.onclick = (e)=>{ if(e.target.classList.contains('add')) return; openSet(c.dataset.openSet); };
+  });
+  grid.querySelectorAll('.add[data-set]').forEach(b=>{ b.onclick = (e)=>{ e.stopPropagation(); openSet(b.dataset.set); }; });
+}
+
+function openSet(id, restore){
+  const sp = SET_PRODS.find(x=>x.id===id);
+  if(!sp) return;
+  restore = restore || window._modalUIState || null;
+  if(restore && restore.id && restore.id!==id) restore = null;
+  if(!restore && window.zrnTrack) zrnTrack('view_item', {currency:'UAH', value:sp.price1, items:[{item_id:sp.id, item_name:sp.name, price:sp.price1, quantity:1}]});
+  genericModal.style.setProperty('--accent', '#a9792f');
+  genericModal.setAttribute('role','dialog'); genericModal.setAttribute('aria-modal','true'); genericModal.setAttribute('aria-label', sp.name);
+  const shown = sp.comps.slice(0,4);
+  genericModal.innerHTML = `
+    <div class="modal-top"><button type="button" class="modal-close" id="modalClose" aria-label="Close">×</button></div>
+    <div class="modal-grid">
+      <div class="set-collage" data-n="${shown.length}">${shown.map(c=>`<img src="${c.p.img}" alt="">`).join('')}</div>
+      <div class="modal-body">
+        <div class="modal-head">
+          ${sp.badge?`<div class="blend-kicker modal-kicker">${sp.badge}</div>`:''}
+          <h2>${sp.name}</h2>
+          <div class="modal-origin">${sp.wlabel}</div>
+        </div>
+        ${sp.desc?`<p class="desc modal-lead">${sp.desc}</p>`:''}
+        <div class="set-list" aria-label="${t('sets.contains')}">${sp.comps.map(c=>`<div class="set-row"><img src="${c.p.img}" alt=""><span><b>${c.p.name}</b><small>${pt(c.p,'notes')}</small></span><span class="w">${c.w} ${t('ui.g')}</span></div>`).join('')}</div>
+        <div class="modal-buy">
+          <div class="buy-fields">
+            <div class="field">
+              <label>${t('ui.grind')}</label>
+              <div class="pill-row" id="grindRow">${GRINDS.map((g,i)=>`<button type="button" class="pill ${i===0?'active':''}" data-g="${g}">${dispGrind(g)}</button>`).join('')}</div>
+              <div class="pill-row" id="grindSubRow" style="display:none;margin-top:8px"></div>
+              <div class="grind-tip" id="grindTip"></div>
+            </div>
+            <div class="field" style="margin-top:12px">
+              <label>${t('ui.qty')}</label>
+              <div class="qty-stepper"><button type="button" id="qtyMinus">−</button><span id="qtyValue">1</span><button type="button" id="qtyPlus">+</button></div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <span class="modal-price" id="modalPrice">${sp.price1} ₴</span>
+            ${sp.worth?`<div class="price-meta">${t('sets.save').replace('{n}', sp.worth-sp.price1)}</div>`:''}
+            <div class="modal-add-row"><button type="button" class="modal-add">${t('ui.add')}</button></div>
+            <div class="modal-after" id="modalAfter" hidden>
+              <button type="button" class="modal-go" id="modalGoCart">${t('ui.toCart')}</button>
+              <button type="button" class="modal-continue" id="modalContinue">${t('ui.continue')}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  genericModal.querySelector('#modalClose').onclick = closeModal;
+  let gMain = (restore && restore.grindMain) || GRINDS[0], gSub = (restore && restore.grindSub) || GRIND_TYPES[2].label, qty = (restore && Number(restore.qty)) || 1;
+  const qv = genericModal.querySelector('#qtyValue'); qv.textContent = qty;
+  function save(){ window._modalUIState = {id: sp.id, grindMain: gMain, grindSub: gSub, qty: qty}; }
+  function grind(){ return gMain==='Мелена' ? `Мелена (${gSub})` : 'Зернова'; }
+  function tip(){
+    const el = genericModal.querySelector('#grindTip');
+    if(gMain!=='Мелена'){ el.textContent = grindTipBean(); return; }
+    const g = GRIND_TYPES.find(x=>x.label===gSub);
+    el.textContent = g ? (currentLang==='ru' && g.tipRu ? g.tipRu : g.tip) : '';
+  }
+  function sub(){
+    const row = genericModal.querySelector('#grindSubRow');
+    if(gMain==='Мелена'){
+      row.style.display='flex';
+      row.innerHTML = GRIND_TYPES.map(g=>`<button class="pill ${g.label===gSub?'active':''}" data-sub="${g.label}">${dispGrind(g.label)}</button>`).join('');
+      row.querySelectorAll('.pill').forEach(b=>{ b.onclick=()=>{ row.querySelectorAll('.pill').forEach(x=>x.classList.remove('active')); b.classList.add('active'); gSub=b.dataset.sub; tip(); save(); }; });
+    } else { row.style.display='none'; row.innerHTML=''; }
+    tip();
+  }
+  genericModal.querySelectorAll('#grindRow .pill').forEach(b=>{
+    b.classList.toggle('active', b.dataset.g===gMain);
+    b.onclick=()=>{ genericModal.querySelectorAll('#grindRow .pill').forEach(x=>x.classList.remove('active')); b.classList.add('active'); gMain=b.dataset.g; sub(); save(); };
+  });
+  sub();
+  genericModal.querySelector('#qtyMinus').onclick=()=>{ if(qty>1){ qty--; qv.textContent=qty; save(); } };
+  genericModal.querySelector('#qtyPlus').onclick=()=>{ qty++; qv.textContent=qty; save(); };
+  genericModal.querySelector('.modal-add').onclick=(e)=>{
+    addToCart(sp.id, grind(), 0, qty);
+    if(window.zrnTrack) zrnTrack('add_to_cart', {currency:'UAH', value:sp.price1*qty, items:[{item_id:sp.id, item_name:sp.name, item_variant:sp.wlabel+', '+grind(), price:sp.price1, quantity:qty}]});
+    const btn=e.currentTarget, orig=btn.textContent; btn.textContent=t('ui.added'); btn.disabled=true;
+    setTimeout(()=>{ btn.textContent=orig; btn.disabled=false; },1300);
+    const after=genericModal.querySelector('#modalAfter'); if(after) after.hidden=false;
+  };
+  genericModal.querySelector('#modalGoCart').onclick=()=>{ closeModal(); openDrawer(); };
+  genericModal.querySelector('#modalContinue').onclick=closeModal;
+  save();
+  modalOverlay.classList.add('open');
+  document.body.style.overflow='hidden';
+  if(!restore) genericModal.scrollTop=0;
+  if(typeof stickyCartBar!=='undefined' && stickyCartBar) stickyCartBar.classList.remove('show');
+  if(!window._zrnBaseTitle) window._zrnBaseTitle=document.title;
+  document.title = sp.name+' — ZRN Coffee';
+  const cb=genericModal.querySelector('#modalClose'); if(cb) cb.focus();
+}
+
 renderGrid('grid', PRODUCTS);
 renderGrid('blendGrid', BLENDS);
+renderSets();
 
 const blogGrid = document.getElementById('blogGrid');
 function renderBlogGrid(){
@@ -3620,6 +3845,9 @@ const CART_KEY = 'zrn_cart_v2';
 let cart = {};
 /* Залишає лише валідні позиції: id є в ALL_PRODUCTS, вага 200/500, кількість — ціле > 0.
    Повертає true, якщо щось було видалено/виправлено. */
+function cartPool(){ return ALL_PRODUCTS.concat(SET_PRODS||[]); }
+function cartFind(id){ return cartPool().find(x=>x.id===id); }
+function cartLabel(p, w){ return p && p.isSet ? p.wlabel : (w+' '+t('ui.g')); }
 function sanitizeCart(){
   let changed = false;
   const clean = {};
@@ -3628,7 +3856,7 @@ function sanitizeCart(){
     const parts = String(key).split('|');
     const id = parts[0], w = Number(parts[2]);
     const q = Math.floor(Number(qty));
-    if(parts.length===3 && ALL_PRODUCTS.some(x=>x.id===id && (x.w1===w || x.w2===w)) && q>0){
+    if(parts.length===3 && cartPool().some(x=>x.id===id && (x.w1===w || x.w2===w)) && q>0){
       clean[key] = q;
       if(q!==qty) changed = true;
     } else changed = true;
@@ -3640,7 +3868,7 @@ function sanitizeCart(){
 function cartLines(){
   return Object.entries(cart).map(([key,qty])=>{
     const [id,grind,w] = key.split('|');
-    const p = ALL_PRODUCTS.find(x=>x.id===id);
+    const p = cartFind(id);
     const weight = Number(w);
     return p ? {key, id, grind, weight, qty, p, unit: priceFor(p, weight)} : null;
   }).filter(Boolean);
@@ -3728,14 +3956,14 @@ function renderCart(){
   toCheckoutBtn.disabled = false;
   cartItems.innerHTML = items.map(([key,qty])=>{
     const [id,grind,w] = key.split('|');
-    const p = ALL_PRODUCTS.find(x=>x.id===id);
+    const p = cartFind(id);
     if(!p) return '';
     const unitPrice = priceFor(p, Number(w));
     return `<div class="cart-row">
       <img class="ci-thumb" src="${p.img}" alt="${p.alt || p.name}" width="52" height="68" loading="lazy">
       <div class="ci-info">
         <div class="ci-name">${p.name}</div>
-        <div class="ci-grind">${w} ${t('ui.g')} · ${dispGrind(grind)} · ${unitPrice} ₴${t('cart.perItem')}</div>
+        <div class="ci-grind">${cartLabel(p, w)} · ${dispGrind(grind)} · ${unitPrice} ₴${t('cart.perItem')}</div>
         <div class="ci-bottom">
           <div class="qty-stepper qty-stepper-sm">
             <button type="button" data-qm="${key}">−</button>
@@ -3781,7 +4009,7 @@ function updateStickyBar(){
 }
 window.addEventListener('scroll', updateStickyBar, {passive:true});
 window.addEventListener('resize', updateStickyBar, {passive:true});
-function zrnCartItems(){ return cartLines().map(l=>({item_id:l.id, item_name:l.p.name, item_variant:l.weight+' г, '+l.grind, price:l.unit, quantity:l.qty})); }
+function zrnCartItems(){ return cartLines().map(l=>({item_id:l.id, item_name:l.p.name, item_variant:(l.p.isSet ? l.p.wlabel : l.weight+' г')+', '+l.grind, price:l.unit, quantity:l.qty})); }
 function openDrawer(){
   if(window.zrnTrack && cartLines().length) zrnTrack('view_cart', {currency:'UAH', value:cartTotal(), items:zrnCartItems()});
   overlay.classList.add('open');
@@ -3914,9 +4142,10 @@ document.getElementById('orderForm').onsubmit = async function(e){
   const total = cartTotal();
   const itemLines = items.map(([key,qty])=>{
     const [id,grind,w] = key.split('|');
-    const p = ALL_PRODUCTS.find(x=>x.id===id);
+    const p = cartFind(id);
     if(!p) return '';
     const linePrice = priceFor(p, Number(w));
+    if(p.isSet) return `${p.name} [набір: ${p.contents}] — ${grind}, ${qty} шт — ${linePrice*qty} ₴`;
     return `${p.name} — ${w} г, ${grind}, ${qty} шт — ${linePrice*qty} ₴`;
   }).filter(Boolean);
 
@@ -4463,11 +4692,11 @@ function renderOrderSummary(){
   let total=0;
   const rows = items.map(([key,qty])=>{
     const [id,grind,w]=key.split('|');
-    const p = ALL_PRODUCTS.find(x=>x.id===id);
+    const p = cartFind(id);
     if(!p) return '';
     const line = priceFor(p, Number(w))*qty;
     total += line;
-    return `<div class="os-row"><span>${p.name} · ${w} г · ${qty} шт</span><b>${line} ₴</b></div>`;
+    return `<div class="os-row"><span>${p.name} · ${p.isSet ? p.wlabel : w+' г'} · ${qty} шт</span><b>${line} ₴</b></div>`;
   }).join('');
   box.innerHTML = `<div style="font-weight:600;margin-bottom:6px">${t('ck.summary')}</div>${rows}<div class="os-total"><span>${t('cart.total')}</span><span>${total} ₴</span></div>`;
 }
@@ -4557,6 +4786,23 @@ if(typeof showReorderBox==='function') showReorderBox();
     openProduct(p.id);
   } else if(h==='ship' && typeof openShipModal==='function'){ openShipModal(); }
   else if(h==='blog' && typeof openBlogOverlay==='function'){ openBlogOverlay(); }
+})();
+
+/* ===== Вигляд каталогу на телефоні: великі картки (за замовч.) / сітка 2 в ряд; вибір запам'ятовується ===== */
+(function(){
+  const box=document.getElementById('viewSwitch'); if(!box) return;
+  function get(){ try{ return localStorage.getItem('zrn_view')==='grid' ? 'grid' : 'big'; }catch(e){ return 'big'; } }
+  function apply(v){
+    document.documentElement.classList.toggle('view-grid', v==='grid');
+    box.querySelectorAll('button').forEach(function(b){ b.setAttribute('aria-pressed', b.getAttribute('data-view')===v ? 'true' : 'false'); });
+  }
+  box.addEventListener('click', function(e){
+    const b=e.target.closest && e.target.closest('button[data-view]'); if(!b) return;
+    const v=b.getAttribute('data-view'); try{ localStorage.setItem('zrn_view', v); }catch(err){}
+    apply(v);
+    if(window.zrnTrack) try{ zrnTrack('select_content', {content_type:'catalog_view', item_id:v}); }catch(err){}
+  });
+  apply(get());
 })();
 
 /* ===== Встановлення як застосунок (PWA) =====
