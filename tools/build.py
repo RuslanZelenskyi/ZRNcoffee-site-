@@ -125,6 +125,52 @@ def truthy(v):
     return str(v).strip().lower() not in ('ні', 'нет', 'no', 'false', '0', '-', 'hide', 'приховати')
 
 
+def sets_from(sheet, cat):
+    """Набори знайомства: з листа «Набори» (якщо він є), інакше з catalog.json → "sets". Показуємо лише коректні й увімкнені."""
+    raw = sheet.get('sets') if isinstance(sheet, dict) and isinstance(sheet.get('sets'), list) else (cat.get('sets') or [])
+    prods = {p['id']: p for p in cat['products']}
+    out = []
+    for idx, r in enumerate(raw):
+        sid = str(r.get('id', '')).strip()
+        if not sid or not truthy(r.get('show', 'Так')):
+            continue
+        if not re.fullmatch(r'[A-Za-z0-9_-]+', sid):
+            sys.stderr.write(f'Увага: набір «{sid}»: ID має бути латиницею/цифрами — пропущено.\n')
+            continue
+        name_uk = str(r.get('nameUk', '')).strip()
+        price = posint(r.get('price'))
+        defw = posint(r.get('defW'))
+        items, bad = [], False
+        for part in re.split(r'[,;\n]', str(r.get('items', ''))):
+            part = part.strip()
+            if not part:
+                continue
+            m = re.fullmatch(r'([A-Za-z0-9_-]+)\s*(?::\s*(\d+(?:[.,]\d+)?))?', part)
+            if not m:
+                bad = True
+                break
+            w = posint(m.group(2)) if m.group(2) else defw
+            if m.group(1) not in prods or not w:
+                sys.stderr.write(f'Увага: набір «{sid}»: сорт «{m.group(1)}» схований, відсутній у листі «Ціни» або без ваги — набір не показано.\n')
+                bad = True
+                break
+            items.append({'id': m.group(1), 'w': w})
+        if bad or len(items) < 2 or not name_uk or not price:
+            if not bad:
+                sys.stderr.write(f'Увага: набір «{sid}»: потрібні назва, ціна й щонайменше 2 сорти — не показано.\n')
+            continue
+        worth = int(round(sum(prods[i['id']]['price1'] / prods[i['id']]['w1'] * i['w'] for i in items)))
+        o = posint(r.get('order'))
+        name_ru = str(r.get('nameRu', '')).strip() or name_uk
+        desc_uk = str(r.get('descUk', '')).strip()
+        badge_uk = str(r.get('badgeUk', '')).strip()
+        out.append(((o if o is not None else 1e9, idx), {
+            'id': 'set-' + sid.lower(), 'name': name_uk, 'desc': desc_uk, 'badge': badge_uk,
+            'price': price, 'worth': worth if worth > price else 0, 'items': items,
+            'ru': {'name': name_ru, 'desc': str(r.get('descRu', '')).strip() or desc_uk, 'badge': str(r.get('badgeRu', '')).strip() or badge_uk}}))
+    return [x[1] for x in sorted(out, key=lambda x: x[0])]
+
+
 REVIEWS_DATA = None   # None = у таблиці немає даних про відгуки (старий Apps Script) → блок у index.html не чіпаємо
 
 
@@ -192,6 +238,7 @@ def apply_sheet(cat):
     cat['products'] = sorted(shown, key=lambda p: p['_ord'])
     for p in cat['products']:
         p.pop('_ord', None)
+    cat['sets_out'] = sets_from(sheet, cat)
     global REVIEWS_DATA
     if sheet and isinstance(sheet.get('reviews'), list):
         REVIEWS_DATA = reviews_from(sheet)
@@ -265,6 +312,9 @@ def js_block(cat):
     out.append('const BLOG_I18N = ' + j(blog_i18n) + ';')
     out.append('const PRODUCTS = ' + j([base(p) for p in mono]) + ';')
     out.append('const BLENDS = ' + j([base(p) for p in blend]) + ';')
+    sets = cat.get('sets_out') or []
+    out.append('const SETS = ' + j([{k: v for k, v in x.items() if k != 'ru'} for x in sets]) + ';')
+    out.append('const SET_I18N = ' + j({x['id']: x['ru'] for x in sets}) + ';')
     out.append('const BLOG = ' + j(blog) + ';')
     out.append('const TASTE_PROFILE = ' + j(taste) + ';')
     out.append('const BREW_GUIDE = ' + j(cat['brewGuide']) + ';')
