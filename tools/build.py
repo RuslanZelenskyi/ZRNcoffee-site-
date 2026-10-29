@@ -121,6 +121,21 @@ def posint(v):
     return int(round(f)) if f > 0 and abs(f - round(f)) < 1e-9 else None
 
 
+def badge_from(v):
+    """Текст із колонки «Плашка» → (текст українською для сайту, тип для стилю). Порожньо → (None, None)."""
+    t = str(v or '').strip()
+    if not t or t in ('-', '—', 'ні', 'Ні', 'нет', 'Нет'):
+        return None, None
+    k = t.lower().replace('ё', 'е')
+    if k.startswith('популярн'):
+        return 'Популярне', 'popular'
+    if k.startswith('новинк'):
+        return 'Новинка', 'new'
+    if k.startswith('вибір') or k.startswith('выбор'):
+        return 'Вибір роастмайстера', 'choice'
+    return t[:30], 'choice'
+
+
 def truthy(v):
     return str(v).strip().lower() not in ('ні', 'нет', 'no', 'false', '0', '-', 'hide', 'приховати')
 
@@ -232,6 +247,8 @@ def apply_sheet(cat):
             o = posint(r.get('order'))
             if o is not None:
                 p['_ord'] = (o, idx)
+            if 'badge' in r:   # колонка «Плашка» є в таблиці: порожньо = без плашки; немає колонки (старий скрипт) = як у catalog.json
+                p['badge'], p['badgeType'] = badge_from(r.get('badge'))
         shown.append(p)
     if not shown:
         fail('усі сорти приховані в листі «Ціни» — на сайті має лишитися хоча б один.')
