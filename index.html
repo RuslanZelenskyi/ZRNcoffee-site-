@@ -305,6 +305,7 @@ section{padding:56px 0;}
 @keyframes badgeShine{0%{background-position:160% 0;}60%{background-position:-60% 0;}100%{background-position:-60% 0;}}
 .badge-popular{background:linear-gradient(135deg,#7d5715,#6e4c14);}
 .badge-new{background:linear-gradient(135deg,#1f6f62,#17564c);}
+.badge-choice{background:linear-gradient(135deg,#3b2a1a,#241a10); box-shadow:0 0 0 1px #c9a15a inset, 0 4px 10px -4px rgba(0,0,0,.4);}
 .card-body{padding:14px 16px 16px; display:flex; flex-direction:column; gap:5px; flex:1;}
 .card-body h3{font-size:1rem; font-weight:500;}
 .card-body h3 a{color:inherit; text-decoration:none;}
@@ -327,8 +328,12 @@ section{padding:56px 0;}
 /* набори знайомства */
 .sets-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:20px;}
 .set-thumbs{display:grid; grid-template-columns:repeat(var(--n,3),minmax(0,1fr)); background:var(--dark); gap:2px;}
-.set-thumbs img{aspect-ratio:1/1 !important; width:100%; height:auto; object-fit:cover; display:block;}
-.set-thumbs .more{display:flex; align-items:center; justify-content:center; color:#e6c98a; font-family:'Fraunces',serif; font-size:1.3rem; background:#2a2217; aspect-ratio:1/1;}
+[data-nav="sets"][hidden]{display:none !important;}
+.set-media{background:var(--dark);}
+.set-media .card-badge{position:relative; top:auto; left:auto; display:inline-block; margin:11px 0 0 11px;}
+.set-media .card-badge + .set-thumbs{margin-top:10px;}
+.set-thumbs img{aspect-ratio:4/5 !important; width:100%; height:auto; object-fit:cover; display:block;}
+.set-thumbs .more{display:flex; align-items:center; justify-content:center; color:#e6c98a; font-family:'Fraunces',serif; font-size:1.3rem; background:#2a2217; aspect-ratio:4/5;}
 .set-comp{font-size:.8rem; color:var(--ink); line-height:1.4;}
 .set-worth{margin-top:2px;}
 .set-worth s{opacity:.8;}
@@ -345,7 +350,8 @@ section{padding:56px 0;}
 .set-collage img{width:100% !important; height:100% !important; aspect-ratio:auto !important; border-radius:0 !important; box-shadow:none !important; object-fit:cover;}
 .set-collage[data-n="2"]{grid-template-rows:1fr;}
 .set-collage[data-n="3"] img:first-child{grid-row:span 2;}
-@media(max-width:600px){ #genericModal .modal-grid > .set-collage{position:absolute; top:2px; left:18px; width:110px; height:110px;} }
+@media(min-width:521px){ #genericModal .modal-grid:has(> .set-collage){grid-template-columns:210px 1fr;} }
+@media(max-width:600px){ #genericModal .modal-grid > .set-collage{position:absolute; top:2px; left:18px; width:150px; height:150px;} #genericModal .modal-grid:has(> .set-collage) .modal-head{margin-left:166px; min-height:154px;} }
 /* вигляд каталогу на телефоні: великі картки (за замовч.) або сітка 2 в ряд */
 .view-switch{display:none; gap:0; border:1px solid var(--line); border-radius:8px; overflow:hidden; align-self:center;}
 .view-switch button{font:inherit; font-size:.78rem; padding:7px 12px; border:0; background:transparent; color:var(--sub); cursor:pointer; min-height:36px;}
@@ -881,6 +887,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
   <div class="wrap hd-inner">
     <a href="#hero" class="hd-logo" onclick="scrollToSel('#hero');return false;" aria-label="ZRN Craft Micro Roastery"><span>Craft</span><span>Micro</span><span>Roastery</span></a>
     <nav class="hd-links" aria-label="Основна навігація" data-i18n-aria="nav.aria">
+      <a data-nav="sets" href="#sets" hidden onclick="scrollToSel('#sets');return false;" data-i18n="nav.sets">Набори</a>
       <a data-nav="catalog" href="#catalog" onclick="scrollToSel('#catalog');return false;" data-i18n="nav.catalog">Моносорти</a>
       <a data-nav="blends" href="#blends" onclick="scrollToSel('#blends');return false;" data-i18n="nav.blends">Бленди</a>
       <a data-nav="club" data-club-hide href="#club" onclick="scrollToSel('#club');return false;" data-i18n="nav.club">Клуб</a>
@@ -912,6 +919,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       <span>ZRN</span>
       <button type="button" class="modal-close" id="mobileNavClose" aria-label="Закрити">×</button>
     </div>
+    <a class="mn-link" data-nav="sets" href="#sets" hidden onclick="closeMobileNav();scrollToSel('#sets');return false;" data-i18n="nav.sets">Набори</a>
     <a class="mn-link" data-nav="catalog" href="#catalog" onclick="closeMobileNav();scrollToSel('#catalog');return false;" data-i18n="nav.catalog">Моносорти</a>
     <a class="mn-link" data-nav="blends" href="#blends" onclick="closeMobileNav();scrollToSel('#blends');return false;" data-i18n="nav.blends">Бленди</a>
     <a class="mn-link" data-nav="club" data-club-hide href="#club" onclick="closeMobileNav();scrollToSel('#club');return false;" data-i18n="nav.club">Клуб</a>
@@ -1459,6 +1467,7 @@ uk: {
   'meta.desc': 'Свіжообсмажена кава ZRN. Моносорти та авторські бленди. Обсмаження під замовлення, зерно або мелена кава. Доставка по Україні.',
   'nav.aria': 'Основна навігація',
   'nav.catalog': 'Моносорти',
+  'nav.sets': 'Набори',
   'nav.blends': 'Бленди',
   'nav.blog': 'Блог',
   'nav.why': 'Чому<br>ми?',
@@ -1641,6 +1650,7 @@ uk: {
   'grind.tipBean': 'Цілі зерна — змелете самостійно під потрібний спосіб приготування.',
   'badge.popular': 'Популярне',
   'badge.new': 'Новинка',
+  'badge.choice': 'Вибір роастмайстера',
   "nav.club": "Клуб",
   "club.title": "Клуб ZRN",
   "club.sub": "Кава, про яку подбали заздалегідь.",
@@ -1774,6 +1784,7 @@ ru: {
   'meta.desc': 'Свежеобжаренный кофе ZRN. Моносорты и авторские бленды. Обжарка под заказ, зерно или молотый кофе. Доставка по Украине.',
   'nav.aria': 'Основная навигация',
   'nav.catalog': 'Моносорты',
+  'nav.sets': 'Наборы',
   'nav.blends': 'Бленды',
   'nav.blog': 'Блог',
   'nav.why': 'Почему<br>мы?',
@@ -1956,6 +1967,7 @@ ru: {
   'grind.tipBean': 'Целые зёрна — смелете самостоятельно под нужный способ приготовления.',
   'badge.popular': 'Популярное',
   'badge.new': 'Новинка',
+  'badge.choice': 'Выбор роастмастера',
   "nav.club": "Клуб",
   "club.title": "Клуб ZRN",
   "club.sub": "Кофе, о котором позаботились заранее.",
@@ -2980,6 +2992,7 @@ function dispBrew(b){
 function dispBadge(b){
   if(b==='Популярне') return t('badge.popular');
   if(b==='Новинка') return t('badge.new');
+  if(b==='Вибір роастмайстера') return t('badge.choice');
   return b;
 }
 function dispRoast(r){
@@ -3296,12 +3309,13 @@ function renderSets(){
   if(!sec) return;
   const grid = document.getElementById('setGrid');
   sec.hidden = !SET_PRODS.length;
+  document.querySelectorAll('[data-nav="sets"]').forEach(a=>{a.hidden=!SET_PRODS.length;});
   if(!SET_PRODS.length){ grid.innerHTML=''; return; }
   grid.innerHTML = SET_PRODS.map(sp=>{
     const shown = sp.comps.slice(0,4), more = sp.comps.length-shown.length;
     return `<div class="card in set-card" id="${sp.id}" data-open-set="${sp.id}" style="--accent:#a9792f">
-      ${sp.badge?`<div class="card-badge badge-new">${sp.badge}</div>`:''}
-      <div class="set-thumbs" style="--n:${shown.length+(more>0?1:0)}">${shown.map(c=>`<img src="${c.p.img}" alt="" loading="lazy" decoding="async">`).join('')}${more>0?`<div class="more">+${more}</div>`:''}</div>
+      <div class="set-media">${sp.badge?`<div class="card-badge badge-new">${sp.badge}</div>`:''}
+      <div class="set-thumbs" style="--n:${shown.length+(more>0?1:0)}">${shown.map(c=>`<img src="${c.p.img}" alt="" loading="lazy" decoding="async">`).join('')}${more>0?`<div class="more">+${more}</div>`:''}</div></div>
       <div class="card-body">
         <h3><a class="card-link" href="#" onclick="event.preventDefault()">${sp.name}</a></h3>
         <div class="fresh-badge">${sp.wlabel}</div>
