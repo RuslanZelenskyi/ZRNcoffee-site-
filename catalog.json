@@ -3,7 +3,11 @@
   "site": {
     "url": "https://zrncoffee.com.ua",
     "telegram": "https://t.me/zrncoffee",
-    "email": "zrncoffee@gmail.com"
+    "email": "zrncoffee@gmail.com",
+    "phones": ["+380505286527", "+380735286527"],
+    "instagram": "https://www.instagram.com/zrncoffee/",
+    "instagramHandle": "@zrncoffee",
+    "city": {"uk": "Черкаси", "ru": "Черкассы"}
   },
   "products": [
     {
