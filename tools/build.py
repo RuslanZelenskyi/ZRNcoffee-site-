@@ -365,6 +365,7 @@ def build_index(cat):
     s = s[:a] + js_block(cat) + s[b:]
     s = replace_between(s, '<!--CAT:NOSCRIPT:START-->', '<!--CAT:NOSCRIPT:END-->', noscript_block(cat), 'CAT:NOSCRIPT')
     s = replace_between(s, '/*SETTINGS:START*/', '/*SETTINGS:END*/', 'const ZRN_SET = ' + json.dumps(SETTINGS) + ';', 'SETTINGS')
+    s = replace_between(s, '<!--FAQ:LD:START-->', '<!--FAQ:LD:END-->', faq_ld_tag(s, 'uk'), 'FAQ:LD')
     # числа у статичному HTML (для пошуковиків і режиму без JS): <span data-v="free">1400</span>
     if REVIEWS_DATA is not None:
         rj = json.dumps(REVIEWS_DATA, ensure_ascii=False).replace('</', '<\\/').replace('\u2028', '\\u2028').replace('\u2029', '\\u2029')
@@ -390,6 +391,30 @@ def ui_texts(index_src):
     def tok(v):
         return v.replace('{free}', str(SETTINGS['freeShip'])).replace('{heroW}', str(SETTINGS['heroW'])).replace('{heroP}', str(SETTINGS['heroP']))
     return {lang: {k: tok(get(lang, k)) for k in keys} for lang in LANGS}
+
+
+def faq_ld_tag(index_src, lang):
+    """Статична розмітка FAQPage з тих самих текстів faq.q1..N / faq.a1..N, що показуються на сайті (для пошуковиків без JS)."""
+    start = index_src.index('const ZRN_I18N = {')
+    ru_at = index_src.index('\nru: {', start)
+    part = index_src[start:ru_at] if lang == 'uk' else index_src[ru_at:ru_at + 400000]
+
+    def get(key):
+        m = re.search(r"'" + re.escape(key) + r"':\s*'((?:[^'\\]|\\.)*)'", part)
+        if not m:
+            return None
+        v = m.group(1).replace("\\'", "'").replace('\\\\', '\\')
+        return v.replace('{free}', str(SETTINGS['freeShip'])).replace('{heroW}', str(SETTINGS['heroW'])).replace('{heroP}', str(SETTINGS['heroP']))
+    items = []
+    for i in range(1, 31):
+        q, a = get(f'faq.q{i}'), get(f'faq.a{i}')
+        if not q or not a:
+            break
+        items.append({'@type': 'Question', 'name': q, 'acceptedAnswer': {'@type': 'Answer', 'text': a}})
+    if not items:
+        fail('не знайдено тексти FAQ (faq.q1/faq.a1) в index.html')
+    ld = {'@context': 'https://schema.org', '@type': 'FAQPage', 'inLanguage': 'ru' if lang == 'ru' else 'uk', 'mainEntity': items}
+    return '<script type="application/ld+json" id="ld-faq">' + json.dumps(ld, ensure_ascii=False).replace('</', '<\\/') + '</script>'
 
 
 # ------------------------------------------------------------------ сторінки
@@ -1010,6 +1035,9 @@ class Site:
         self.url = cat['site']['url'].rstrip('/')
         self.tg = cat['site']['telegram']
         self.email = cat['site']['email']
+        self.phones = cat['site'].get('phones', [])
+        self.insta = cat['site'].get('instagram', '')
+        self.city = cat['site'].get('city', {})
         self.prods = cat['products']
         self.posts = cat['posts']
         self.ui_txt = ui_texts(index_src)
@@ -1105,16 +1133,24 @@ class Site:
     def footer(self, lang):
         u = UI[lang]
         home = '/' if lang == 'uk' else '/ru/'
+        def fmt(ph):
+            d = re.sub(r'\D', '', ph)
+            return f'+{d[:2]} {d[2:5]} {d[5:8]} {d[8:10]} {d[10:12]}' if len(d) == 12 else ph
+        phones_html = ' '.join(f'<a href="tel:{ph}">{fmt(ph)}</a>' for ph in self.phones)
+        city_html = f'<div class="foot-city">{"м." if lang == "uk" else "г."} {self.city.get(lang, "")}{" · відправляємо по всій Україні" if lang == "uk" else " · отправляем по всей Украине"}</div>' if self.city.get(lang) else ''
         sub_foot = (f'<a href="{u["pre"]}/subscription/">{"Моя підписка" if lang == "uk" else "Моя подписка"}</a>') if SETTINGS['sub']['on'] else ''
         return f'''</main>
 <footer class="site-foot">
   <div class="wrap">
     <div class="foot-brand"><b>ZRN</b> {u['foot']}</div>
+    {city_html}
     <div class="foot-links">
       <a href="{home}">ZRN Coffee</a>
       <a href="{u['pre']}/blog/">{u['blog']}</a>
       <a href="{self.tg}" rel="noopener">Telegram</a>
+      {f'<a href="{self.insta}" rel="noopener me">Instagram</a>' if self.insta else ''}
       <a href="mailto:{self.email}">{u['mail']}</a>
+      {phones_html}
       <a href="/oferta/">{u['offer']}</a>
       <a href="/privacy/">{u['privacy']}</a>
       <a href="{u['pre']}/status/">{'Статус замовлення' if lang == 'uk' else 'Статус заказа'}</a>
@@ -1384,6 +1420,48 @@ class Site:
         for code, src in SHORT.items():
             self.write(f'{code}/index.html', SHORT_HTML.replace('@@META@@', meta).replace('@@URL@@', self.url).replace('@@SRC@@', json.dumps(src, ensure_ascii=False)))
 
+    # --- фід товарів для Google Merchant Center (безкоштовні лістинги): /feed/merchant-uk.xml, /feed/merchant-ru.xml
+    def merchant_feed(self):
+        def x(v):
+            return html.escape(str(v), quote=False)
+        cat_path = 'Food, Beverages & Tobacco > Beverages > Coffee & Tea > Coffee'
+        for lang in LANGS:
+            u = UI[lang]
+            title_site = 'ZRN Coffee'
+            out = ['<?xml version="1.0" encoding="UTF-8"?>',
+                   '<rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">', '<channel>',
+                   f'<title>{title_site}</title>', f'<link>{self.main(lang)}</link>',
+                   f'<description>{x(self.ui_txt[lang]["meta.desc"])}</description>']
+            for p in self.prods:
+                link = self.p_url(lang, p['id'])
+                img = f"{self.url}/{p['img']}"
+                kind = ('Бленди' if lang == 'uk' else 'Бленды') if p['type'] == 'blend' else ('Моносорти' if lang == 'uk' else 'Моносорты')
+                base_desc = self.short(f"{p['notes'][lang]}. {p['region'][lang]}. {p['info'][lang]}", 900)
+                for w, pr in ((p['w1'], p['price1']), (p['w2'], p['price2'])):
+                    out.append('<item>')
+                    out.append(f'<g:id>{x(p["id"])}-{w}</g:id>')
+                    out.append(f'<g:item_group_id>{x(p["id"])}</g:item_group_id>')
+                    out.append(f'<title>{x(p["name"])} — {w} {u["g"]}</title>')
+                    out.append(f'<description>{x(base_desc)}</description>')
+                    out.append(f'<link>{x(link)}</link>')
+                    out.append(f'<g:image_link>{x(img)}</g:image_link>')
+                    out.append('<g:availability>in_stock</g:availability>')
+                    out.append(f'<g:price>{pr}.00 UAH</g:price>')
+                    out.append('<g:condition>new</g:condition>')
+                    out.append('<g:brand>ZRN Coffee</g:brand>')
+                    out.append('<g:identifier_exists>no</g:identifier_exists>')
+                    out.append(f'<g:google_product_category>{x(cat_path)}</g:google_product_category>')
+                    out.append(f'<g:product_type>{x("Кава > " + kind if lang == "uk" else "Кофе > " + kind)}</g:product_type>')
+                    out.append(f'<g:product_weight>{w} g</g:product_weight>')
+                    out.append(f'<g:shipping_weight>{w} g</g:shipping_weight>')
+                    out.append('<g:ships_from_country>UA</g:ships_from_country>')
+                    out.append('<g:min_handling_time>0</g:min_handling_time>')
+                    out.append('<g:max_handling_time>1</g:max_handling_time>')
+                    out.append(f'<g:custom_label_0>{"blend" if p["type"] == "blend" else "mono"}</g:custom_label_0>')
+                    out.append('</item>')
+            out += ['</channel>', '</rss>', '']
+            self.write(f'feed/merchant-{lang}.xml', '\n'.join(out))
+
     # --- sitemap
     def home_ru(self):
         """Російська головна: /ru/index.html — той самий index.html, але з російськими <title>, описом, canonical, og.
@@ -1407,6 +1485,7 @@ class Site:
         sub(r'<meta property="og:url" content="[^"]*">', f'<meta property="og:url" content="{self.url}/ru/">')
         sub(r'<meta name="twitter:title" content="[^"]*">', f'<meta name="twitter:title" content="{t}">')
         sub(r'<meta name="twitter:description" content="[^"]*">', f'<meta name="twitter:description" content="{d}">')
+        h = replace_between(h, '<!--FAQ:LD:START-->', '<!--FAQ:LD:END-->', faq_ld_tag(self.index_src, 'ru'), 'FAQ:LD')
         self.write('ru/index.html', h)
 
     def sitemap(self):
@@ -1515,6 +1594,7 @@ section p,.article p{margin-bottom:12px;color:var(--sub)}
 .article p{font-size:1rem;line-height:1.75}
 .article .btn{margin-top:10px;color:#fff}
 .site-foot{border-top:1px solid var(--line);background:var(--bg2);padding:26px 0;font-size:.9rem;color:var(--sub)}
+.foot-city{font-size:.82rem;color:var(--sub);margin-top:4px}
 .foot-links{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:8px}
 .foot-links a{display:inline-flex;align-items:center;min-height:44px;color:var(--sub)}
 .btn.ghost{background:transparent;color:var(--dark);border:1px solid var(--line)}
@@ -1606,6 +1686,7 @@ def main():
     site.page_404()
     site.short_links()
     site.home_ru()
+    site.merchant_feed()
     site.sitemap()
     site.write('pages.css', CSS + SB_CSS)
     # прибираємо застарілі сторінки сортів/статей, яких більше немає в catalog.json
