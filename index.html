@@ -564,6 +564,8 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
 .foot-contacts{display:flex; gap:16px; flex-wrap:wrap;}
 .foot-contacts a{color:var(--ink); text-decoration:none;}
 .foot-contacts a:hover{color:var(--gold-soft);}
+.foot-city{font-size:.8rem; color:var(--sub); margin-top:8px;}
+.foot-phones a{white-space:nowrap;}
 .foot-schedule{font-size:.82rem; line-height:1.55; color:var(--sub); text-align:right;}
 .foot-schedule b{color:var(--ink); font-weight:600;}
 @media(max-width:600px){
@@ -862,12 +864,20 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       "logo": "https://zrncoffee.com.ua/icon-512.png",
       "description": "Мікроростерня свіжообсмаженої кави. Моносорти та авторські бленди. Обсмаження під замовлення.",
       "email": "zrncoffee@gmail.com",
+      "telephone": "+380505286527",
       "address": {
         "@type": "PostalAddress",
+        "addressLocality": "Черкаси",
         "addressCountry": "UA"
       },
+      "areaServed": "UA",
+      "contactPoint": [
+        {"@type": "ContactPoint", "contactType": "customer service", "telephone": "+380505286527", "areaServed": "UA", "availableLanguage": ["uk", "ru"]},
+        {"@type": "ContactPoint", "contactType": "customer service", "telephone": "+380735286527", "areaServed": "UA", "availableLanguage": ["uk", "ru"]}
+      ],
       "sameAs": [
-        "https://t.me/zrncoffee"
+        "https://t.me/zrncoffee",
+        "https://www.instagram.com/zrncoffee/"
       ]
     },
     {
@@ -880,6 +890,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
   ]
 }
 </script>
+<!--FAQ:LD:START--><script type="application/ld+json" id="ld-faq">{"@context": "https://schema.org", "@type": "FAQPage", "inLanguage": "uk", "mainEntity": [{"@type": "Question", "name": "Коли обсмажуєте і відправляєте?", "acceptedAnswer": {"@type": "Answer", "text": "Після вашого замовлення. Зазвичай обсмажуємо й відправляємо того самого або наступного робочого дня — щоб кава була максимально свіжою."}}, {"@type": "Question", "name": "Зерно чи мелена — що краще?", "acceptedAnswer": {"@type": "Answer", "text": "Зерно довше тримає аромат. Якщо маєте млин — беріть зерно. Якщо млина немає — оберіть помел під свій спосіб (турка, еспресо, фільтр, френч-прес), і ми змелемо перед відправкою."}}, {"@type": "Question", "name": "Як довго кава залишається свіжою?", "acceptedAnswer": {"@type": "Answer", "text": "Після обсмаження каві потрібно відлежатися 3–5 днів (дегазація). Найкращий смак — приблизно до 40 днів після обсмаження при правильному зберіганні. Дату обсмаження завжди вказуємо на пачці."}}, {"@type": "Question", "name": "Яка доставка і оплата?", "acceptedAnswer": {"@type": "Answer", "text": "Нова Пошта або Укрпошта. Оплата — переказ на картку або накладений платіж. Від 1400 ₴ доставка безкоштовна."}}, {"@type": "Question", "name": "Скільки йде доставка по Україні?", "acceptedAnswer": {"@type": "Answer", "text": "Після відправки зазвичай 1–3 дні Новою Поштою (залежить від міста). Укрпоштою може бути трохи довше. ТТН надсилаємо, щойно відправимо посилку."}}, {"@type": "Question", "name": "Як зберігати каву вдома?", "acceptedAnswer": {"@type": "Answer", "text": "У герметичній непрозорій тарі, подалі від тепла, світла й вологи. Не в холодильнику — там кава вбирає запахи. Відсипайте на кілька днів у меншу банку, решту тримайте щільно закритою."}}, {"@type": "Question", "name": "Що, якщо кава не зайде?", "acceptedAnswer": {"@type": "Answer", "text": "Напишіть нам у Telegram протягом 14 днів: замінимо каву на інший сорт або повернемо гроші. Також підкажемо сорт під ваш смак чи спосіб заварювання."}}, {"@type": "Question", "name": "Чим відрізняються моносорти та бленди?", "acceptedAnswer": {"@type": "Answer", "text": "Моносорт — кава з одного регіону: у чашці чітко відчувається характер походження. Бленд — авторська композиція кількох сортів, зібрана заради збалансованого, цілісного смаку. Не знаєте, з чого почати, — напишіть нам, підберемо під ваш смак."}}, {"@type": "Question", "name": "Який помел обрати для моєї кавоварки?", "acceptedAnswer": {"@type": "Answer", "text": "Турка — дуже дрібний помел, еспресо — дрібний, фільтр — середній, френч-прес — крупний. Якщо не впевнені — беріть зерно або напишіть, чим заварюєте, і ми підкажемо."}}, {"@type": "Question", "name": "Де ви знаходитесь і як з вами зв’язатися?", "acceptedAnswer": {"@type": "Answer", "text": "Ми — мікроростерня в Черкасах, відправляємо по всій Україні. Телефони: +38 050 528 65 27, +38 073 528 65 27. Telegram: t.me/zrncoffee, Instagram: @zrncoffee, пошта: zrncoffee@gmail.com. Замовлення приймаємо щодня з 9:00 до 20:00."}}]}</script><!--FAQ:LD:END-->
 </head>
 <body>
 
@@ -1189,6 +1200,18 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
         <button type="button" class="faq-q" aria-expanded="false"><span data-i18n="faq.q7">Що, якщо кава не зайде?</span><span class="faq-icon">+</span></button>
         <div class="faq-a" data-i18n="faq.a7">Напишіть нам у Telegram протягом 14 днів: замінимо каву на інший сорт або повернемо гроші. Також підкажемо сорт під ваш смак чи спосіб заварювання.</div>
       </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q" aria-expanded="false"><span data-i18n="faq.q8">Чим відрізняються моносорти та бленди?</span><span class="faq-icon">+</span></button>
+        <div class="faq-a" data-i18n="faq.a8">Моносорт — кава з одного регіону: у чашці чітко відчувається характер походження. Бленд — авторська композиція кількох сортів, зібрана заради збалансованого, цілісного смаку. Не знаєте, з чого почати, — напишіть нам, підберемо під ваш смак.</div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q" aria-expanded="false"><span data-i18n="faq.q9">Який помел обрати для моєї кавоварки?</span><span class="faq-icon">+</span></button>
+        <div class="faq-a" data-i18n="faq.a9">Турка — дуже дрібний помел, еспресо — дрібний, фільтр — середній, френч-прес — крупний. Якщо не впевнені — беріть зерно або напишіть, чим заварюєте, і ми підкажемо.</div>
+      </div>
+      <div class="faq-item">
+        <button type="button" class="faq-q" aria-expanded="false"><span data-i18n="faq.q10">Де ви знаходитесь і як з вами зв’язатися?</span><span class="faq-icon">+</span></button>
+        <div class="faq-a" data-i18n="faq.a10">Ми — мікроростерня в Черкасах, відправляємо по всій Україні. Телефони: +38 050 528 65 27, +38 073 528 65 27. Telegram: t.me/zrncoffee, Instagram: @zrncoffee, пошта: zrncoffee@gmail.com. Замовлення приймаємо щодня з 9:00 до 20:00.</div>
+      </div>
     </div>
   </section>
 
@@ -1201,11 +1224,17 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       <div class="logo" style="margin-bottom:8px">ZRN</div>
       <div style="font-size:.84rem;line-height:1.5" data-i18n-html="foot.tag">Мікроростерня<br>Обсмажуємо після замовлення</div>
       <div class="foot-contacts" style="margin-top:12px">
-        <a href="https://t.me/zrncoffee" target="_blank">Telegram</a>
+        <a href="https://t.me/zrncoffee" target="_blank" rel="noopener">Telegram</a>
+        <a href="https://www.instagram.com/zrncoffee/" target="_blank" rel="noopener me">Instagram</a>
         <a href="mailto:zrncoffee@gmail.com" data-i18n="foot.mail">Написати на пошту</a>
         <a href="/blog/" data-seo="blog/" onclick="openBlogOverlay();return false;" data-i18n="nav.blog">Блог</a>
         <a href="#" data-pwa-install hidden data-i18n="pwa.foot">Встановити застосунок ZRN</a>
       </div>
+      <div class="foot-contacts foot-phones" style="margin-top:6px">
+        <a href="tel:+380505286527">+38 050 528 65 27</a>
+        <a href="tel:+380735286527">+38 073 528 65 27</a>
+      </div>
+      <div class="foot-city" data-i18n="foot.city">м. Черкаси · відправляємо по всій Україні</div>
       <div class="foot-contacts foot-legal" style="margin-top:6px">
         <a href="/oferta/" data-i18n="foot.oferta">Публічна оферта</a>
         <a href="/privacy/" data-i18n="foot.privacy">Політика конфіденційності</a>
@@ -1536,6 +1565,12 @@ uk: {
   'faq.a6': 'У герметичній непрозорій тарі, подалі від тепла, світла й вологи. Не в холодильнику — там кава вбирає запахи. Відсипайте на кілька днів у меншу банку, решту тримайте щільно закритою.',
   'faq.q7': 'Що, якщо кава не зайде?',
   'faq.a7': 'Напишіть нам у Telegram протягом 14 днів: замінимо каву на інший сорт або повернемо гроші. Також підкажемо сорт під ваш смак чи спосіб заварювання.',
+  'faq.q8': 'Чим відрізняються моносорти та бленди?',
+  'faq.a8': 'Моносорт — кава з одного регіону: у чашці чітко відчувається характер походження. Бленд — авторська композиція кількох сортів, зібрана заради збалансованого, цілісного смаку. Не знаєте, з чого почати, — напишіть нам, підберемо під ваш смак.',
+  'faq.q9': 'Який помел обрати для моєї кавоварки?',
+  'faq.a9': 'Турка — дуже дрібний помел, еспресо — дрібний, фільтр — середній, френч-прес — крупний. Якщо не впевнені — беріть зерно або напишіть, чим заварюєте, і ми підкажемо.',
+  'faq.q10': 'Де ви знаходитесь і як з вами зв’язатися?',
+  'faq.a10': 'Ми — мікроростерня в Черкасах, відправляємо по всій Україні. Телефони: +38 050 528 65 27, +38 073 528 65 27. Telegram: t.me/zrncoffee, Instagram: @zrncoffee, пошта: zrncoffee@gmail.com. Замовлення приймаємо щодня з 9:00 до 20:00.',
   'rev.title': 'Відгуки',
   'rev.cta': 'Спробували нашу каву? Напишіть відгук у Telegram',
   'rev.ctaBtn': 'Написати відгук',
@@ -1548,6 +1583,7 @@ uk: {
   'ship.pay1': 'Картка або накладений платіж.',
   'foot.tag': 'Мікроростерня<br>Обсмажуємо після замовлення',
   'foot.mail': 'Написати на пошту',
+  'foot.city': 'м. Черкаси · відправляємо по всій Україні',
   'foot.orders': 'Приймання замовлень',
   'foot.ordersH': 'Пн–Нд · 9:00–20:00',
   'foot.roast': 'Обсмаження',
@@ -1853,6 +1889,12 @@ ru: {
   'faq.a6': 'В герметичной непрозрачной таре, вдали от тепла, света и влаги. Не в холодильнике — там кофе впитывает запахи. Отсыпайте на несколько дней в меньшую банку, остальное держите плотно закрытым.',
   'faq.q7': 'Что, если кофе не зайдёт?',
   'faq.a7': 'Напишите нам в Telegram в течение 14 дней: заменим кофе на другой сорт или вернём деньги. Также подскажем сорт под ваш вкус или способ заваривания.',
+  'faq.q8': 'Чем отличаются моносорта и бленды?',
+  'faq.a8': 'Моносорт — кофе из одного региона: в чашке чётко чувствуется характер происхождения. Бленд — авторская композиция нескольких сортов, собранная ради сбалансированного, цельного вкуса. Не знаете, с чего начать, — напишите нам, подберём под ваш вкус.',
+  'faq.q9': 'Какой помол выбрать для моей кофеварки?',
+  'faq.a9': 'Турка — очень мелкий помол, эспрессо — мелкий, фильтр — средний, френч-пресс — крупный. Если не уверены — берите зерно или напишите, чем завариваете, и мы подскажем.',
+  'faq.q10': 'Где вы находитесь и как с вами связаться?',
+  'faq.a10': 'Мы — микроростерия в Черкассах, отправляем по всей Украине. Телефоны: +38 050 528 65 27, +38 073 528 65 27. Telegram: t.me/zrncoffee, Instagram: @zrncoffee, почта: zrncoffee@gmail.com. Заказы принимаем ежедневно с 9:00 до 20:00.',
   'rev.title': 'Отзывы',
   'rev.cta': 'Попробовали наш кофе? Напишите отзыв в Telegram',
   'rev.ctaBtn': 'Написать отзыв',
@@ -1865,6 +1907,7 @@ ru: {
   'ship.pay1': 'Карта или наложенный платёж.',
   'foot.tag': 'Микроростерия<br>Обжариваем после заказа',
   'foot.mail': 'Написать на почту',
+  'foot.city': 'г. Черкассы · отправляем по всей Украине',
   'foot.orders': 'Приём заказов',
   'foot.ordersH': 'Пн–Вс · 9:00–20:00',
   'foot.roast': 'Обжарка',
