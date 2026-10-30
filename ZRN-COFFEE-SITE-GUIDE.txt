@@ -846,3 +846,13 @@ Custom domain = zrncoffee.com.ua (рекомендуется Enforce HTTPS). В
   • Дрібниці набору: фото в картці набору вищі й плашка над ними (не перекриває); у вікні набору колаж більший;
     у меню з'являється пункт «Набори», якщо хоч один набір показується.
 
+
+7.11 Контакти, FAQ-розмітка і фід для Google Merchant Center
+  • Телефони +38 050 528 65 27 і +38 073 528 65 27, Instagram @zrncoffee, місто Черкаси — у футері всіх сторінок, у FAQ (питання 10)
+    і в розмітці Organization. Дані для згенерованих сторінок — catalog.json → site (phones, instagram, city).
+  • FAQ: 10 питань; розмітка FAQPage тепер статична в коді сторінки (uk для /, ru для /ru/), а не лише додається скриптом.
+  • Фід товарів: https://zrncoffee.com.ua/feed/merchant-uk.xml (і -ru.xml). Оновлюється разом із сайтом; у Merchant Center
+    підключається як «Scheduled fetch» раз на добу. Окремі набори в фід не входять.
+  • Cloudflare: домен у Cloudflare (Free). Прокси увімкнено для A-записів і www; записи пошти (rsend.mail, send.mail,
+    resend._domainkey.mail, _dmarc) — завжди «DNS only». Правила: заголовки безпеки, кеш картинок (7 днів edge / 1 день браузер).
+    Замінили фото з тим самим іменем — Caching → Configuration → Purge Everything.
