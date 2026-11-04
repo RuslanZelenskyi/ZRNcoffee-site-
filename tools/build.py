@@ -23,6 +23,16 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CATALOG = os.path.join(ROOT, 'catalog.json')
 INDEX = os.path.join(ROOT, 'index.html')
+import hashlib as _hl
+def vimg(path):
+    """/img/x.webp -> /img/x.webp?v=<хеш вмісту>: нове фото одразу обходить кеш браузера/Cloudflare."""
+    rel = path.lstrip('/')
+    try:
+        with open(os.path.join(ROOT, rel), 'rb') as f:
+            return '/' + rel + '?v=' + _hl.md5(f.read()).hexdigest()[:8]
+    except OSError:
+        return '/' + rel
+
 E = html.escape
 LANGS = ('uk', 'ru')
 TODAY = datetime.date.today().isoformat()
@@ -287,12 +297,12 @@ def js_block(cat):
     blend = [p for p in prods if p['type'] == 'blend']
 
     def base(p):
-        o = {'id': p['id'], 'img': '/' + p['img'], 'alt': p['alt'], 'accent': p['accent']}
+        o = {'id': p['id'], 'img': vimg(p['img']), 'alt': p['alt'], 'accent': p['accent']}
         if p.get('badge'):
             o['badge'] = p['badge']
             o['badgeType'] = p['badgeType']
         if p.get('gallery'):
-            o['gallery'] = ['/' + g for g in p['gallery']]
+            o['gallery'] = [vimg(g) for g in p['gallery']]
         if p.get('kicker'):
             o['kicker'] = p['kicker']
         o['name'] = p['name']
@@ -1034,12 +1044,12 @@ STATUS_HTML = """<nav class="crumbs" aria-label="breadcrumb"><a href="@@HOME@@">
 def gal_html(p, lang):
     """Слайдер фото сорту (перше фото + gallery); без gallery — звичайне фото."""
     alt = p['alt']
-    first = f'<img class="p-img" src="/{p["img"]}" alt="{E(alt)}" width="600" height="600" fetchpriority="high">'
+    first = f'<img class="p-img" src="{vimg(p["img"])}" alt="{E(alt)}" width="600" height="600" fetchpriority="high">'
     gl = p.get('gallery') or []
     if not gl:
         return first
     word = 'фото' if lang == 'uk' else 'фото'
-    slides = ''.join(f'<img class="p-img" src="/{g}" alt="{E(alt)} — {word} {i + 2}" width="600" height="600" loading="lazy">' for i, g in enumerate(gl))
+    slides = ''.join(f'<img class="p-img" src="{vimg(g)}" alt="{E(alt)} — {word} {i + 2}" width="600" height="600" loading="lazy">' for i, g in enumerate(gl))
     n = len(gl) + 1
     dots = ''.join(f'<button type="button" class="gal-dot{" on" if i == 0 else ""}" aria-label="{i + 1}/{n}"></button>' for i in range(n))
     return (f'<div class="gal" data-gal><div class="gal-track">{first}{slides}</div>'
