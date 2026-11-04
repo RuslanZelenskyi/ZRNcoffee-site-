@@ -702,6 +702,26 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
   .modal-body .m-share{order:8;}
   .modal-buy .modal-footer{order:9; position:sticky; bottom:0; z-index:3; margin:8px -18px 0; padding:10px 18px calc(10px + env(safe-area-inset-bottom)); background:var(--card); border-top:1px solid var(--line); box-shadow:0 -6px 14px -8px rgba(33,26,17,.25); gap:10px;}
 }
+
+.gal{position:relative;min-width:0}
+.gal-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;border-radius:12px;overscroll-behavior-x:contain}
+.gal-track::-webkit-scrollbar{display:none}
+.gal-track>img{flex:0 0 100%;height:auto;scroll-snap-align:center;scroll-snap-stop:always;width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:12px;display:block;background:#211a11}
+.gal-nav{position:absolute;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;border:0;background:rgba(255,255,255,.88);color:#211a11;font-size:1.3rem;line-height:1;cursor:pointer;box-shadow:0 1px 6px rgba(0,0,0,.3);z-index:2}
+.gal-prev{left:6px}.gal-next{right:6px}
+.gal-nav[disabled]{opacity:.35;cursor:default}
+.gal-dots{display:flex;justify-content:center;gap:7px;margin-top:8px}
+.gal-dot{width:8px;height:8px;border-radius:50%;border:0;padding:0;background:rgba(150,120,70,.35);cursor:pointer}
+.gal-dot.on{background:var(--accent,#a9792f);transform:scale(1.25)}
+@media(hover:none){.gal-nav{display:none}}
+
+.gal-track>img{box-shadow:none}
+.modal-grid .gal{align-self:start}
+@media(min-width:521px){ #genericModal .modal-grid:has(> .gal){grid-template-columns:270px 1fr;} }
+@media(max-width:520px){
+  #genericModal .modal-grid > .gal{position:static; width:100%; margin:0 0 12px;}
+  #genericModal .modal-grid:has(> .gal) .modal-head{margin-left:0; min-height:0;}
+}
 .modal-grid img{width:100%; aspect-ratio:1/1; object-fit:cover; object-position:center; border-radius:8px; display:block; background:#211a11; box-shadow:0 0 0 2px color-mix(in srgb, var(--accent,#a9792f) 55%, transparent);}
 .modal-body h2{font-size:1.4rem; margin-bottom:4px;}
 .modal-origin{color:var(--gold-soft); font-size:.82rem; margin-bottom:14px;}
@@ -2574,6 +2594,10 @@ const PRODUCTS = [
   "accent": "#7a5a9e",
   "badge": "Популярне",
   "badgeType": "popular",
+  "gallery": [
+   "/img/zrn-kava-colombia-supremo-2.webp",
+   "/img/zrn-kava-colombia-supremo-3.webp"
+  ],
   "name": "Colombia Supremo",
   "region": "Huila, 1200–2000 м",
   "variety": "Castillo, Caturra",
@@ -2659,6 +2683,10 @@ const PRODUCTS = [
   "accent": "#c9a227",
   "badge": "Новинка",
   "badgeType": "new",
+  "gallery": [
+   "/img/zrn-kava-ethiopia-sidamo-2.webp",
+   "/img/zrn-kava-ethiopia-sidamo-3.webp"
+  ],
   "name": "Ethiopia Sidamo",
   "region": "Sidamo (Sidama), 1600–2200 м",
   "variety": "Kurume",
@@ -2805,6 +2833,10 @@ const BLENDS = [
   "img": "/img/zrn-kava-poetry-signature-blend.webp",
   "alt": "Кава Poetry Signature Blend ZRN — 70% арабіка / 30% робуста",
   "accent": "#3a5a8c",
+  "gallery": [
+   "/img/zrn-kava-poetry-signature-blend-2.webp",
+   "/img/zrn-kava-poetry-signature-blend-3.webp"
+  ],
   "kicker": "Signature Blend",
   "name": "Poetry",
   "region": "Колумбія, Ефіопія, Індонезія",
@@ -3629,6 +3661,23 @@ function modalSectionsHtml(p){
   + '<button type="button" class="m-share" id="modalShare">'+mL('Поділитися цим сортом','Поделиться этим сортом')+'</button>';
 }
 
+(function(){function init(g){if(g._i)return;g._i=1;var t=g.querySelector('.gal-track'),d=g.querySelectorAll('.gal-dot'),pv=g.querySelector('.gal-prev'),nx=g.querySelector('.gal-next'),n=d.length;
+function cur(){return Math.round(t.scrollLeft/(t.clientWidth||1))}
+function go(i){i=Math.max(0,Math.min(n-1,i));t.scrollTo({left:i*t.clientWidth,behavior:'smooth'})}
+function upd(){var i=Math.min(n-1,Math.max(0,cur()));d.forEach(function(x,k){x.classList.toggle('on',k===i)});if(pv)pv.disabled=i===0;if(nx)nx.disabled=i===n-1}
+t.addEventListener('scroll',function(){clearTimeout(g._s);g._s=setTimeout(upd,40)},{passive:true});
+pv&&pv.addEventListener('click',function(){go(cur()-1)});nx&&nx.addEventListener('click',function(){go(cur()+1)});
+d.forEach(function(x,k){x.addEventListener('click',function(){go(k)})});
+t.tabIndex=0;t.addEventListener('keydown',function(e){if(e.key==='ArrowRight')go(cur()+1);else if(e.key==='ArrowLeft')go(cur()-1)});upd()}
+window.zrnGalInit=function(r){(r||document).querySelectorAll('[data-gal]').forEach(init)};zrnGalInit()})();
+function galleryHtml(p){
+  const alt = p.alt || (p.name + ' — кава ZRN');
+  if(!p.gallery || !p.gallery.length) return `<img src="${p.img}" alt="${alt}">`;
+  const all = [p.img].concat(p.gallery), n = all.length;
+  return `<div class="gal" data-gal><div class="gal-track">${all.map((s,i)=>`<img src="${s}" alt="${alt}${i?' — '+(i+1)+'/'+n:''}" ${i?'loading="lazy"':''} width="600" height="600">`).join('')}</div>`
+   + `<button type="button" class="gal-nav gal-prev" aria-label="←">‹</button><button type="button" class="gal-nav gal-next" aria-label="→">›</button>`
+   + `<div class="gal-dots">${all.map((s,i)=>`<button type="button" class="gal-dot${i?'':' on'}" aria-label="${i+1}/${n}"></button>`).join('')}</div></div>`;
+}
 function openProduct(id, restore){
   const p = ALL_PRODUCTS.find(x=>x.id===id);
   if(!p) return;
@@ -3643,7 +3692,7 @@ function openProduct(id, restore){
   genericModal.innerHTML = `
     <div class="modal-top"><button type="button" class="modal-close" id="modalClose" aria-label="Close">×</button></div>
     <div class="modal-grid">
-      <img src="${p.img}" alt="${p.alt || (p.name + ' — кава ZRN')}">
+      ${galleryHtml(p)}
       <div class="modal-body">
         <div class="modal-head">
         ${p.kicker?`<div class="blend-kicker modal-kicker">${p.kicker}</div>`:''}
@@ -3692,6 +3741,7 @@ function openProduct(id, restore){
       </div>
     </div>
   `;
+  if(window.zrnGalInit) zrnGalInit(genericModal);
   genericModal.querySelector('#modalClose').onclick = closeModal;
   let selectedGrindMain = GRINDS[0];
   let selectedGrindSub = GRIND_TYPES[2].label;
