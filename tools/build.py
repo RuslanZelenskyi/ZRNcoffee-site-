@@ -291,6 +291,8 @@ def js_block(cat):
         if p.get('badge'):
             o['badge'] = p['badge']
             o['badgeType'] = p['badgeType']
+        if p.get('gallery'):
+            o['gallery'] = ['/' + g for g in p['gallery']]
         if p.get('kicker'):
             o['kicker'] = p['kicker']
         o['name'] = p['name']
@@ -1029,6 +1031,46 @@ STATUS_HTML = """<nav class="crumbs" aria-label="breadcrumb"><a href="@@HOME@@">
 """
 
 
+def gal_html(p, lang):
+    """Слайдер фото сорту (перше фото + gallery); без gallery — звичайне фото."""
+    alt = p['alt']
+    first = f'<img class="p-img" src="/{p["img"]}" alt="{E(alt)}" width="600" height="600" fetchpriority="high">'
+    gl = p.get('gallery') or []
+    if not gl:
+        return first
+    word = 'фото' if lang == 'uk' else 'фото'
+    slides = ''.join(f'<img class="p-img" src="/{g}" alt="{E(alt)} — {word} {i + 2}" width="600" height="600" loading="lazy">' for i, g in enumerate(gl))
+    n = len(gl) + 1
+    dots = ''.join(f'<button type="button" class="gal-dot{" on" if i == 0 else ""}" aria-label="{i + 1}/{n}"></button>' for i in range(n))
+    return (f'<div class="gal" data-gal><div class="gal-track">{first}{slides}</div>'
+            f'<button type="button" class="gal-nav gal-prev" aria-label="←">‹</button><button type="button" class="gal-nav gal-next" aria-label="→">›</button>'
+            f'<div class="gal-dots">{dots}</div></div>')
+
+GAL_CSS = """
+.gal{position:relative;min-width:0}
+.gal-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;border-radius:12px;overscroll-behavior-x:contain}
+.gal-track::-webkit-scrollbar{display:none}
+.gal-track>img{flex:0 0 100%;height:auto;scroll-snap-align:center;scroll-snap-stop:always;width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:12px;display:block;background:#211a11}
+.gal-nav{position:absolute;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;border:0;background:rgba(255,255,255,.88);color:#211a11;font-size:1.3rem;line-height:1;cursor:pointer;box-shadow:0 1px 6px rgba(0,0,0,.3);z-index:2}
+.gal-prev{left:6px}.gal-next{right:6px}
+.gal-nav[disabled]{opacity:.35;cursor:default}
+.gal-dots{display:flex;justify-content:center;gap:7px;margin-top:8px}
+.gal-dot{width:8px;height:8px;border-radius:50%;border:0;padding:0;background:rgba(150,120,70,.35);cursor:pointer}
+.gal-dot.on{background:var(--accent,#a9792f);transform:scale(1.25)}
+@media(hover:none){.gal-nav{display:none}}
+"""
+
+GAL_JS = """(function(){function init(g){if(g._i)return;g._i=1;var t=g.querySelector('.gal-track'),d=g.querySelectorAll('.gal-dot'),pv=g.querySelector('.gal-prev'),nx=g.querySelector('.gal-next'),n=d.length;
+function cur(){return Math.round(t.scrollLeft/(t.clientWidth||1))}
+function go(i){i=Math.max(0,Math.min(n-1,i));t.scrollTo({left:i*t.clientWidth,behavior:'smooth'})}
+function upd(){var i=Math.min(n-1,Math.max(0,cur()));d.forEach(function(x,k){x.classList.toggle('on',k===i)});if(pv)pv.disabled=i===0;if(nx)nx.disabled=i===n-1}
+t.addEventListener('scroll',function(){clearTimeout(g._s);g._s=setTimeout(upd,40)},{passive:true});
+pv&&pv.addEventListener('click',function(){go(cur()-1)});nx&&nx.addEventListener('click',function(){go(cur()+1)});
+d.forEach(function(x,k){x.addEventListener('click',function(){go(k)})});
+t.tabIndex=0;t.addEventListener('keydown',function(e){if(e.key==='ArrowRight')go(cur()+1);else if(e.key==='ArrowLeft')go(cur()-1)});upd()}
+window.zrnGalInit=function(r){(r||document).querySelectorAll('[data-gal]').forEach(init)};zrnGalInit()})();"""
+
+
 class Site:
     def __init__(self, cat, index_src):
         self.cat = cat
@@ -1201,7 +1243,7 @@ class Site:
                                                        'returnMethod': 'https://schema.org/ReturnByMail',
                                                        'returnFees': 'https://schema.org/ReturnShippingFees'}}
                           for w, pr in ((p['w1'], p['price1']), (p['w2'], p['price2']))]
-                ld_prod = {'@context': 'https://schema.org', '@type': 'Product', 'name': name, 'sku': p['id'], 'image': img,
+                ld_prod = {'@context': 'https://schema.org', '@type': 'Product', 'name': name, 'sku': p['id'], 'image': ([img] + [f"{self.url}/{g}" for g in p.get('gallery', [])]) if p.get('gallery') else img,
                            'description': self.short(f"{notes}. {p['info'][lang]}", 300), 'category': 'Coffee', 'url': canonical,
                            'brand': {'@type': 'Brand', 'name': 'ZRN Coffee'}, 'offers': offers}
                 ld_bc = self.crumbs([('ZRN Coffee', self.main(lang)),
@@ -1240,7 +1282,7 @@ class Site:
                 h += f'''<nav class="crumbs" aria-label="breadcrumb"><a href="{shop}">ZRN Coffee</a> › <a href="{shop}#{sect}">{u['blends'] if p['type'] == 'blend' else u['catalog']}</a> › <span>{E(name)}</span></nav>
 <article class="product">
   <div class="p-grid">
-    <img class="p-img" src="/{p['img']}" alt="{E(p['alt'])}" width="600" height="600" fetchpriority="high">
+    {gal_html(p, lang)}
     <div class="p-main">
       {f'<div class="kicker">{E(p["kicker"])}</div>' if p.get('kicker') else ''}
       <h1>{u['h1']}{E(name)}</h1>
@@ -1285,6 +1327,8 @@ class Site:
   </section>
 </article>
 '''
+                if p.get('gallery'):
+                    h += '<script>' + GAL_JS + '</script>\n'
                 h += self.footer(lang)
                 self.write(f"{u['pre'].strip('/')}/coffee/{p['id']}/index.html".lstrip('/'), h)
 
@@ -1445,6 +1489,8 @@ class Site:
                     out.append(f'<description>{x(base_desc)}</description>')
                     out.append(f'<link>{x(link)}</link>')
                     out.append(f'<g:image_link>{x(img)}</g:image_link>')
+                    for g in p.get('gallery', []):
+                        out.append(f'<g:additional_image_link>{x(self.url + "/" + g)}</g:additional_image_link>')
                     out.append('<g:availability>in_stock</g:availability>')
                     out.append(f'<g:price>{pr}.00 UAH</g:price>')
                     out.append('<g:condition>new</g:condition>')
@@ -1688,7 +1734,7 @@ def main():
     site.home_ru()
     site.merchant_feed()
     site.sitemap()
-    site.write('pages.css', CSS + SB_CSS)
+    site.write('pages.css', CSS + SB_CSS + GAL_CSS)
     # прибираємо застарілі сторінки сортів/статей, яких більше немає в catalog.json
     keep = set(site.out)
     for base in ('coffee', 'blog', 'ru/coffee', 'ru/blog'):
