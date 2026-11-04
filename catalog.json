@@ -4,10 +4,16 @@
     "url": "https://zrncoffee.com.ua",
     "telegram": "https://t.me/zrncoffee",
     "email": "zrncoffee@gmail.com",
-    "phones": ["+380505286527", "+380735286527"],
+    "phones": [
+      "+380505286527",
+      "+380735286527"
+    ],
     "instagram": "https://www.instagram.com/zrncoffee/",
     "instagramHandle": "@zrncoffee",
-    "city": {"uk": "Черкаси", "ru": "Черкассы"}
+    "city": {
+      "uk": "Черкаси",
+      "ru": "Черкассы"
+    }
   },
   "products": [
     {
@@ -117,7 +123,11 @@
         "sweet": 4,
         "bitter": 2,
         "body": 3
-      }
+      },
+      "gallery": [
+        "img/zrn-kava-colombia-supremo-2.webp",
+        "img/zrn-kava-colombia-supremo-3.webp"
+      ]
     },
     {
       "id": "elsalvador",
@@ -279,7 +289,11 @@
         "sweet": 3,
         "bitter": 1,
         "body": 2
-      }
+      },
+      "gallery": [
+        "img/zrn-kava-ethiopia-sidamo-2.webp",
+        "img/zrn-kava-ethiopia-sidamo-3.webp"
+      ]
     },
     {
       "id": "papua",
@@ -568,7 +582,11 @@
         "sweet": 4,
         "bitter": 2,
         "body": 4
-      }
+      },
+      "gallery": [
+        "img/zrn-kava-poetry-signature-blend-2.webp",
+        "img/zrn-kava-poetry-signature-blend-3.webp"
+      ]
     }
   ],
   "posts": [
