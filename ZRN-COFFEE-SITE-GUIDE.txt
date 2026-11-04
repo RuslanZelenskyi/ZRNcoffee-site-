@@ -856,3 +856,5 @@ Custom domain = zrncoffee.com.ua (рекомендуется Enforce HTTPS). В
   • Cloudflare: домен у Cloudflare (Free). Прокси увімкнено для A-записів і www; записи пошти (rsend.mail, send.mail,
     resend._domainkey.mail, _dmarc) — завжди «DNS only». Правила: заголовки безпеки, кеш картинок (7 днів edge / 1 день браузер).
     Замінили фото з тим самим іменем — Caching → Configuration → Purge Everything.
+
+7.12 Слайдер фото сорту: поле "gallery" у catalog.json (список шляхів img/...). Файли: img/zrn-kava-<сорт>-2.webp, -3.webp. Щоб поміняти місцями фото — перейменуйте файли або змініть порядок у gallery.
