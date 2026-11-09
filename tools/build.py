@@ -80,8 +80,9 @@ def load():
                 if lang not in p[k] or not p[k][lang]:
                     fail(f'{where}: у полі "{k}" немає тексту для "{lang}"')
         for k in ('acid', 'sweet', 'bitter', 'body'):
-            if not isinstance(p['taste'].get(k), int) or not 1 <= p['taste'][k] <= 5:
-                fail(f'{where}: taste.{k} має бути числом від 1 до 5')
+            v = p['taste'].get(k)
+            if not isinstance(v, (int, float)) or isinstance(v, bool) or not 1 <= v <= 5 or (v * 2) % 1:
+                fail(f'{where}: taste.{k} має бути числом від 1 до 5 (можна з кроком 0,5)')
         for b in p['brew']:
             if b not in cat['brewGuide']:
                 fail(f'{where}: способу заварювання "{b}" немає в розділі brewGuide')
@@ -1274,7 +1275,7 @@ class Site:
                 specs += (f"<div><dt>{u['roast']}</dt><dd>{E(p['roastLabel'][lang])} <span class=\"dots\" aria-hidden=\"true\">{dots}</span>"
                           f"<small class=\"ends\"><i>{u['light']}</i><i>{u['dark']}</i></small></dd></div>")
                 bars = ''.join(f'<div class="bar"><span>{u[k]}</span><div class="track"><div class="fill" style="width:{p["taste"][k] * 20}%"></div></div>'
-                               f'<b class="sr">{p["taste"][k]}/5</b></div>' for k in ('acid', 'sweet', 'bitter', 'body'))
+                               f'<b class="sr">{str(p["taste"][k]).replace(".", ",")}/5</b></div>' for k in ('acid', 'sweet', 'bitter', 'body'))
                 brew = ''
                 for b in p['brew']:
                     g = self.cat['brewGuide'][b]
