@@ -2504,6 +2504,28 @@ const PRODUCT_I18N = {
  }
 };
 const BLOG_I18N = {
+ "kava-dlya-turky-filtra-kavomashyny": {
+  "k": {
+   "uk": "Гайд",
+   "ru": "Гайд"
+  },
+  "title": {
+   "uk": "Яку каву обрати для турки, фільтра, кавомашини чи гейзера: проста шпаргалка",
+   "ru": "Какой кофе выбрать для турки, фильтра, кофемашины или гейзера: простая шпаргалка"
+  },
+  "excerpt": {
+   "uk": "Як підібрати каву під свій спосіб заварювання: обсмаження, помел, сорти та готові рецепти для фільтра, еспресо, турки й гейзера.",
+   "ru": "Как подобрать кофе под свой способ заваривания: обжарка, помол, сорта и готовые рецепты для фильтра, эспрессо, турки и гейзера."
+  },
+  "body": {
+   "uk": null,
+   "ru": ""
+  },
+  "url": {
+   "uk": "/blog/kava-dlya-turky-filtra-kavomashyny/",
+   "ru": "/ru/blog/kava-dlya-turky-filtra-kavomashyny/"
+  }
+ },
  "brew-guide": {
   "k": {
    "uk": "Гайд",
@@ -2871,6 +2893,13 @@ const BLENDS = [
 const SETS = [];
 const SET_I18N = {};
 const BLOG = [
+ {
+  "id": "kava-dlya-turky-filtra-kavomashyny",
+  "k": "Гайд",
+  "title": "Яку каву обрати для турки, фільтра, кавомашини чи гейзера: проста шпаргалка",
+  "excerpt": "Як підібрати каву під свій спосіб заварювання: обсмаження, помел, сорти та готові рецепти для фільтра, еспресо, турки й гейзера.",
+  "body": ""
+ },
  {
   "id": "brew-guide",
   "k": "Гайд",
@@ -3577,6 +3606,8 @@ function showBlogList(){ blogListView.style.display='block'; blogDetailView.styl
 function openBlogPost(id){
   const a = BLOG.find(x=>x.id===id);
   if(!a) return;
+  const pageUrl = bt(a,'url');
+  if(pageUrl){ location.href = pageUrl; return; }
   window._openBlogId = id;
   const bodyTxt = bt(a,'body');
   document.getElementById('blogDetailContent').innerHTML = `
