@@ -47,6 +47,77 @@ def fail(msg):
 
 
 # ------------------------------------------------------------------ завантаження і перевірка
+POSTS_DIR = os.path.join(ROOT, 'content', 'posts')
+MONTHS = {'uk': ['січня', 'лютого', 'березня', 'квітня', 'травня', 'червня', 'липня', 'серпня', 'вересня', 'жовтня', 'листопада', 'грудня'],
+          'ru': ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря']}
+
+
+def fmt_date(iso, lang):
+    y, m, d = (int(x) for x in iso.split('-'))
+    return f'{d} {MONTHS[lang][m - 1]} {y}'
+
+
+def inline(text):
+    """Безпечне форматування: **жирний** і [текст](/посилання)."""
+    t = E(text)
+    t = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', t)
+    t = re.sub(r'\[([^\]]+)\]\(((?:/|https?://)[^)\s]*)\)', r'<a href="\2">\1</a>', t)
+    return t
+
+
+def plain(text):
+    return re.sub(r'\s+', ' ', re.sub(r'\[([^\]]+)\]\([^)]*\)', r'\1', text.replace('**', ''))).strip()
+
+
+def load_content_posts(cat):
+    """Статті нового формату: content/posts/<id>.json (обидві мови в одному файлі)."""
+    res = []
+    if not os.path.isdir(POSTS_DIR):
+        return res
+    ids = {a['id'] for a in cat['posts']}
+    for fn in sorted(os.listdir(POSTS_DIR)):
+        if not fn.endswith('.json'):
+            continue
+        where = f'стаття {fn}'
+        try:
+            a = json.load(open(os.path.join(POSTS_DIR, fn), encoding='utf-8'))
+        except json.JSONDecodeError as e:
+            fail(f'{where}: некоректний JSON — рядок {e.lineno}, позиція {e.colno}: {e.msg}')
+        for k in ('id', 'k', 'title', 'excerpt', 'published', 'lead', 'sections'):
+            if k not in a:
+                fail(f'{where}: немає поля "{k}"')
+        if a['id'] in ids:
+            fail(f'{where}: id "{a["id"]}" вже використано')
+        ids.add(a['id'])
+        if not re.fullmatch(r'\d{4}-\d{2}-\d{2}', a['published']):
+            fail(f'{where}: "published" має бути у форматі РРРР-ММ-ДД')
+        a.setdefault('updated', a['published'])
+        for k in ('k', 'title', 'excerpt', 'lead'):
+            for lang in LANGS:
+                if not a[k].get(lang):
+                    fail(f'{where}: у полі "{k}" немає тексту для "{lang}"')
+        if len(a['excerpt']['uk']) > 170 or len(a['excerpt']['ru']) > 170:
+            sys.stderr.write(f'Увага: {a["id"]}: excerpt довший за 170 символів — у Google його обріжуть\n')
+        for i, sec in enumerate(a['sections']):
+            w = f'{where}, розділ №{i + 1}'
+            if 'id' not in sec or 'h' not in sec:
+                fail(f'{w}: потрібні "id" і "h"')
+            for lang in LANGS:
+                if not sec['h'].get(lang):
+                    fail(f'{w}: заголовок "h" без тексту для "{lang}"')
+                for key in ('p', 'list'):
+                    if key in sec and not sec[key].get(lang):
+                        fail(f'{w}: "{key}" без тексту для "{lang}"')
+        for f in a.get('faq', []):
+            for lang in LANGS:
+                if not f['q'].get(lang) or not f['a'].get(lang):
+                    fail(f'{where}: FAQ без тексту для "{lang}"')
+        a['_new'] = True
+        res.append(a)
+    res.sort(key=lambda x: x['published'], reverse=True)
+    return res
+
+
 def load():
     try:
         cat = json.load(open(CATALOG, encoding='utf-8'))
@@ -96,6 +167,11 @@ def load():
             for lang in LANGS:
                 if not a[k].get(lang):
                     fail(f'стаття "{a["id"]}": у полі "{k}" немає тексту для "{lang}"')
+    cat['posts'] = load_content_posts(cat) + cat['posts']
+    for a in cat['posts']:
+        for pid in a.get('products', []):
+            if pid not in {p['id'] for p in cat['products']}:
+                fail(f'стаття "{a["id"]}": невідомий сорт "{pid}" у полі products')
     return cat
 
 
@@ -332,10 +408,12 @@ def js_block(cat):
         for k in ('notes', 'info', 'roastLabel', 'variety', 'story', 'region'):
             e[k] = p[k]
         i18n[p['id']] = e
-    blog = [{'id': a['id'], 'k': a['k']['uk'], 'title': a['title']['uk'], 'excerpt': a['excerpt']['uk'], 'body': a['body']['uk']}
-            for a in cat['posts']]
+    blog = [{'id': a['id'], 'k': a['k']['uk'], 'title': a['title']['uk'], 'excerpt': a['excerpt']['uk'],
+             'body': '' if a.get('_new') else a['body']['uk']} for a in cat['posts']]
     blog_i18n = {a['id']: {'k': a['k'], 'title': a['title'], 'excerpt': a['excerpt'],
-                           'body': {'uk': None, 'ru': a['body']['ru']}} for a in cat['posts']}
+                           'body': {'uk': None, 'ru': ''} if a.get('_new') else {'uk': None, 'ru': a['body']['ru']},
+                           **({'url': {'uk': f"/blog/{a['id']}/", 'ru': f"/ru/blog/{a['id']}/"}} if a.get('_new') else {})}
+                 for a in cat['posts']}
     taste = {p['id']: p['taste'] for p in prods}
     out = ['/*CATALOG:START — блок генерується tools/build.py з catalog.json. Не правте вручну: зміни вносьте в catalog.json*/']
     out.append('const PRODUCT_I18N = ' + j(i18n) + ';')
@@ -1057,6 +1135,53 @@ def gal_html(p, lang):
             f'<button type="button" class="gal-nav gal-prev" aria-label="←">‹</button><button type="button" class="gal-nav gal-next" aria-label="→">›</button>'
             f'<div class="gal-dots">{dots}</div></div>')
 
+BLOG_CSS = r"""
+/* ===== блог: розширені статті ===== */
+.article.rich{max-width:760px}
+.article.rich h1{font-size:clamp(1.7rem,4.5vw,2.4rem);margin:6px 0 10px}
+.article.rich h2{font-size:1.45rem;margin:34px 0 12px;scroll-margin-top:84px}
+.article.rich p,.article.rich li{color:var(--ink);font-size:1.02rem;line-height:1.72}
+.article.rich p{margin-bottom:14px}
+.article.rich ul,.article.rich ol{margin:0 0 16px 22px}
+.article.rich li{margin-bottom:6px}
+.article.rich a{color:var(--gold-soft);text-underline-offset:3px}
+.byline{font-size:.85rem;color:var(--sub)!important;margin-bottom:18px!important}
+.cover,.article figure{margin:0 0 22px}
+.article figure img,.cover img{width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;border-radius:12px;display:block;background:var(--bg2)}
+.article figcaption{font-size:.82rem;color:var(--sub);margin-top:6px}
+.tldr{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:10px;padding:14px 16px;margin:0 0 22px}
+.tldr b{display:block;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-soft);margin-bottom:4px}
+.tldr p{margin:0!important}
+.toc{background:rgba(169,121,47,.07);border-radius:10px;padding:14px 18px;margin:0 0 26px}
+.toc b{display:block;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-soft);margin-bottom:6px}
+.toc ol{margin:0 0 0 18px!important}.toc li{font-size:.95rem!important;margin-bottom:3px!important}
+.tbl{overflow-x:auto;margin:0 0 20px;-webkit-overflow-scrolling:touch}
+.tbl table{border-collapse:collapse;width:100%;min-width:480px;font-size:.92rem}
+.tbl th,.tbl td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+.tbl th{background:var(--card);font-weight:600}
+.buy-box{margin:36px 0;padding:20px;background:var(--card);border:1px solid var(--line);border-radius:14px}
+.buy-box h2{margin-top:0!important}
+.pcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:16px}
+.pcard{display:flex;flex-direction:column;gap:4px;text-decoration:none!important;color:var(--ink)!important;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px}
+.pcard img{width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;border-radius:8px}
+.pcard b{font-family:'Fraunces',Georgia,serif;font-weight:500;font-size:1.02rem}
+.pcard span{font-size:.8rem;color:var(--sub)}
+.pcard em{font-style:normal;font-weight:600;color:var(--gold-soft);font-size:.9rem}
+.faq details{border-bottom:1px solid var(--line);padding:12px 0}
+.faq summary{cursor:pointer;font-weight:600;list-style:none;padding-right:24px;position:relative}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:'+';position:absolute;right:2px;top:0;font-size:1.3rem;line-height:1;color:var(--gold)}
+.faq details[open] summary::after{content:'−'}
+.faq details p{margin:8px 0 0!important}
+.author{display:flex;gap:16px;align-items:flex-start;margin:38px 0 10px;padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+.author img{width:72px;height:auto;aspect-ratio:1/1;object-fit:cover;border-radius:50%;flex:0 0 auto}
+.author b{display:block;font-family:'Fraunces',Georgia,serif;font-weight:500;font-size:1.1rem}
+.author small{display:block;color:var(--gold-soft);margin-bottom:6px}
+.author p{font-size:.9rem!important;margin:0 0 6px!important;color:var(--sub)!important}
+.post img{width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;border-radius:8px;margin-bottom:4px}
+@media(max-width:520px){.author{flex-direction:column}.article.rich h2{font-size:1.3rem}}
+"""
+
 GAL_CSS = """
 .gal{position:relative;min-width:0}
 .gal-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;border-radius:12px;overscroll-behavior-x:contain}
@@ -1344,7 +1469,93 @@ class Site:
                 self.write(f"{u['pre'].strip('/')}/coffee/{p['id']}/index.html".lstrip('/'), h)
 
     # --- блог
+    def img_ok(self, src):
+        ok = os.path.exists(os.path.join(ROOT, src))
+        if not ok and src not in self._missing:
+            self._missing.add(src)
+            sys.stderr.write(f'Фото ще немає (блок пропущено): {src}\n')
+        return ok
+
+    def post_body(self, lang, a):
+        """HTML тіла статті нового формату + дані для JSON-LD."""
+        u = UI[lang]
+        T = {'uk': dict(short='Коротко', toc='Зміст', faq='Часті запитання', min='хв читання', upd='Оновлено', by='Автор',
+                        about='Мікроростерня ZRN Coffee, Черкаси. Обсмажуємо каву невеликими партіями й відправляємо по всій Україні. '
+                              'Питання про каву чи замовлення — пишіть у Telegram, відповімо особисто.',
+                        role='засновник мікроростерні ZRN Coffee', coffee='Кава до цієї теми', ask='Написати в Telegram', allc='Усі сорти'),
+             'ru': dict(short='Коротко', toc='Содержание', faq='Частые вопросы', min='мин чтения', upd='Обновлено', by='Автор',
+                        about='Микрообжарочная ZRN Coffee, Черкассы. Обжариваем кофе небольшими партиями и отправляем по всей Украине. '
+                              'Вопросы о кофе или заказе — пишите в Telegram, ответим лично.',
+                        role='основатель микрообжарочной ZRN Coffee', coffee='Кофе по теме', ask='Написать в Telegram', allc='Все сорта'),
+             }[lang]
+        home = '/' if lang == 'uk' else '/ru/'
+        words = 0
+        imgs = []
+        parts = []
+        # обкладинка
+        cov = a.get('cover')
+        if cov and self.img_ok(cov):
+            imgs.append(f'{self.url}/{cov}')
+            parts.append(f'<figure class="cover"><img src="{vimg(cov)}" alt="{E(a.get("coverAlt", {}).get(lang, a["title"][lang]))}" '
+                         f'width="1200" height="800" fetchpriority="high"></figure>')
+        words += len(plain(a['lead'][lang]).split())
+        parts.append(f'<div class="tldr"><b>{T["short"]}</b><p>{inline(a["lead"][lang])}</p></div>')
+        secs = a['sections']
+        if len(secs) >= 3:
+            li = ''.join(f'<li><a href="#{x["id"]}">{E(x["h"][lang])}</a></li>' for x in secs)
+            if a.get('faq'):
+                li += f'<li><a href="#faq">{T["faq"]}</a></li>'
+            parts.append(f'<nav class="toc" aria-label="{T["toc"]}"><b>{T["toc"]}</b><ol>{li}</ol></nav>')
+        for x in secs:
+            parts.append(f'<h2 id="{x["id"]}">{E(x["h"][lang])}</h2>')
+            for par in x.get('p', {}).get(lang, []):
+                words += len(plain(par).split())
+                parts.append(f'<p>{inline(par)}</p>')
+            if x.get('list'):
+                tag = 'ol' if x.get('ordered') else 'ul'
+                parts.append(f'<{tag}>' + ''.join(f'<li>{inline(i)}</li>' for i in x['list'][lang]) + f'</{tag}>')
+                words += sum(len(plain(i).split()) for i in x['list'][lang])
+            if x.get('table'):
+                tb = x['table']
+                head = ''.join(f'<th scope="col">{E(c)}</th>' for c in tb['head'][lang])
+                rows = ''.join('<tr>' + ''.join(f'<td>{inline(c)}</td>' for c in r) + '</tr>' for r in tb['rows'][lang])
+                parts.append(f'<div class="tbl"><table><thead><tr>{head}</tr></thead><tbody>{rows}</tbody></table></div>')
+                words += sum(len(plain(c).split()) for r in tb['rows'][lang] for c in r)
+            for im in ([x['img']] if isinstance(x.get('img'), dict) else x.get('img', [])):
+                if self.img_ok(im['src']):
+                    imgs.append(f'{self.url}/{im["src"]}')
+                    cap = im.get('cap', {}).get(lang, '')
+                    parts.append(f'<figure><img src="{vimg(im["src"])}" alt="{E(im["alt"][lang])}" width="1200" height="800" loading="lazy" decoding="async">'
+                                 + (f'<figcaption>{E(cap)}</figcaption>' if cap else '') + '</figure>')
+        # сорти по темі
+        prods = [p for p in self.prods if p['id'] in a.get('products', [])]
+        if prods:
+            cards = ''.join(
+                f'<a class="pcard" href="{u["pre"]}/coffee/{p["id"]}/"><img src="{vimg(p["img"])}" alt="" width="600" height="600" loading="lazy">'
+                f'<b>{E(p["name"])}</b><span>{E(p["notes"][lang])}</span><em>{u["from_"]}{p["price200"]} ₴</em></a>' for p in prods)
+            parts.append(f'<section class="wide buy-box"><h2>{T["coffee"]}</h2><div class="pcards">{cards}</div>'
+                         f'<p><a class="btn" href="{home}#catalog">{T["allc"]}</a></p></section>')
+        faqs = a.get('faq', [])
+        if faqs:
+            det = ''.join(f'<details><summary>{E(f["q"][lang])}</summary><p>{inline(f["a"][lang])}</p></details>' for f in faqs)
+            parts.append(f'<h2 id="faq">{T["faq"]}</h2><div class="faq">{det}</div>')
+            words += sum(len(plain(f['q'][lang] + ' ' + f['a'][lang]).split()) for f in faqs)
+        ph = ' · '.join(f'<a href="tel:{p}">{self.fmt_phone(p)}</a>' for p in self.phones)
+        parts.append(f'<aside class="author"><img src="/img/owner.webp" alt="{E(self.author(lang))}" width="72" height="76" loading="lazy">'
+                     f'<div><b>{E(self.author(lang))}</b><small>{T["role"]}</small><p>{T["about"]}</p>'
+                     f'<p><a href="{self.tg}" rel="noopener">{T["ask"]}</a>{" · " + ph if ph else ""}</p></div></aside>')
+        return '\n'.join(parts), imgs, words, T
+
+    @staticmethod
+    def fmt_phone(ph):
+        d = re.sub(r'\D', '', ph)
+        return f'+{d[:2]} {d[2:5]} {d[5:8]} {d[8:10]} {d[10:12]}' if len(d) == 12 else ph
+
+    def author(self, lang):
+        return UI[lang]['author']
+
     def blog_pages(self):
+        self._missing = set()
         for lang in LANGS:
             u = UI[lang]
             other = 'ru' if lang == 'uk' else 'uk'
@@ -1358,30 +1569,60 @@ class Site:
             h += self.header(lang, f"{UI[other]['pre']}/blog/")
             h += (f'<nav class="crumbs" aria-label="breadcrumb"><a href="{home}">ZRN Coffee</a> › <span>{u["blogTitle"]}</span></nav>\n'
                   f'<h1>{u["blogTitle"]}</h1>\n<div class="posts">\n')
-            h += ''.join(f'  <a class="post" href="{u["pre"]}/blog/{a["id"]}/"><small>{E(a["k"][lang])}</small><h2>{E(a["title"][lang])}</h2>'
-                         f'<p>{E(a["excerpt"][lang])}</p><span>{u["read"]} →</span></a>\n' for a in self.posts) + '</div>\n'
-            h += self.footer(lang)
+            for a in self.posts:
+                cov = a.get('cover')
+                thumb = f'<img src="{vimg(cov)}" alt="" width="1200" height="800" loading="lazy">' if cov and self.img_ok(cov) else ''
+                dt = f'<time datetime="{a["published"]}">{fmt_date(a["published"], lang)}</time>' if a.get('_new') else ''
+                h += (f'  <a class="post" href="{u["pre"]}/blog/{a["id"]}/">{thumb}<small>{E(a["k"][lang])}{" · " + dt if dt else ""}</small><h2>{E(a["title"][lang])}</h2>'
+                      f'<p>{E(a["excerpt"][lang])}</p><span>{u["read"]} →</span></a>\n')
+            h += '</div>\n' + self.footer(lang)
             self.write(f"{u['pre'].strip('/')}/blog/index.html".lstrip('/'), h)
             for a in self.posts:
                 title = a['title'][lang] + u['postSuf']
-                desc = self.short(a['excerpt'][lang] + ' ' + a['body'][lang].replace('\n', ' '), 158)
                 canonical = self.b_url(lang, a['id'])
                 alts = {'uk': self.b_url('uk', a['id']), 'ru': self.b_url('ru', a['id']), 'x-default': self.b_url('uk', a['id'])}
-                ld = [{'@context': 'https://schema.org', '@type': 'Article', 'headline': a['title'][lang], 'description': a['excerpt'][lang],
-                       'inLanguage': lang, 'mainEntityOfPage': canonical, 'image': f"{self.url}/img/og.jpg",
-                       'author': {'@type': 'Person', 'name': u['author']},
-                       'publisher': {'@type': 'Organization', 'name': 'ZRN Coffee', 'url': self.url + '/'}},
-                      self.crumbs([('ZRN Coffee', self.main(lang)), (u['blogTitle'], self.blog_idx(lang)), (a['title'][lang], canonical)])]
-                h = self.head(lang, title, desc, canonical, alts, 'article', f"{self.url}/img/og.jpg", ld)
-                h += self.header(lang, self.b_url(other, a['id']).replace(self.url, ''))
-                body = ''.join(f'<p>{E(par.strip())}</p>' for par in a['body'][lang].split('\n\n') if par.strip())
                 rel = [y for y in self.posts if y['id'] != a['id']]
-                h += (f'<nav class="crumbs" aria-label="breadcrumb"><a href="{home}">ZRN Coffee</a> › <a href="{u["pre"]}/blog/">{u["blogTitle"]}</a> › <span>{E(a["title"][lang])}</span></nav>\n'
-                      f'<article class="article">\n  <small class="kicker">{E(a["k"][lang])}</small>\n  <h1>{E(a["title"][lang])}</h1>\n  {body}\n'
-                      f'  <p><a class="btn" href="{home}#catalog">{u["toShop"]}</a></p>\n</article>\n'
-                      f'<section class="more"><h2>{u["more"]}</h2><div class="posts">\n')
+                if a.get('_new'):
+                    desc = self.short(a['excerpt'][lang], 158)
+                    body, imgs, words, T = self.post_body(lang, a)
+                    ld = [{'@context': 'https://schema.org', '@type': 'Article', 'headline': a['title'][lang], 'description': a['excerpt'][lang],
+                           'inLanguage': lang, 'mainEntityOfPage': canonical, 'url': canonical,
+                           'image': imgs or [f"{self.url}/img/og.jpg"], 'datePublished': a['published'], 'dateModified': a['updated'],
+                           'wordCount': words, 'articleSection': a['k'][lang],
+                           'author': {'@type': 'Person', 'name': u['author'], 'jobTitle': T['role'],
+                                      'worksFor': {'@type': 'Organization', 'name': 'ZRN Coffee', 'url': self.url + '/'}},
+                           'publisher': {'@type': 'Organization', 'name': 'ZRN Coffee', 'url': self.url + '/',
+                                         'logo': {'@type': 'ImageObject', 'url': f'{self.url}/icon-512.png'}}},
+                          self.crumbs([('ZRN Coffee', self.main(lang)), (u['blogTitle'], self.blog_idx(lang)), (a['title'][lang], canonical)])]
+                    if a.get('faq'):
+                        ld.append({'@context': 'https://schema.org', '@type': 'FAQPage',
+                                   'mainEntity': [{'@type': 'Question', 'name': f['q'][lang],
+                                                   'acceptedAnswer': {'@type': 'Answer', 'text': plain(f['a'][lang])}} for f in a['faq']]})
+                    og = imgs[0] if imgs else f"{self.url}/img/og.jpg"
+                    h = self.head(lang, title, desc, canonical, alts, 'article', og, ld)
+                    h += self.header(lang, self.b_url(other, a['id']).replace(self.url, ''))
+                    mins = max(1, round(words / 190))
+                    upd = f' · {T["upd"]}: <time datetime="{a["updated"]}">{fmt_date(a["updated"], lang)}</time>' if a['updated'] != a['published'] else ''
+                    h += (f'<nav class="crumbs" aria-label="breadcrumb"><a href="{home}">ZRN Coffee</a> › <a href="{u["pre"]}/blog/">{u["blogTitle"]}</a> › <span>{E(a["title"][lang])}</span></nav>\n'
+                          f'<article class="article rich">\n  <small class="kicker">{E(a["k"][lang])}</small>\n  <h1>{E(a["title"][lang])}</h1>\n'
+                          f'  <p class="byline">{T["by"]}: {E(u["author"])} · <time datetime="{a["published"]}">{fmt_date(a["published"], lang)}</time>{upd} · {mins} {T["min"]}</p>\n'
+                          f'  {body}\n</article>\n')
+                else:
+                    desc = self.short(a['excerpt'][lang] + ' ' + a['body'][lang].replace('\n', ' '), 158)
+                    ld = [{'@context': 'https://schema.org', '@type': 'Article', 'headline': a['title'][lang], 'description': a['excerpt'][lang],
+                           'inLanguage': lang, 'mainEntityOfPage': canonical, 'image': f"{self.url}/img/og.jpg",
+                           'author': {'@type': 'Person', 'name': u['author']},
+                           'publisher': {'@type': 'Organization', 'name': 'ZRN Coffee', 'url': self.url + '/'}},
+                          self.crumbs([('ZRN Coffee', self.main(lang)), (u['blogTitle'], self.blog_idx(lang)), (a['title'][lang], canonical)])]
+                    h = self.head(lang, title, desc, canonical, alts, 'article', f"{self.url}/img/og.jpg", ld)
+                    h += self.header(lang, self.b_url(other, a['id']).replace(self.url, ''))
+                    body = ''.join(f'<p>{E(par.strip())}</p>' for par in a['body'][lang].split('\n\n') if par.strip())
+                    h += (f'<nav class="crumbs" aria-label="breadcrumb"><a href="{home}">ZRN Coffee</a> › <a href="{u["pre"]}/blog/">{u["blogTitle"]}</a> › <span>{E(a["title"][lang])}</span></nav>\n'
+                          f'<article class="article">\n  <small class="kicker">{E(a["k"][lang])}</small>\n  <h1>{E(a["title"][lang])}</h1>\n  {body}\n'
+                          f'  <p><a class="btn" href="{home}#catalog">{u["toShop"]}</a></p>\n</article>\n')
+                h += f'<section class="more"><h2>{u["more"]}</h2><div class="posts">\n'
                 h += ''.join(f'<a class="post" href="{u["pre"]}/blog/{y["id"]}/"><small>{E(y["k"][lang])}</small><h3>{E(y["title"][lang])}</h3>'
-                             f'<p>{E(y["excerpt"][lang])}</p></a>' for y in rel) + '</div></section>\n'
+                             f'<p>{E(y["excerpt"][lang])}</p></a>' for y in rel[:3]) + '</div></section>\n'
                 h += self.footer(lang)
                 self.write(f"{u['pre'].strip('/')}/blog/{a['id']}/index.html".lstrip('/'), h)
 
@@ -1546,8 +1787,8 @@ class Site:
         self.write('ru/index.html', h)
 
     def sitemap(self):
-        def entry(loc, alts, prio, freq):
-            x = f"  <url>\n    <loc>{loc}</loc>\n    <lastmod>{TODAY}</lastmod>\n    <changefreq>{freq}</changefreq>\n    <priority>{prio}</priority>\n"
+        def entry(loc, alts, prio, freq, lastmod=None):
+            x = f"  <url>\n    <loc>{loc}</loc>\n    <lastmod>{lastmod or TODAY}</lastmod>\n    <changefreq>{freq}</changefreq>\n    <priority>{prio}</priority>\n"
             for k, v in alts.items():
                 x += f'    <xhtml:link rel="alternate" hreflang="{k}" href="{v}"/>\n'
             return x + '  </url>\n'
@@ -1561,7 +1802,8 @@ class Site:
         sm += entry(bi['uk'], bi, '0.7', 'weekly') + entry(bi['ru'], bi, '0.5', 'weekly')
         for a_ in self.posts:
             a = {'uk': self.b_url('uk', a_['id']), 'ru': self.b_url('ru', a_['id']), 'x-default': self.b_url('uk', a_['id'])}
-            sm += entry(a['uk'], a, '0.6', 'monthly') + entry(a['ru'], a, '0.5', 'monthly')
+            lm = a_.get('updated')
+            sm += entry(a['uk'], a, '0.7' if a_.get('_new') else '0.6', 'monthly', lm) + entry(a['ru'], a, '0.6' if a_.get('_new') else '0.5', 'monthly', lm)
         for path in ('oferta', 'privacy'):
             sm += entry(f'{self.url}/{path}/', {}, '0.3', 'yearly')
         self.write('sitemap.xml', sm + '</urlset>\n')
@@ -1745,7 +1987,7 @@ def main():
     site.home_ru()
     site.merchant_feed()
     site.sitemap()
-    site.write('pages.css', CSS + SB_CSS + GAL_CSS)
+    site.write('pages.css', CSS + SB_CSS + GAL_CSS + BLOG_CSS)
     # прибираємо застарілі сторінки сортів/статей, яких більше немає в catalog.json
     keep = set(site.out)
     for base in ('coffee', 'blog', 'ru/coffee', 'ru/blog'):
