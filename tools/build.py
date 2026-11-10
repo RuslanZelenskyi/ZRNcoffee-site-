@@ -61,12 +61,13 @@ def inline(text):
     """Безпечне форматування: **жирний** і [текст](/посилання)."""
     t = E(text)
     t = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', t)
+    t = re.sub(r'(?<!\*)\*([^*\n]+?)\*(?!\*)', r'<em>\1</em>', t)
     t = re.sub(r'\[([^\]]+)\]\(((?:/|https?://)[^)\s]*)\)', r'<a href="\2">\1</a>', t)
     return t
 
 
 def plain(text):
-    return re.sub(r'\s+', ' ', re.sub(r'\[([^\]]+)\]\([^)]*\)', r'\1', text.replace('**', ''))).strip()
+    return re.sub(r'\s+', ' ', re.sub(r'\[([^\]]+)\]\([^)]*\)', r'\1', text.replace('**', '').replace('*', ''))).strip()
 
 
 def load_content_posts(cat):
