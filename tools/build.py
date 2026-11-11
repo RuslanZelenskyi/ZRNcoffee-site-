@@ -1533,7 +1533,7 @@ class Site:
         if prods:
             cards = ''.join(
                 f'<a class="pcard" href="{u["pre"]}/coffee/{p["id"]}/"><img src="{vimg(p["img"])}" alt="" width="600" height="600" loading="lazy">'
-                f'<b>{E(p["name"])}</b><span>{E(p["notes"][lang])}</span><em>{u["from_"]}{p["price200"]} ₴</em></a>' for p in prods)
+                f'<b>{E(p["name"])}</b><span>{E(p["notes"][lang])}</span><em>{u["from_"]}{p["price1"]} ₴</em></a>' for p in prods)
             parts.append(f'<section class="wide buy-box"><h2>{T["coffee"]}</h2><div class="pcards">{cards}</div>'
                          f'<p><a class="btn" href="{home}#catalog">{T["allc"]}</a></p></section>')
         faqs = a.get('faq', [])
