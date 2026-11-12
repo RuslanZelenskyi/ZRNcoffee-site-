@@ -409,7 +409,11 @@ def js_block(cat):
         for k in ('notes', 'info', 'roastLabel', 'variety', 'story', 'region'):
             e[k] = p[k]
         i18n[p['id']] = e
+    def cover_of(a):   # обкладинка для списку на головній (лише якщо файл є в репозиторії)
+        c = a.get('cover') if a.get('_new') else None
+        return vimg(c) if c and os.path.exists(os.path.join(ROOT, c)) else None
     blog = [{'id': a['id'], 'k': a['k']['uk'], 'title': a['title']['uk'], 'excerpt': a['excerpt']['uk'],
+             'cover': cover_of(a),
              'body': '' if a.get('_new') else a['body']['uk']} for a in cat['posts']]
     blog_i18n = {a['id']: {'k': a['k'], 'title': a['title'], 'excerpt': a['excerpt'],
                            'body': {'uk': None, 'ru': ''} if a.get('_new') else {'uk': None, 'ru': a['body']['ru']},
