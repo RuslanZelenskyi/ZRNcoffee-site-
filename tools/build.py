@@ -1382,7 +1382,7 @@ class Site:
                                                        'returnPolicyCategory': 'https://schema.org/MerchantReturnFiniteReturnWindow',
                                                        'merchantReturnDays': 14,
                                                        'returnMethod': 'https://schema.org/ReturnByMail',
-                                                       'returnFees': 'https://schema.org/ReturnShippingFees'}}
+                                                       'returnFees': 'https://schema.org/ReturnFeesCustomerResponsibility'}}
                           for w, pr in ((p['w1'], p['price1']), (p['w2'], p['price2']))]
                 ld_prod = {'@context': 'https://schema.org', '@type': 'Product', 'name': name, 'sku': p['id'], 'image': ([img] + [f"{self.url}/{g}" for g in p.get('gallery', [])]) if p.get('gallery') else img,
                            'description': self.short(f"{notes}. {p['info'][lang]}", 300), 'category': 'Coffee', 'url': canonical,
