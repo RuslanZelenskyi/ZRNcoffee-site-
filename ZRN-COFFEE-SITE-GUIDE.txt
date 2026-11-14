@@ -858,3 +858,7 @@ Custom domain = zrncoffee.com.ua (рекомендуется Enforce HTTPS). В
     Замінили фото з тим самим іменем — Caching → Configuration → Purge Everything.
 
 7.12 Слайдер фото сорту: поле "gallery" у catalog.json (список шляхів img/...). Файли: img/zrn-kava-<сорт>-2.webp, -3.webp. Щоб поміняти місцями фото — перейменуйте файли або змініть порядок у gallery.
+
+7.13 Блог: ціни в картках «Кава по темі» (внизу статей) беруться з p['price1'] — це ціна першої ваги з таблиці «Ціни» (запасна — price200 із catalog.json). Правку внесено 2026-11-11 (файл build.py від користувача — актуальна база).
+
+7.14 Політика повернення у розмітці Product: returnFees = ReturnFeesCustomerResponsibility (покупець оплачує зворотну доставку — як в оферті п. 9.3). Це прибирає попередження Google про відсутнє поле returnShippingFeesAmount. Якщо колись повернення стане безкоштовним — замінити на FreeReturn у tools/build.py.
