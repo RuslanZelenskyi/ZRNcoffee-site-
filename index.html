@@ -927,6 +927,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       <a data-nav="ship" href="#ship" onclick="openShipModal();return false;" data-i18n="nav.shipShort">Доставка</a>
       <a data-nav="faq" href="#faq" onclick="scrollToSel('#faq');return false;" data-i18n="nav.faq">FAQ</a>
       <a data-nav="blog" href="/blog/" data-seo="blog/" onclick="openBlogOverlay();return false;" data-i18n="nav.blog">Блог</a>
+      <a data-nav="calc" href="/calculator/" data-seo="calculator/" data-i18n="nav.calc">Калькулятор</a>
     </nav>
     <div class="hd-right">
     <button type="button" class="menu-btn" id="menuBtn" aria-label="Меню" aria-expanded="false" aria-controls="mobileNav">
@@ -959,6 +960,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
     <a class="mn-link" data-nav="ship" href="#ship" onclick="closeMobileNav();openShipModal();return false;" data-i18n="nav.shipFull">Доставка та оплата</a>
     <a class="mn-link" data-nav="faq" href="#faq" onclick="closeMobileNav();scrollToSel('#faq');return false;" data-i18n="nav.faq">FAQ</a>
     <a class="mn-link" data-nav="blog" href="/blog/" data-seo="blog/" onclick="closeMobileNav();openBlogOverlay();return false;" data-i18n="nav.blog">Блог</a>
+    <a class="mn-link" data-nav="calc" href="/calculator/" data-seo="calculator/" data-i18n="nav.calc">Калькулятор</a>
   </div>
 </div>
 
@@ -1015,7 +1017,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
   </ul>
   <!--CAT:NOSCRIPT:END-->
   <p>Обсмажуємо після замовлення. Доставка Новою Поштою або Укрпоштою. Безкоштовна доставка від <span data-v="freeShip">1400</span> ₴.</p>
-  <p><a href="/blog/">Блог</a></p>
+  <p><a href="/blog/">Блог</a> · <a href="/calculator/">Калькулятор кави</a></p>
   <p>Пошта: <a href="mailto:zrncoffee@gmail.com">zrncoffee@gmail.com</a></p>
 </div>
 </noscript>
@@ -1249,6 +1251,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
         <a href="https://www.instagram.com/zrncoffee/" target="_blank" rel="noopener me">Instagram</a>
         <a href="mailto:zrncoffee@gmail.com" data-i18n="foot.mail">Написати на пошту</a>
         <a href="/blog/" data-seo="blog/" onclick="openBlogOverlay();return false;" data-i18n="nav.blog">Блог</a>
+        <a href="/calculator/" data-seo="calculator/" data-i18n="nav.calc">Калькулятор</a>
         <a href="#" data-pwa-install hidden data-i18n="pwa.foot">Встановити застосунок ZRN</a>
       </div>
       <div class="foot-contacts foot-phones" style="margin-top:6px">
@@ -1520,6 +1523,7 @@ uk: {
   'nav.sets': 'Набори',
   'nav.blends': 'Бленди',
   'nav.blog': 'Блог',
+  'nav.calc': 'Калькулятор',
   'nav.why': 'Чому<br>ми?',
   'nav.whyShort': 'Чому ми',
   'nav.whyFull': 'Чому ми?',
@@ -1844,6 +1848,7 @@ ru: {
   'nav.sets': 'Наборы',
   'nav.blends': 'Бленды',
   'nav.blog': 'Блог',
+  'nav.calc': 'Калькулятор',
   'nav.why': 'Почему<br>мы?',
   'nav.whyShort': 'Почему мы',
   'nav.whyFull': 'Почему мы?',
@@ -2505,6 +2510,28 @@ const PRODUCT_I18N = {
  }
 };
 const BLOG_I18N = {
+ "skilky-kavy-na-chashku": {
+  "k": {
+   "uk": "Рецепт",
+   "ru": "Рецепт"
+  },
+  "title": {
+   "uk": "Скільки кави на чашку: пропорції, таблиця грамів і розрахунок за способом",
+   "ru": "Сколько кофе на чашку: пропорции, таблица граммов и расчёт по способу"
+  },
+  "excerpt": {
+   "uk": "Скільки грамів кави на чашку: таблиця за обсягом води, пропорція 1:16, еспресо, турка, гейзер, колд брю й розрахунок води, яку вбирає гуща.",
+   "ru": "Сколько граммов кофе на чашку: таблица по объёму воды, пропорция 1:16, эспрессо, турка, гейзер, колд брю и расчёт воды, которую впитывает гуща."
+  },
+  "body": {
+   "uk": null,
+   "ru": ""
+  },
+  "url": {
+   "uk": "/blog/skilky-kavy-na-chashku/",
+   "ru": "/ru/blog/skilky-kavy-na-chashku/"
+  }
+ },
  "arabika-ta-robusta": {
   "k": {
    "uk": "Розбір",
@@ -2553,7 +2580,7 @@ const BLOG_I18N = {
 const PRODUCTS = [
  {
   "id": "costarica",
-  "img": "/img/zrn-kava-costa-rica-tarrazu-shb.webp?v=016ed470",
+  "img": "/img/zrn-kava-costa-rica-tarrazu-shb.webp",
   "alt": "Кава Costa Rica Tarrazu SHB ZRN — свіжа обсмажка",
   "accent": "#c1652f",
   "name": "Costa Rica Tarrazu SHB",
@@ -2580,16 +2607,16 @@ const PRODUCTS = [
  },
  {
   "id": "colombia",
-  "img": "/img/zrn-kava-colombia-supremo.webp?v=393def53",
+  "img": "/img/zrn-kava-colombia-supremo.webp",
   "alt": "Кава Colombia Supremo ZRN — свіжа обсмажка, 100% арабіка",
   "accent": "#7a5a9e",
   "badge": "Популярне",
   "badgeType": "popular",
   "gallery": [
-   "/img/zrn-kava-colombia-supremo-2.webp?v=b9b6502f",
-   "/img/zrn-kava-colombia-supremo-3.webp?v=8b8ffeb8",
-   "/img/zrn-kava-colombia-supremo-4.webp?v=4efcc141",
-   "/img/zrn-kava-colombia-supremo-5.webp?v=f4cb1b41"
+   "/img/zrn-kava-colombia-supremo-2.webp",
+   "/img/zrn-kava-colombia-supremo-3.webp",
+   "/img/zrn-kava-colombia-supremo-4.webp",
+   "/img/zrn-kava-colombia-supremo-5.webp"
   ],
   "name": "Colombia Supremo",
   "region": "Huila, 1200–2000 м",
@@ -2616,7 +2643,7 @@ const PRODUCTS = [
  },
  {
   "id": "elsalvador",
-  "img": "/img/zrn-kava-el-salvador-shg.webp?v=4b0c08ac",
+  "img": "/img/zrn-kava-el-salvador-shg.webp",
   "alt": "Кава El Salvador SHG ZRN — свіжа обсмажка, 100% арабіка",
   "accent": "#2f8f82",
   "name": "El Salvador SHG",
@@ -2643,7 +2670,7 @@ const PRODUCTS = [
  },
  {
   "id": "guatemala",
-  "img": "/img/zrn-kava-guatemala-huehuetenango.webp?v=1faaf0cc",
+  "img": "/img/zrn-kava-guatemala-huehuetenango.webp",
   "alt": "Кава Guatemala Huehuetenango ZRN — свіжа обсмажка",
   "accent": "#5f8a3f",
   "name": "Guatemala Huehuetenango",
@@ -2671,16 +2698,16 @@ const PRODUCTS = [
  },
  {
   "id": "ethiopia",
-  "img": "/img/zrn-kava-ethiopia-sidamo.webp?v=f2d301fd",
+  "img": "/img/zrn-kava-ethiopia-sidamo.webp",
   "alt": "Кава Ethiopia Sidamo Kurume ZRN — свіжа обсмажка, ягідний профіль",
   "accent": "#c9a227",
   "badge": "Новинка",
   "badgeType": "new",
   "gallery": [
-   "/img/zrn-kava-ethiopia-sidamo-2.webp?v=4e68e259",
-   "/img/zrn-kava-ethiopia-sidamo-3.webp?v=45ef4377",
-   "/img/zrn-kava-ethiopia-sidamo-4.webp?v=bb774279",
-   "/img/zrn-kava-ethiopia-sidamo-5.webp?v=bc4edb0a"
+   "/img/zrn-kava-ethiopia-sidamo-2.webp",
+   "/img/zrn-kava-ethiopia-sidamo-3.webp",
+   "/img/zrn-kava-ethiopia-sidamo-4.webp",
+   "/img/zrn-kava-ethiopia-sidamo-5.webp"
   ],
   "name": "Ethiopia Sidamo",
   "region": "Sidamo (Sidama), 1600–2200 м",
@@ -2706,7 +2733,7 @@ const PRODUCTS = [
  },
  {
   "id": "papua",
-  "img": "/img/zrn-kava-papua-new-guinea-psc.webp?v=7729ede1",
+  "img": "/img/zrn-kava-papua-new-guinea-psc.webp",
   "alt": "Кава Papua New Guinea PSC ZRN — свіжа обсмажка, 100% арабіка",
   "accent": "#c9a04a",
   "name": "Papua New Guinea PSC",
@@ -2735,7 +2762,7 @@ const PRODUCTS = [
 const BLENDS = [
  {
   "id": "myth",
-  "img": "/img/zrn-kava-myth-craft-edition.webp?v=25c79874",
+  "img": "/img/zrn-kava-myth-craft-edition.webp",
   "alt": "Кава Myth Craft Edition ZRN — бленд 50% арабіка / 50% робуста",
   "accent": "#8a5a34",
   "kicker": "Craft Edition",
@@ -2765,7 +2792,7 @@ const BLENDS = [
  },
  {
   "id": "epic",
-  "img": "/img/zrn-kava-epic-harmony-roast.webp?v=c6ea6976",
+  "img": "/img/zrn-kava-epic-harmony-roast.webp",
   "alt": "Кава Epic Harmony Roast ZRN — 100% арабіка, Коста-Ріка та Папуа Нова Гвінея",
   "accent": "#9c9488",
   "kicker": "Harmony Roast",
@@ -2794,7 +2821,7 @@ const BLENDS = [
  },
  {
   "id": "legend",
-  "img": "/img/zrn-kava-legend-specialty-selection.webp?v=123847dc",
+  "img": "/img/zrn-kava-legend-specialty-selection.webp",
   "alt": "Кава Legend Specialty Selection ZRN — 100% арабіка, Гватемала та Сальвадор",
   "accent": "#c1432a",
   "badge": "Популярне",
@@ -2825,14 +2852,14 @@ const BLENDS = [
  },
  {
   "id": "poetry",
-  "img": "/img/zrn-kava-poetry-signature-blend.webp?v=34c7a900",
+  "img": "/img/zrn-kava-poetry-signature-blend.webp",
   "alt": "Кава Poetry Signature Blend ZRN — 70% арабіка / 30% робуста",
   "accent": "#3a5a8c",
   "gallery": [
-   "/img/zrn-kava-poetry-signature-blend-2.webp?v=31a60d39",
-   "/img/zrn-kava-poetry-signature-blend-3.webp?v=0d842eec",
-   "/img/zrn-kava-poetry-signature-blend-4.webp?v=4ea3a1d1",
-   "/img/zrn-kava-poetry-signature-blend-5.webp?v=2bc47d1d"
+   "/img/zrn-kava-poetry-signature-blend-2.webp",
+   "/img/zrn-kava-poetry-signature-blend-3.webp",
+   "/img/zrn-kava-poetry-signature-blend-4.webp",
+   "/img/zrn-kava-poetry-signature-blend-5.webp"
   ],
   "kicker": "Signature Blend",
   "name": "Poetry",
@@ -2862,6 +2889,14 @@ const BLENDS = [
 const SETS = [];
 const SET_I18N = {};
 const BLOG = [
+ {
+  "id": "skilky-kavy-na-chashku",
+  "k": "Рецепт",
+  "title": "Скільки кави на чашку: пропорції, таблиця грамів і розрахунок за способом",
+  "excerpt": "Скільки грамів кави на чашку: таблиця за обсягом води, пропорція 1:16, еспресо, турка, гейзер, колд брю й розрахунок води, яку вбирає гуща.",
+  "cover": null,
+  "body": ""
+ },
  {
   "id": "arabika-ta-robusta",
   "k": "Розбір",
