@@ -64,6 +64,30 @@ CALC_CSS = r"""
 .calc-act button:hover{background:rgba(243,234,217,.12)}
 .calc-act button:focus-visible{outline-color:#f3ead9}
 .calc-toast{min-height:1.3em;font-size:.82rem;margin-top:8px;opacity:.9}
+.calc-pre{margin:0 0 14px}
+.calc-pre .calc-chips{margin-top:6px}
+.calc-steps{margin:10px 0 0;font-size:.9rem;color:#f3ead9}
+.calc-steps summary{cursor:pointer;font-weight:600;color:var(--gold-soft)}
+.calc-steps ol{margin:8px 0 0!important;padding:0 0 0 1.2em!important;display:grid;gap:7px}
+.calc-steps li{font-size:.88rem!important;line-height:1.5!important;color:#f3ead9!important;margin:0!important}
+.calc-steps li b{color:var(--gold-soft);font-weight:600;margin-right:4px}
+.calc-steps p{font-size:.8rem!important;margin:8px 0 0!important;color:rgba(243,234,217,.7)!important}
+.calc-steps a{color:var(--gold-soft)}
+.calc-saved{margin-top:12px}
+.calc-saved h4{margin:0 0 6px!important;font-size:.82rem!important;letter-spacing:.06em;text-transform:uppercase;color:rgba(243,234,217,.7)!important;font-weight:600}
+.calc-saved ul{list-style:none;margin:0!important;padding:0!important;display:grid;gap:6px}
+.calc-saved li{display:flex;gap:6px;margin:0!important}
+.calc-saved li button:first-child{flex:1;text-align:left}
+.calc-saved button,.calc-act button.calc-save{border:1px solid rgba(243,234,217,.25);background:transparent;color:#f3ead9;border-radius:10px;padding:8px 12px;font-size:.86rem}
+.calc-tm{margin-top:12px;background:#2a1d12;color:#f3ead9;border-radius:16px;padding:16px}
+.calc-tm[hidden]{display:none}
+.calc-tm h4{margin:0 0 6px!important;font-size:.82rem!important;letter-spacing:.06em;text-transform:uppercase;color:rgba(243,234,217,.7)!important;font-weight:600}
+.calc-tm-time{font-size:2.6rem;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1}
+.calc-tm-cur{margin:8px 0 0!important;font-size:.95rem!important;line-height:1.5!important;color:#f3ead9!important}
+.calc-tm-nxt{margin:6px 0 0!important;font-size:.82rem!important;color:rgba(243,234,217,.7)!important}
+.calc-tm-btn{display:flex;gap:8px;margin-top:12px}
+.calc-tm-btn button{flex:1;border:1px solid rgba(243,234,217,.3);background:transparent;color:#f3ead9;border-radius:12px;padding:12px;font-size:1rem}
+.calc-tm-btn button[data-tm=go]{background:var(--gold-soft);border-color:var(--gold-soft);color:#fff;font-weight:600}
 .calc-src{margin-top:12px;font-size:.84rem;color:var(--sub)}
 .calc-src summary{cursor:pointer;font-weight:600;color:var(--gold-soft)}
 .calc-src p,.calc-src li{font-size:.86rem!important;line-height:1.55!important;color:var(--sub)!important}
@@ -84,6 +108,37 @@ TXT = {
   'ratio': 'Міцність (співвідношення кави до води)', 'strong': 'Міцніше', 'base': 'Базово', 'light': 'Легше', 'sca': 'SCA',
   'ret': 'Врахувати воду, яку вбирає гуща', 'ret_h': 'Близько 2 мл на 1 г кави у фільтрі й 3 мл в імерсії (Barista Hustle). Без цього в чашці буде менше, ніж налили.',
   'ret_est': 'Для цього способу утримання води — наша оцінка.',
+  'presets_h': 'Швидкий старт: відомі рецепти', 'steps_h': 'Покроково', 'src_lbl': 'Джерело',
+  'pre': {
+    'v60h': {'n': 'Hoffmann V60', 'g': 'Середньо-дрібний', 'temp': 'якомога гарячіша, щойно з кипіння', 'time': 'до 3:30',
+      'steps': ['Змочіть фільтр окропом, насипте каву, зробіть лунку. Блюм: влийте {a} г (2× кава), закрутіть воронку, щоб гуща змокла рівно. Чекайте до 0:45.',
+                'Влийте воду до {c} г на вазі (ще {a} г), приблизно за 30 с. Тримайте воронку повною.',
+                'Долийте до {c} г (ще {a} г) повільніше й м’якше.',
+                'Один раз помішайте за годинниковою стрілкою й один проти, дайте стекти, злегка закрутіть воронку. Стік має завершитися приблизно до 3:30.'],
+      'src': ['https://www.hario-usa.com/blogs/recipes-and-more-from-friends/james-hoffmann-uitimate-v60-technique', 'Hario USA, Джеймс Гоффман']},
+    'k46': {'n': '4:6 (Tetsu Kasuya)', 'g': 'Грубий, як для френч-преса', 'temp': '93 °C світле, 88 °C середнє, 83 °C темне обсмаження', 'time': 'до 3:30',
+      'steps': ['Перша порція: {a} г повільно по колу (на вазі {c} г).', 'Друга порція: {a} г (на вазі {c} г).', 'Третя порція: {a} г (на вазі {c} г).', 'Четверта порція: {a} г (на вазі {c} г).', 'П’ята порція: {a} г (на вазі {c} г). Дайте стекти до 3:30.'],
+      'note': 'Перші дві порції (40% води) керують смаком: більша перша порція дає більше кислотності, більша друга — більше солодкості. Останні три (60%) керують міцністю: дві порції по 90 г дадуть слабше, чотири по 45 г міцніше.',
+      'src': ['https://pullandpourcoffee.com/v60-4-to-6-method-pour-over/amp/', 'Pull & Pour']},
+    'pressh': {'n': 'Hoffmann, френч-прес', 'g': 'Середньо-грубий, як морська сіль', 'temp': '≈96 °C, щойно з кипіння', 'time': '9–12 хв',
+      'steps': ['Насипте каву, влийте всю воду ({c} г) так, щоб уся гуща змокла. Не мішайте.',
+                'Через 4 хв розбийте кірку ложкою й акуратно помішайте 2–3 рази.',
+                'Двома ложками зніміть піну й гущу, що плаває.',
+                'Зачекайте ще 5–8 хв, щоб гуща осіла.',
+                'Опустіть поршень приблизно на 2,5 см під поверхню, як кришку, не притискайте до кінця. Наливайте повільно, останні 30–50 мл з осадом залиште.'],
+      'src': ['https://secure.lamose.com/blogs/recipes/james-hoffmanns-french-press-method-the-better-way', 'LAMOSE, Джеймс Гоффман']}
+  },
+  'mi': {
+    'filter': {'g': 'Середньо-дрібний (дрібніший за френч-прес, грубший за еспресо)', 'steps': ['Змочіть паперовий фільтр окропом, злийте воду.', 'Блюм: залийте кави вдвічі більше води за вагою й почекайте 30–45 с.', 'Доливайте колами до повної ваги води.', 'Стік має завершитися приблизно за 2:30–3:30. Якщо швидше, мельніть дрібніше, якщо довше, грубіше.']},
+    'press': {'g': 'Грубий', 'steps': ['Залийте каву водою й накрийте кришкою без притискання.', 'Чекайте 4 хв, розбийте кірку й зніміть піну.', 'Повільно притисніть поршень і одразу перелийте каву, щоб не перетримати.']},
+    'aero': {'g': 'Середній, між фільтром і еспресо', 'steps': ['Змочіть фільтр, налийте воду, насипте каву.', 'Залийте водою, перемішайте, вставте поршень.', 'Через ≈2 хв повільно тисніть 30 с, зупиніться на шипінні.']},
+    'espresso': {'g': 'Дуже дрібний; підлаштуйте так, щоб вихід вийшов за 25–30 с', 'steps': ['Зважте дозу в кошику, рівно розподіліть, притрамбуйте.', 'Поставте чашку на вагу й запустіть екстракцію.', 'Зупиніть, коли вага напою досягне розрахованого. Якщо швидше за 25 с, мельніть дрібніше, якщо довше за 30 с, грубіше.']},
+    'turka': {'g': 'Дуже дрібний, як пудра', 'steps': ['Всипте каву в холодну воду, не мішайте до нагрівання.', 'Нагрівайте на малому вогні, не кип’ятіть.', 'Зніміть, коли підніметься піна, дайте гущі осісти 1–2 хв.']},
+    'moka': {'g': 'Середньо-дрібний, грубший за еспресо', 'steps': ['Налийте воду до клапана, насипте каву вщерть без трамбування.', 'Поставте на малий вогонь із відкритою кришкою.', 'Зніміть, щойно кава почне хрипіти, охолодіть дно під холодною водою.']},
+    'cold': {'g': 'Грубий', 'steps': ['Змішайте каву з холодною водою, перемішайте, щоб усе змокло.', 'Настоюйте 12–16 год у холодильнику.', 'Процідіть через фільтр і розбавте водою або льодом до смаку.']}
+  },
+  'save': 'Зберегти рецепт', 'saved_h': 'Мої рецепти', 'saved_ok': 'Рецепт збережено в цьому браузері', 'saved_fail': 'Не вдалося зберегти (браузер забороняє сховище)', 'del': 'Видалити', 'saved_full': 'Збережено до 10 рецептів, найстарші видаляються',
+  'tm_h': 'Таймер', 'tm_start': 'Старт', 'tm_pause': 'Пауза', 'tm_resume': 'Продовжити', 'tm_reset': 'Скинути', 'tm_ready': 'Натисніть «Старт», коли почнете наливати воду.', 'tm_next': 'Далі через', 'tm_step': 'Крок', 'tm_done': 'Готово. Смачної кави!', 'tm_after': 'Потім',
   'prec': 'Ваги', 'prec1': 'точність 1 г', 'prec01': 'точність 0,1 г',
   'tds_h': 'Для профі: TDS і вихід екстракції', 'tds_lab': 'TDS напою, % (за рефрактометром)', 'tds_hint': 'Необов’язково. EY = TDS × вага напою ÷ вага кави.',
   'ey': 'Вихід екстракції (EY)', 'tds': 'Міцність (TDS)',
@@ -121,6 +176,37 @@ TXT = {
   'ratio': 'Крепость (соотношение кофе к воде)', 'strong': 'Крепче', 'base': 'Базово', 'light': 'Легче', 'sca': 'SCA',
   'ret': 'Учесть воду, которую впитывает гуща', 'ret_h': 'Около 2 мл на 1 г кофе в фильтре и 3 мл в иммерсии (Barista Hustle). Без этого в чашке будет меньше, чем налили.',
   'ret_est': 'Для этого способа удержание воды — наша оценка.',
+  'presets_h': 'Быстрый старт: известные рецепты', 'steps_h': 'По шагам', 'src_lbl': 'Источник',
+  'pre': {
+    'v60h': {'n': 'Hoffmann V60', 'g': 'Средне-мелкий', 'temp': 'как можно горячее, только с кипения', 'time': 'до 3:30',
+      'steps': ['Смочите фильтр кипятком, насыпьте кофе, сделайте лунку. Блюм: влейте {a} г (2× кофе), закрутите воронку, чтобы гуща смочилась ровно. Ждите до 0:45.',
+                'Влейте воду до {c} г на весах (ещё {a} г), примерно за 30 с. Держите воронку полной.',
+                'Долейте до {c} г (ещё {a} г) медленнее и мягче.',
+                'Один раз помешайте по часовой стрелке и один против, дайте стечь, слегка закрутите воронку. Стекание должно завершиться примерно к 3:30.'],
+      'src': ['https://www.hario-usa.com/blogs/recipes-and-more-from-friends/james-hoffmann-uitimate-v60-technique', 'Hario USA, Джеймс Хоффман']},
+    'k46': {'n': '4:6 (Tetsu Kasuya)', 'g': 'Крупный, как для френч-пресса', 'temp': '93 °C светлая, 88 °C средняя, 83 °C тёмная обжарка', 'time': 'до 3:30',
+      'steps': ['Первая порция: {a} г медленно по кругу (на весах {c} г).', 'Вторая порция: {a} г (на весах {c} г).', 'Третья порция: {a} г (на весах {c} г).', 'Четвёртая порция: {a} г (на весах {c} г).', 'Пятая порция: {a} г (на весах {c} г). Дайте стечь до 3:30.'],
+      'note': 'Первые две порции (40% воды) управляют вкусом: большая первая порция даёт больше кислотности, большая вторая — больше сладости. Последние три (60%) управляют крепостью: две порции по 90 г дадут слабее, четыре по 45 г крепче.',
+      'src': ['https://pullandpourcoffee.com/v60-4-to-6-method-pour-over/amp/', 'Pull & Pour']},
+    'pressh': {'n': 'Hoffmann, френч-пресс', 'g': 'Средне-крупный, как морская соль', 'temp': '≈96 °C, только с кипения', 'time': '9–12 мин',
+      'steps': ['Насыпьте кофе, влейте всю воду ({c} г), чтобы вся гуща смочилась. Не мешайте.',
+                'Через 4 мин разбейте корку ложкой и аккуратно помешайте 2–3 раза.',
+                'Двумя ложками снимите пену и плавающую гущу.',
+                'Подождите ещё 5–8 мин, чтобы гуща осела.',
+                'Опустите поршень примерно на 2,5 см под поверхность, как крышку, не прижимайте до конца. Наливайте медленно, последние 30–50 мл с осадком оставьте.'],
+      'src': ['https://secure.lamose.com/blogs/recipes/james-hoffmanns-french-press-method-the-better-way', 'LAMOSE, Джеймс Хоффман']}
+  },
+  'mi': {
+    'filter': {'g': 'Средне-мелкий (мельче френч-пресса, крупнее эспрессо)', 'steps': ['Смочите бумажный фильтр кипятком, слейте воду.', 'Блюм: залейте кофе вдвое больше воды по весу и подождите 30–45 с.', 'Доливайте кругами до полного веса воды.', 'Стекание должно завершиться примерно за 2:30–3:30. Если быстрее, мелите мельче, если дольше, крупнее.']},
+    'press': {'g': 'Крупный', 'steps': ['Залейте кофе водой и накройте крышкой без прижима.', 'Подождите 4 мин, разбейте корку и снимите пену.', 'Медленно прижмите поршень и сразу перелейте кофе, чтобы не перестоял.']},
+    'aero': {'g': 'Средний, между фильтром и эспрессо', 'steps': ['Смочите фильтр, налейте воду, насыпьте кофе.', 'Залейте водой, перемешайте, вставьте поршень.', 'Через ≈2 мин медленно давите 30 с, остановитесь на шипении.']},
+    'espresso': {'g': 'Очень мелкий; подстройте так, чтобы выход получился за 25–30 с', 'steps': ['Взвесьте дозу в корзине, ровно распределите, притрамбуйте.', 'Поставьте чашку на весы и запустите экстракцию.', 'Остановите, когда вес напитка достигнет расчётного. Если быстрее 25 с, мелите мельче, если дольше 30 с, крупнее.']},
+    'turka': {'g': 'Очень мелкий, как пудра', 'steps': ['Всыпьте кофе в холодную воду, не мешайте до нагрева.', 'Нагревайте на малом огне, не кипятите.', 'Снимите, когда поднимется пена, дайте гуще осесть 1–2 мин.']},
+    'moka': {'g': 'Средне-мелкий, крупнее эспрессо', 'steps': ['Налейте воду до клапана, насыпьте кофе вровень без трамбовки.', 'Поставьте на малый огонь с открытой крышкой.', 'Снимите, как только кофе начнёт хрипеть, охладите дно под холодной водой.']},
+    'cold': {'g': 'Крупный', 'steps': ['Смешайте кофе с холодной водой, перемешайте, чтобы всё смочилось.', 'Настаивайте 12–16 ч в холодильнике.', 'Процедите через фильтр и разбавьте водой или льдом по вкусу.']}
+  },
+  'save': 'Сохранить рецепт', 'saved_h': 'Мои рецепты', 'saved_ok': 'Рецепт сохранён в этом браузере', 'saved_fail': 'Не удалось сохранить (браузер запрещает хранилище)', 'del': 'Удалить', 'saved_full': 'Сохраняется до 10 рецептов, самые старые удаляются',
+  'tm_h': 'Таймер', 'tm_start': 'Старт', 'tm_pause': 'Пауза', 'tm_resume': 'Продолжить', 'tm_reset': 'Сбросить', 'tm_ready': 'Нажмите «Старт», когда начнёте наливать воду.', 'tm_next': 'Дальше через', 'tm_step': 'Шаг', 'tm_done': 'Готово. Приятного кофе!', 'tm_after': 'Потом',
   'prec': 'Весы', 'prec1': 'точность 1 г', 'prec01': 'точность 0,1 г',
   'tds_h': 'Для профи: TDS и выход экстракции', 'tds_lab': 'TDS напитка, % (по рефрактометру)', 'tds_hint': 'Необязательно. EY = TDS × вес напитка ÷ вес кофе.',
   'ey': 'Выход экстракции (EY)', 'tds': 'Крепость (TDS)',
@@ -173,10 +259,19 @@ CALC_JS = r"""
     cold:     { r: 10,   min: 8,  max: 14, k: 3,   cupMl: 250, cups: 1, est: true, variant: 'rtd', to: 12,
                 chips: [[10, 'base'], [13, 'light']] }
   };
+  var PRESETS = {
+    v60h:   { m: 'filter', dose: 30, r: 500 / 30, t: ['0:00', '0:45', '1:15', '1:45'], at: [0, 45, 75, 105], end: 210,
+              cum: function (d, w) { return [2 * d, 0.6 * w, w, null]; } },
+    k46:    { m: 'filter', dose: 20, r: 15, t: ['0:00', '0:40', '1:20', '2:00', '2:30'], at: [0, 40, 80, 120, 150], end: 210,
+              cum: function (d, w) { return [0.2 * w, 0.4 * w, 0.6 * w, 0.8 * w, w]; } },
+    pressh: { m: 'press', dose: 30, r: 500 / 30, t: ['0:00', '4:00', '4:00', '4:00+', '9–12'],
+              cum: function (d, w) { return [w, null, null, null, null]; } }
+  };
+  var PORDER = ['v60h', 'k46', 'pressh'];
   var ORDER = ['filter', 'press', 'aero', 'espresso', 'turka', 'moka', 'cold'];
 
   var S = { m: 'filter', g: 'drink', cups: 1, cupMl: 250, dose: 18, water: 288, r: 16, ret: true, prec: 1,
-            edose: 18, er: 2, tds: 0, pot: 2, serv: 1, per: 70, variant: 'rtd', to: 12 };
+            edose: 18, er: 2, tds: 0, preset: '', pot: 2, serv: 1, per: 70, variant: 'rtd', to: 12 };
 
   function $(sel, el) { return (el || root).querySelector(sel); }
   function $$(sel, el) { return [].slice.call((el || root).querySelectorAll(sel)); }
@@ -191,6 +286,7 @@ CALC_JS = r"""
   // ---------- каркас ----------
   function build() {
     var h = '';
+    h += '<div class="calc-pre"><span class="calc-lab">' + T.presets_h + '</span><div class="calc-chips" data-chips="preset"></div></div>';
     h += '<div class="calc-methods" role="group" aria-label="' + T.aria_methods + '">';
     ORDER.forEach(function (k) { h += '<button type="button" data-m="' + k + '" aria-pressed="false">' + T.methods[k] + '</button>'; });
     h += '</div><div class="calc-grid"><div class="calc-in">';
@@ -214,7 +310,7 @@ CALC_JS = r"""
          '<div style="margin-top:12px"><span class="calc-lab">' + T.prec + '</span><div class="calc-seg" role="group" aria-label="' + T.prec + '" data-precseg>' +
          '<button type="button" data-p="1" aria-pressed="true">' + T.prec1 + '</button><button type="button" data-p="0.1" aria-pressed="false">' + T.prec01 + '</button></div></div></div>';
     h += '<div class="calc-sec" data-sec="tds"><label class="calc-lab" for="c-tds">' + T.tds_h + '</label><div class="calc-row"><div class="calc-num"><input type="text" inputmode="decimal" autocomplete="off" id="c-tds" data-tds placeholder="1,35" aria-label="' + T.tds_lab + '"></div><span class="calc-unit">% TDS</span></div><p class="calc-unit" style="margin:8px 0 0;font-size:.8rem">' + T.tds_hint + '</p></div>';
-    h += '</div><div class="calc-out" aria-live="polite" data-out></div></div>';
+    h += '</div><div class="calc-out" aria-live="polite" data-out></div><div class="calc-tm" data-timer hidden></div></div>';
     h += '<details class="calc-src"><summary>' + T.src_sum + '</summary>' + T.src_html + '</details>';
     root.innerHTML = h;
   }
@@ -285,6 +381,8 @@ CALC_JS = r"""
     show('conc', isCold && S.variant === 'conc');
     show('opts', brew || isEsp || isTurka);
     show('tds', (brew && !isCold) || isEsp);
+    $('[data-chips=preset]').innerHTML = PORDER.map(function (id) { return '<button type="button" data-preset="' + id + '" aria-pressed="' + (S.preset === id) + '">' + T.pre[id].n + '</button>'; }).join('');
+    var PI = S.preset ? T.pre[S.preset] : null, tempV = PI ? PI.temp : c.temp, timeV = PI ? PI.time : c.time;
     var retw = $('[data-retwrap]'); retw.hidden = !brew;
     $('[data-reth]').textContent = T.ret_h + (c.est ? ' ' + T.ret_est : '');
     // сегмент цілей
@@ -348,7 +446,7 @@ CALC_JS = r"""
            '<li><span>' + T.f_perl + '</span><b>' + fmt(1000 / o.ratio, 1) + ' ' + T.g + '</b></li>';
       if (S.g === 'drink' && S.cups > 1) h += '<li><span>' + T.f_out + '</span><b>' + S.cups + ' × ' + S.cupMl + ' ' + T.ml + '</b></li>';
       h += '<li><span>' + T.f_spoon + '</span><b>' + spoon(o.dose) + '</b></li>';
-      if (c.temp) h += '<li><span>' + T.f_temp + '</span><b>' + c.temp + '</b></li><li><span>' + T.f_time + '</span><b>' + c.time + '</b></li>';
+      if (tempV) h += '<li><span>' + T.f_temp + '</span><b>' + tempV + '</b></li><li><span>' + T.f_time + '</span><b>' + timeV + '</b></li>';
       if (isCold) h += '<li><span>' + T.f_time + '</span><b>' + T.cold_time + '</b></li><li><span>' + T.f_grind + '</span><b>' + T.cold_grind + '</b></li>';
       h += '</ul>';
       if (m === 'filter') { var v = verdict(o.ratio); h += '<p class="calc-note ' + v[0] + '">' + v[1] + '</p>'; }
@@ -358,16 +456,18 @@ CALC_JS = r"""
         h += '<p class="calc-note ok"><b>' + T.conc_add + ': ' + add + ' ' + T.ml + '</b> (' + ratioStr(S.to) + ' → ≈ ' + fin + ' ' + T.ml + ')</p>';
       }
     }
+    h += stepsHtml(o);
     if (S.tds > 0 && (isEsp || (brew && !isCold))) {
       var bev = isEsp ? o.yield : o.drink, ey = S.tds * bev / o.dose, vc = (ey >= 18 && ey <= 22) ? 'ok' : '', vt = ey < 18 ? T.ey_under : (ey <= 22 ? T.ey_ok : T.ey_over);
       h += '<ul class="calc-facts"><li><span>' + T.tds + '</span><b>' + fmt(S.tds, 2) + '%</b></li><li><span>' + T.ey + '</span><b>' + fmt(ey, 1) + '%</b></li></ul>';
       h += '<p class="calc-note ' + vc + '">' + vt + ' ' + (isEsp ? T.tds_range_e : T.tds_range_f) + '</p>';
     }
     (o.warn || []).forEach(function (w) { h += '<p class="calc-note warn">' + w + '</p>'; });
-    h += '<div class="calc-act"><button type="button" data-copy>' + T.copy + '</button><button type="button" data-share>' + T.share + '</button></div><div class="calc-toast" data-toast></div>';
+    h += '<div class="calc-act"><button type="button" data-copy>' + T.copy + '</button><button type="button" data-share>' + T.share + '</button><button type="button" class="calc-save" data-save>' + T.save + '</button></div><div class="calc-toast" data-toast></div>' + savedHtml();
     $('[data-out]').innerHTML = h;
     root._o = o;
     saveState();
+    tmSync();
   }
   function barHtml(a, b, esp) {
     var tot = a + b, w = clamp(a / tot * 100, 8, 50);
@@ -387,7 +487,7 @@ CALC_JS = r"""
     var l = LIM[key]; if (!l) return; S[key] = clamp(v, l[0], l[1]);
   }
   function applyMethod(m) {
-    var c = METHODS[m], prev = S.m; S.m = m; if ((prev === 'espresso') !== (m === 'espresso')) S.tds = 0;
+    var c = METHODS[m], prev = S.m; S.m = m; S.preset = ''; if ((prev === 'espresso') !== (m === 'espresso')) S.tds = 0;
     if (m === 'espresso') { if (S.g !== 'yield') S.g = 'dose'; if (S.er < 1 || S.er > 4) S.er = c.r; }
     else if (m === 'moka') { S.g = 'drink'; }
     else if (m === 'turka') { S.g = 'drink'; if (prev !== 'turka' || S.r < c.min || S.r > c.max) S.r = c.r; }
@@ -397,6 +497,96 @@ CALC_JS = r"""
       if (!S.cupMlTouched) S.cupMl = c.cupMl;
     }
   }
+  function applyPreset(id) {
+    var P = PRESETS[id]; if (!P) return;
+    applyMethod(P.m); S.g = 'dose'; S.dose = P.dose; S.r = P.r; S.ret = true; S.preset = id;
+  }
+  function presetSteps(o) {
+    var P = PRESETS[S.preset], PI = T.pre[S.preset], cum = P.cum(o.dose, o.water), prev = 0;
+    return PI.steps.map(function (tx, i) {
+      var c = cum[i], a = '';
+      if (c != null) { a = Math.round(c - prev); prev = c; }
+      return { t: P.t[i], at: P.at ? P.at[i] : null, text: tx.replace('{a}', a).replace('{c}', c != null ? Math.round(c) : '') };
+    });
+  }
+  // ---------- таймер ----------
+  var TM = { run: false, acc: 0, t0: 0, iv: 0, id: '', last: -1, lock: null, ac: null };
+  function fmtT(sec) { sec = Math.max(0, Math.floor(sec)); return Math.floor(sec / 60) + ':' + ('0' + (sec % 60)).slice(-2); }
+  function tmBeep() {
+    try { if (navigator.vibrate) navigator.vibrate([120, 60, 120]); } catch (e) {}
+    try { if (TM.ac) { var o = TM.ac.createOscillator(), g = TM.ac.createGain(); o.frequency.value = 880; g.gain.value = 0.08; o.connect(g); g.connect(TM.ac.destination); o.start(); o.stop(TM.ac.currentTime + 0.18); } } catch (e) {}
+  }
+  function tmSecs() { return (TM.run ? Date.now() - TM.t0 : TM.acc) / 1000; }
+  function tmDraw() {
+    var box = $('[data-timer]'), o = root._o; if (!box || box.hidden || !o || !S.preset || !PRESETS[S.preset].at) return;
+    var P = PRESETS[S.preset], steps = presetSteps(o), sec = tmSecs(), idx = -1, i;
+    for (i = 0; i < steps.length; i++) if (steps[i].at <= sec) idx = i;
+    var done = sec >= P.end, started = TM.run || TM.acc > 0;
+    var cur = done ? T.tm_done : (idx < 0 || !started ? T.tm_ready : T.tm_step + ' ' + (idx + 1) + '/' + steps.length + ': ' + steps[idx].text);
+    var nxt = '';
+    if (started && !done) { var nx = steps[idx + 1]; nxt = nx ? T.tm_next + ' ' + fmtT(nx.at - sec + 0.999) + ' · ' + T.tm_after + ': ' + nx.text : T.tm_next + ' ' + fmtT(P.end - sec + 0.999) + ' · ' + T.tm_done; }
+    if (idx !== TM.last) { if (TM.last !== -2 && TM.run && idx >= 0) tmBeep(); TM.last = idx; }
+    if (done && TM.run) { tmBeep(); tmStop(false); }
+    box.querySelector('[data-tm-time]').textContent = fmtT(sec);
+    box.querySelector('[data-tm-cur]').textContent = cur;
+    box.querySelector('[data-tm-nxt]').textContent = nxt;
+    var go = box.querySelector('[data-tm=go]'); go.textContent = TM.run ? T.tm_pause : (TM.acc > 0 && !done ? T.tm_resume : T.tm_start);
+  }
+  function tmStop(keepAcc) {
+    if (TM.run) TM.acc = Date.now() - TM.t0;
+    TM.run = false; clearInterval(TM.iv); TM.iv = 0;
+    try { if (TM.lock) { TM.lock.release(); TM.lock = null; } } catch (e) {}
+    if (keepAcc === false) { /* залишаємо час, щоб показати результат */ }
+  }
+  function tmReset() { tmStop(true); TM.acc = 0; TM.last = -1; tmDraw(); }
+  function tmToggle() {
+    if (TM.run) { tmStop(true); tmDraw(); return; }
+    var P = PRESETS[S.preset]; if (TM.acc / 1000 >= P.end) TM.acc = 0;
+    try { if (!TM.ac && (window.AudioContext || window.webkitAudioContext)) TM.ac = new (window.AudioContext || window.webkitAudioContext)(); if (TM.ac && TM.ac.resume) TM.ac.resume(); } catch (e) {}
+    try { if (navigator.wakeLock) navigator.wakeLock.request('screen').then(function (l) { TM.lock = l; }, function () {}); } catch (e) {}
+    TM.run = true; TM.t0 = Date.now() - TM.acc; TM.last = -2; TM.iv = setInterval(tmDraw, 250); tmDraw();
+  }
+  function tmSync() {
+    var box = $('[data-timer]'); if (!box) return;
+    var on = !!(S.preset && PRESETS[S.preset].at);
+    if (TM.id !== (on ? S.preset : '')) { tmReset(); TM.id = on ? S.preset : ''; }
+    if (on && !box.firstChild) box.innerHTML = '<h4>' + T.tm_h + '</h4><div class="calc-tm-time" data-tm-time>0:00</div><p class="calc-tm-cur" data-tm-cur></p><p class="calc-tm-nxt" data-tm-nxt></p><div class="calc-tm-btn"><button type="button" data-tm="go"></button><button type="button" data-tm="reset">' + T.tm_reset + '</button></div>';
+    box.hidden = !on; tmDraw();
+  }
+  // ---------- збережені рецепти ----------
+  function getSaved() { try { var a = JSON.parse(localStorage.getItem('zrn-calc-recipes') || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
+  function putSaved(a) { try { localStorage.setItem('zrn-calc-recipes', JSON.stringify(a)); return true; } catch (e) { return false; } }
+  function recipeName(o) {
+    var PI = S.preset ? T.pre[S.preset] : null, n = PI ? PI.n : T.methods[S.m];
+    return n + ' · ' + fmtAuto(o.dose) + ' ' + T.g + (o.water ? ' / ' + Math.round(o.water) + ' ' + T.ml : o.yield ? ' → ' + fmtAuto(o.yield) + ' ' + T.g : '');
+  }
+  function savedHtml() {
+    var a = getSaved(); if (!a.length) return '';
+    return '<div class="calc-saved"><h4>' + T.saved_h + '</h4><ul>' + a.map(function (r, i) {
+      return '<li><button type="button" data-load="' + i + '">' + E(r.n) + '</button><button type="button" data-del="' + i + '" aria-label="' + T.del + '" title="' + T.del + '">×</button></li>';
+    }).join('') + '</ul></div>';
+  }
+  function E(x) { return String(x).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function stepsHtml(o) {
+    var PI = S.preset ? T.pre[S.preset] : null, P = S.preset ? PRESETS[S.preset] : null, h = '';
+    if (!(o.mode === 'brew' || o.mode === 'espresso' || o.mode === 'turka' || o.mode === 'moka')) return h;
+    var info = T.mi[S.m]; if (!info && !PI) return h;
+    var grind = PI ? PI.g : info.g;
+    if (grind && S.m !== 'cold') h += '<ul class="calc-facts"><li><span>' + T.f_grind + '</span><b>' + grind + '</b></li></ul>';
+    var items = '';
+    if (PI && P) {
+      items = presetSteps(o).map(function (st) { return '<li><b>' + st.t + '</b>' + st.text + '</li>'; }).join('');
+    } else if (info) {
+      items = info.steps.map(function (tx) { return '<li>' + tx + '</li>'; }).join('');
+    }
+    if (items) {
+      h += '<details class="calc-steps"' + (PI ? ' open' : '') + '><summary>' + T.steps_h + (PI ? ': ' + PI.n : '') + '</summary><ol>' + items + '</ol>';
+      if (PI && PI.note) h += '<p>' + PI.note + '</p>';
+      if (PI) h += '<p>' + T.src_lbl + ': <a href="' + PI.src[0] + '" target="_blank" rel="noopener">' + PI.src[1] + '</a></p>';
+      h += '</details>';
+    }
+    return h;
+  }
   function saveState() { try { localStorage.setItem('zrn-calc', JSON.stringify({ m: S.m, prec: S.prec, cupMl: S.cupMl })); } catch (e) {} }
   function loadState() {
     try {
@@ -405,6 +595,12 @@ CALC_JS = r"""
     } catch (e) {}
     var h = location.hash || '';
     if (h.indexOf('#calc=') === 0) {
+      applyParams(h);
+      setTimeout(function () { try { root.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) {} }, 300);
+    }
+  }
+  function applyParams(h) {
+    {
       var p = {}; h.slice(6).split(',').forEach(function (kv) { var a = kv.split(':'); p[a[0]] = a[1]; });
       if (METHODS[p.m]) { applyMethod(p.m); }
       if (p.g && /^(drink|dose|water|yield)$/.test(p.g)) S.g = p.g;
@@ -419,8 +615,8 @@ CALC_JS = r"""
       if (p.t) S.serv = clamp(parseInt(p.t, 10) || 1, 1, 12);
       if (p.e) S.per = clamp(num(p.e) || 70, 30, 200);
       if (p.n === '0') S.ret = false;
+      if (p.k && PRESETS[p.k] && PRESETS[p.k].m === S.m) S.preset = p.k;
       if (p.z) { var zv = num(p.z); if (isFinite(zv) && zv > 0) S.tds = clamp(zv, 0.05, 15); }
-      setTimeout(function () { try { root.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) {} }, 300);
     }
   }
   function hashState() {
@@ -430,6 +626,7 @@ CALC_JS = r"""
     else if (S.m === 'turka') { a.push('t:' + S.serv, 'e:' + S.per, 'r:' + S.r); }
     else { a.push('g:' + S.g, 'r:' + S.r); if (S.g === 'drink') a.push('c:' + S.cups, 's:' + S.cupMl); if (S.g === 'dose') a.push('d:' + S.dose); if (S.g === 'water') a.push('w:' + S.water); if (!S.ret) a.push('n:0'); if (S.m === 'cold' && S.variant === 'conc') a.push('v:conc'); }
     if (S.prec === 0.1) a.push('p:0.1');
+    if (S.preset) a.push('k:' + S.preset);
     if (S.tds > 0) a.push('z:' + S.tds);
     return '#calc=' + a.join(',');
   }
@@ -453,13 +650,15 @@ CALC_JS = r"""
   // ---------- події ----------
   root.addEventListener('click', function (e) {
     var b = e.target.closest ? e.target.closest('button') : null; if (!b || !root.contains(b)) return;
-    if (b.hasAttribute('data-m')) { applyMethod(b.getAttribute('data-m')); }
+    if (b.hasAttribute('data-tm')) { if (b.getAttribute('data-tm') === 'go') tmToggle(); else tmReset(); return; }
+    if (b.hasAttribute('data-preset')) { applyPreset(b.getAttribute('data-preset')); }
+    else if (b.hasAttribute('data-m')) { applyMethod(b.getAttribute('data-m')); }
     else if (b.hasAttribute('data-g')) { S.g = b.getAttribute('data-g'); if (S.g === 'dose' && S.m !== 'espresso') S.dose = (root._o && root._o.dose) ? root._o.dose : S.dose; if (S.g === 'water' && root._o && root._o.water) S.water = root._o.water; }
     else if (b.hasAttribute('data-v')) { S.variant = b.getAttribute('data-v'); S.r = S.variant === 'conc' ? 8 : 10; }
     else if (b.hasAttribute('data-p')) { S.prec = parseFloat(b.getAttribute('data-p')); }
     else if (b.hasAttribute('data-cup')) { S.cupMl = parseInt(b.getAttribute('data-cup'), 10); S.cupMlTouched = true; }
     else if (b.hasAttribute('data-pot')) { S.pot = parseInt(b.getAttribute('data-pot'), 10); }
-    else if (b.hasAttribute('data-rc')) { var v = parseFloat(b.getAttribute('data-rc')); if (S.m === 'espresso') S.er = v; else S.r = v; }
+    else if (b.hasAttribute('data-rc')) { S.preset = ''; var v = parseFloat(b.getAttribute('data-rc')); if (S.m === 'espresso') S.er = v; else S.r = v; }
     else if (b.hasAttribute('data-inc') || b.hasAttribute('data-dec')) {
       var key = b.getAttribute('data-inc') || b.getAttribute('data-dec'), sign = b.hasAttribute('data-inc') ? 1 : -1;
       var st = { cups: 1, cupMl: 10, dose: S.prec, water: 10, serv: 1, per: 10 }[key] || 1;
@@ -467,13 +666,25 @@ CALC_JS = r"""
       setVal(key, Math.round((cur + sign * st) * 10) / 10);
     }
     else if (b.hasAttribute('data-copy')) { copy(recipeText() + '\n' + location.href.split('#')[0] + hashState(), T.copied); return; }
+    else if (b.hasAttribute('data-save')) {
+      var sv = getSaved(), hs = hashState(), nm = recipeName(root._o);
+      sv = sv.filter(function (r) { return r.h !== hs; }); sv.unshift({ n: nm, h: hs, t: Date.now() }); if (sv.length > 10) sv.length = 10;
+      pendingToast = putSaved(sv) ? T.saved_ok : T.saved_fail;
+    }
+    else if (b.hasAttribute('data-load')) {
+      var ld = getSaved()[parseInt(b.getAttribute('data-load'), 10)];
+      if (ld && ld.h) { var keep = { prec: S.prec, cupMl: S.cupMl, cupMlTouched: S.cupMlTouched }; var fresh = JSON.parse(S0); for (var kk in fresh) S[kk] = fresh[kk]; applyParams(ld.h); }
+    }
+    else if (b.hasAttribute('data-del')) { var dl = getSaved(); dl.splice(parseInt(b.getAttribute('data-del'), 10), 1); putSaved(dl); }
     else if (b.hasAttribute('data-share')) { var url = location.href.split('#')[0] + hashState(); try { history.replaceState(null, '', hashState()); } catch (e2) {} copy(url, T.shared); return; }
     else return;
     render();
+    if (pendingToast) { var tt = $('[data-toast]'); if (tt) tt.textContent = pendingToast; pendingToast = ''; }
   });
+  var pendingToast = '';
   root.addEventListener('input', function (e) {
     var t = e.target;
-    if (t.hasAttribute('data-range')) { var v = parseFloat(t.value); if (S.m === 'espresso') S.er = Math.round(v * 20) / 20; else S.r = Math.round(v * 10) / 10; render(); return; }
+    if (t.hasAttribute('data-range')) { S.preset = ''; var v = parseFloat(t.value); if (S.m === 'espresso') S.er = Math.round(v * 20) / 20; else S.r = Math.round(v * 10) / 10; render(); return; }
     if (t.hasAttribute('data-torange')) { S.to = parseFloat(t.value); render(); return; }
     if (t.hasAttribute('data-ret')) { S.ret = t.checked; render(); return; }
     if (t.hasAttribute('data-tds')) { var tv = num(t.value); S.tds = (isFinite(tv) && tv > 0) ? clamp(tv, 0.05, 15) : 0; render(); return; }
@@ -481,6 +692,7 @@ CALC_JS = r"""
   });
   root.addEventListener('focusout', function (e) { var t = e.target; if (t.hasAttribute && t.hasAttribute('data-in')) setTimeout(function () { render(); var k = t.getAttribute('data-in'); setIn(k, (k === 'dose' && S.m === 'espresso') ? S.edose : S[k]); }, 0); });
 
+  var S0 = JSON.stringify(S);
   build(); loadState(); render();
 })();
 """
@@ -578,6 +790,9 @@ def page_html(lang):
     P = CPAGE[lang]
     h = '<div class="tldr"><b>%s</b><p>%s</p></div>\n' % ('Коротко', P['lead'])
     h += widget_html(lang)
+    h += '<p class="calc-a2hs"><small>%s</small></p>\n' % {
+        'uk': 'Порада: додайте сайт на головний екран телефона (меню браузера, «Додати на головний екран»), і калькулятор буде під рукою на кухні. На Android довгий дотик до значка ZRN Coffee відкриває пункт «Калькулятор кави».',
+        'ru': 'Совет: добавьте сайт на главный экран телефона (меню браузера, «Добавить на главный экран»), и калькулятор будет под рукой на кухне. На Android долгое нажатие на значок ZRN Coffee открывает пункт «Калькулятор кофе».'}[lang]
     h += '<h2 id="use">%s</h2><ol>%s</ol>\n' % (P['h_use'], ''.join('<li>%s</li>' % x for x in P['steps']))
     h += '<h2 id="how">%s</h2>%s\n' % (P['h_how'], ''.join('<p>%s</p>' % _md(x) for x in P['how']))
     head = ''.join('<th scope="col">%s</th>' % c for c in P['tbl_head'])
