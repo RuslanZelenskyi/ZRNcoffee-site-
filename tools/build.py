@@ -2036,6 +2036,15 @@ def main():
     site.write('pages.css', CSS + SB_CSS + GAL_CSS + BLOG_CSS + (CW.CALC_CSS if CW else ''))
     if CW:
         site.write('calc.js', CW.js())
+    # версії для скидання кешу браузера й Cloudflare: ?v=хеш змінюється разом із вмістом
+    pv = _hl.md5(site.out['pages.css'].encode('utf-8')).hexdigest()[:8]
+    cv = _hl.md5(site.out['calc.js'].encode('utf-8')).hexdigest()[:8] if 'calc.js' in site.out else ''
+    for k, v in list(site.out.items()):
+        if k.endswith('.html') and isinstance(v, str):
+            v2 = v.replace('href="/pages.css"', 'href="/pages.css?v=%s"' % pv)
+            if cv:
+                v2 = v2.replace('src="/calc.js"', 'src="/calc.js?v=%s"' % cv)
+            site.out[k] = v2
     # прибираємо застарілі сторінки сортів/статей, яких більше немає в catalog.json
     keep = set(site.out)
     for base in ('coffee', 'blog', 'ru/coffee', 'ru/blog'):
