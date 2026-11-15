@@ -66,8 +66,9 @@ CALC_CSS = r"""
 .calc-toast{min-height:1.3em;font-size:.82rem;margin-top:8px;opacity:.9}
 .calc-pre{margin:0 0 14px}
 .calc-prebtn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--gold-soft);background:linear-gradient(135deg,#2a1d12,#4a3320);color:#f3ead9;border-radius:16px;padding:14px 16px;font-size:1rem;font-weight:600;text-align:left;box-shadow:0 6px 18px rgba(42,29,18,.18)}
-.calc-prebtn span:first-child{display:flex;flex-direction:column;gap:2px}
-.calc-prebtn small{font-weight:400;font-size:.78rem;color:rgba(243,234,217,.75)}
+.calc-prebtn,.calc-prebtn span,.calc-prebtn i{color:#f3ead9!important}
+.calc-prebtn span:first-child{display:flex;flex-direction:column;gap:2px;font-size:1.02rem}
+.calc-prebtn small{display:block;font-weight:400;font-size:.78rem;color:rgba(243,234,217,.8)!important}
 .calc-prebtn i{font-style:normal;transition:transform .2s}
 .calc-prebtn[aria-expanded=true] i{transform:rotate(180deg)}
 .calc-prelist{margin-top:10px;display:grid;gap:12px}
@@ -144,6 +145,21 @@ TXT = {
                 'Обережно покрутіть аеропрес.',
                 'Повільно й м’яко притисніть до кінця.'],
       'src': ['https://www.fluentincoffee.com/wprm_print/james-hoffmanns-aeropress', 'Fluent in Coffee, Джеймс Гоффман']},
+    'v60one': {'n': 'Hoffmann, V60 на одну чашку', 'by': 'Джеймс Гоффман · 1:16,7 · 3:00', 'g': 'Середньо-дрібний', 'temp': '100 °C, щойно з кипіння', 'time': '≈3:00',
+      'steps': ['Блюм: влийте {a} г (≈10 с), потім 5 с злегка покрутіть воронку й почекайте до 0:45.',
+                'Влийте до {c} г (ще {a} г), це 40% води.',
+                'Через 10 с після зупинки долийте до {c} г (ще {a} г), це 60%.',
+                'Ще через 10 с долийте до {c} г (ще {a} г), це 80%.',
+                'Ще через 10 с долийте до {c} г (ще {a} г), це 100%.',
+                'Злегка закрутіть воронку.',
+                'Дайте стекти приблизно до 3:00, час може трохи відрізнятися. Головне смак.'],
+      'src': ['https://aeroprecipe.com/recipes/james-hoffmann-better-1-cup-v60-technique', 'AeroPrecipe, за відео Джеймса Гоффмана']},
+    'wende': {'n': 'Tim Wendelboe, аеропрес', 'by': 'Тім Вендельбо · 1:14,3 · ≈1:30', 'g': 'Дрібний, як для фільтра (≈15–20 кліків Comandante)', 'temp': '96 °C', 'time': '≈1:30',
+      'steps': ['Промийте паперовий фільтр проточною водою 10 с, насипте свіжомелену каву, влийте {c} г води й 3 рази помішайте від себе до себе. Вставте поршень, щоб вода не стікала.',
+                'Через 60 с зніміть поршень, ще 3 рази помішайте й знову вставте.',
+                'Натисніть усією вагою тіла у велику чашку чи глечик.'],
+      'note': 'Це стандартне (не перевернуте) положення. Час натискання автор не вказує, загальний час ≈1:30. Рецепт, за словами джерела, використовують у кав’ярні Tim Wendelboe в Осло.',
+      'src': ['https://aeroprecipe.com/recipes/tim-wendelboe', 'AeroPrecipe, Тім Вендельбо']},
     'rao': {'n': 'Scott Rao V60', 'by': 'Скотт Рао · 1:16,5 · 4:00–4:30', 'g': 'Підберіть так, щоб злив завершився за 4:00–4:30', 'temp': '97 °C', 'time': '4:00–4:30',
       'steps': ['Пластикова воронка V60. Насипте каву й зробіть пальцем «пташине гніздо».',
                 'Блюм: влийте {a} г і одразу енергійно закрутіть воронку.',
@@ -256,6 +272,21 @@ TXT = {
                 'Осторожно покрутите аэропресс.',
                 'Медленно и мягко прижмите до конца.'],
       'src': ['https://www.fluentincoffee.com/wprm_print/james-hoffmanns-aeropress', 'Fluent in Coffee, Джеймс Хоффман']},
+    'v60one': {'n': 'Hoffmann, V60 на одну чашку', 'by': 'Джеймс Хоффман · 1:16,7 · 3:00', 'g': 'Средне-мелкий', 'temp': '100 °C, только с кипения', 'time': '≈3:00',
+      'steps': ['Блюм: влейте {a} г (≈10 с), затем 5 с слегка покрутите воронку и подождите до 0:45.',
+                'Влейте до {c} г (ещё {a} г), это 40% воды.',
+                'Через 10 с после остановки долейте до {c} г (ещё {a} г), это 60%.',
+                'Ещё через 10 с долейте до {c} г (ещё {a} г), это 80%.',
+                'Ещё через 10 с долейте до {c} г (ещё {a} г), это 100%.',
+                'Слегка закрутите воронку.',
+                'Дайте стечь примерно до 3:00, время может немного отличаться. Главное вкус.'],
+      'src': ['https://aeroprecipe.com/recipes/james-hoffmann-better-1-cup-v60-technique', 'AeroPrecipe, по видео Джеймса Хоффмана']},
+    'wende': {'n': 'Tim Wendelboe, аэропресс', 'by': 'Тим Вендельбо · 1:14,3 · ≈1:30', 'g': 'Мелкий, как для фильтра (≈15–20 щелчков Comandante)', 'temp': '96 °C', 'time': '≈1:30',
+      'steps': ['Промойте бумажный фильтр проточной водой 10 с, насыпьте свежемолотый кофе, влейте {c} г воды и 3 раза помешайте от себя к себе. Вставьте поршень, чтобы вода не стекала.',
+                'Через 60 с снимите поршень, ещё 3 раза помешайте и снова вставьте.',
+                'Нажмите всем весом тела в большую чашку или кувшин.'],
+      'note': 'Это стандартное (не перевёрнутое) положение. Время нажатия автор не указывает, общее время ≈1:30. Рецепт, по словам источника, используют в кофейне Tim Wendelboe в Осло.',
+      'src': ['https://aeroprecipe.com/recipes/tim-wendelboe', 'AeroPrecipe, Тим Вендельбо']},
     'rao': {'n': 'Scott Rao V60', 'by': 'Скотт Рао · 1:16,5 · 4:00–4:30', 'g': 'Подберите так, чтобы слив завершился за 4:00–4:30', 'temp': '97 °C', 'time': '4:00–4:30',
       'steps': ['Пластиковая воронка V60. Насыпьте кофе и сделайте пальцем «птичье гнездо».',
                 'Блюм: влейте {a} г и сразу энергично закрутите воронку.',
@@ -368,6 +399,10 @@ CALC_JS = r"""
               cum: function (d, w) { return [w * 40 / 300, w * 120 / 300, w * 260 / 300, w, null]; } },
     aerohh: { m: 'aero', dose: 11, r: 200 / 11, t: ['0:00', '2:00', '2:30'], at: [0, 120, 150], end: 180,
               cum: function (d, w) { return [w, null, null]; } },
+    v60one: { m: 'filter', dose: 15, r: 250 / 15, t: ['0:00', '0:45', '1:10', '1:30', '1:50', '2:00', '2:05'], at: [0, 45, 70, 90, 110, 120, 125], end: 180,
+              cum: function (d, w) { return [0.2 * w, 0.4 * w, 0.6 * w, 0.8 * w, w, null, null]; } },
+    wende:  { m: 'aero', dose: 14, r: 200 / 14, t: ['0:00', '1:00', '≈1:10'], at: [0, 60, 70], end: 90,
+              cum: function (d, w) { return [w, null, null]; } },
     rao:    { m: 'filter', dose: 20, r: 16.5, t: ['', '0:00', '0:40', '', '≈70%', ''],
               cum: function (d, w) { return [null, 3 * d, w * 200 / 330, null, w, null]; } },
     chemex: { m: 'filter', dose: 30, r: 500 / 30, t: ['', '0:00', '0:45', '1:15', '1:45', 'до 4:10'],
@@ -381,7 +416,7 @@ CALC_JS = r"""
     pressh: { m: 'press', dose: 30, r: 500 / 30, t: ['0:00', '4:00', '4:00', '4:00+', '9–12'],
               cum: function (d, w) { return [w, null, null, null, null]; } }
   };
-  var PORDER = ['v60h', 'k46', 'hedrick', 'rao', 'chemex', 'pressh', 'aerohh', 'wac24', 'wac25'];
+  var PORDER = ['v60h', 'v60one', 'k46', 'hedrick', 'rao', 'chemex', 'pressh', 'aerohh', 'wende', 'wac24', 'wac25'];
   var ORDER = ['filter', 'press', 'aero', 'espresso', 'turka', 'moka', 'cold'];
 
   var S = { m: 'filter', g: 'drink', cups: 1, cupMl: 250, dose: 18, water: 288, r: 16, ret: true, prec: 1,
