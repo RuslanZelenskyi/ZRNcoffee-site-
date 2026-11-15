@@ -20,6 +20,12 @@ import time
 import urllib.request
 import sys
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+try:
+    import calc_widget as CW   # інтерактивний калькулятор (tools/calc_widget.py)
+except ImportError:
+    CW = None
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CATALOG = os.path.join(ROOT, 'catalog.json')
 INDEX = os.path.join(ROOT, 'index.html')
@@ -63,6 +69,7 @@ def inline(text):
     t = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', t)
     t = re.sub(r'(?<!\*)\*([^*\n]+?)\*(?!\*)', r'<em>\1</em>', t)
     t = re.sub(r'\[([^\]]+)\]\(((?:/|https?://)[^)\s]*)\)', r'<a href="\2">\1</a>', t)
+    t = re.sub(r'<a href="(https?://[^"]*)">', r'<a href="\1" target="_blank" rel="noopener">', t)
     return t
 
 
@@ -1298,6 +1305,7 @@ class Site:
     def header(self, lang, alt_href):
         u = UI[lang]
         home = '/' if lang == 'uk' else '/ru/'
+        calc_link = (f'\n      <a href="{u["pre"]}/calculator/">{CW.CPAGE[lang]["bread"]}</a>' if CW else '')
         club_link = f'\n      <a href="{home}#club">Клуб</a>' if SETTINGS['sub']['on'] else ''
         return f'''<header class="site-head">
   <div class="wrap hd-in">
@@ -1305,7 +1313,7 @@ class Site:
     <nav aria-label="{u['home']}">
       <a href="{home}#catalog">{u['catalog']}</a>
       <a href="{home}#blends">{u['blends']}</a>{club_link}
-      <a href="{u['pre']}/blog/">{u['blog']}</a>
+      <a href="{u['pre']}/blog/">{u['blog']}</a>{calc_link}
     </nav>
     <a class="lang" href="{alt_href}" hreflang="{'ru' if lang == 'uk' else 'uk'}">{u['altcode']}</a>
   </div>
@@ -1316,6 +1324,7 @@ class Site:
     def footer(self, lang):
         u = UI[lang]
         home = '/' if lang == 'uk' else '/ru/'
+        calc_link = (f'\n      <a href="{u["pre"]}/calculator/">{CW.CPAGE[lang]["bread"]}</a>' if CW else '')
         def fmt(ph):
             d = re.sub(r'\D', '', ph)
             return f'+{d[:2]} {d[2:5]} {d[5:8]} {d[8:10]} {d[10:12]}' if len(d) == 12 else ph
@@ -1329,7 +1338,7 @@ class Site:
     {city_html}
     <div class="foot-links">
       <a href="{home}">ZRN Coffee</a>
-      <a href="{u['pre']}/blog/">{u['blog']}</a>
+      <a href="{u['pre']}/blog/">{u['blog']}</a>{calc_link}
       <a href="{self.tg}" rel="noopener">Telegram</a>
       {f'<a href="{self.insta}" rel="noopener me">Instagram</a>' if self.insta else ''}
       <a href="mailto:{self.email}">{u['mail']}</a>
@@ -1526,6 +1535,8 @@ class Site:
                 rows = ''.join('<tr>' + ''.join(f'<td>{inline(c)}</td>' for c in r) + '</tr>' for r in tb['rows'][lang])
                 parts.append(f'<div class="tbl"><table><thead><tr>{head}</tr></thead><tbody>{rows}</tbody></table></div>')
                 words += sum(len(plain(c).split()) for r in tb['rows'][lang] for c in r)
+            if x.get('widget') == 'dose-calc' and CW:
+                parts.append(CW.widget_html(lang))
             for im in ([x['img']] if isinstance(x.get('img'), dict) else x.get('img', [])):
                 if self.img_ok(im['src']):
                     imgs.append(f'{self.url}/{im["src"]}')
@@ -1630,6 +1641,32 @@ class Site:
                              f'<p>{E(y["excerpt"][lang])}</p></a>' for y in rel[:3]) + '</div></section>\n'
                 h += self.footer(lang)
                 self.write(f"{u['pre'].strip('/')}/blog/{a['id']}/index.html".lstrip('/'), h)
+
+    # --- калькулятор кави (/calculator/, /ru/calculator/)
+    def calc_pages(self):
+        if not CW:
+            return
+        for lang in LANGS:
+            u = UI[lang]
+            P = CW.CPAGE[lang]
+            other = 'ru' if lang == 'uk' else 'uk'
+            home = '/' if lang == 'uk' else '/ru/'
+            canonical = f"{self.url}{u['pre']}/calculator/"
+            alts = {'uk': f"{self.url}/calculator/", 'ru': f"{self.url}/ru/calculator/", 'x-default': f"{self.url}/calculator/"}
+            ld = [{'@context': 'https://schema.org', '@type': 'WebApplication', 'name': P['app_name'], 'url': canonical,
+                   'description': P['desc'], 'inLanguage': lang, 'applicationCategory': 'LifestyleApplication', 'operatingSystem': 'Any',
+                   'browserRequirements': 'Requires JavaScript', 'isAccessibleForFree': True,
+                   'offers': {'@type': 'Offer', 'price': '0', 'priceCurrency': 'UAH'},
+                   'publisher': {'@type': 'Organization', 'name': 'ZRN Coffee', 'url': self.url + '/'}},
+                  CW.page_faq_ld(lang),
+                  self.crumbs([('ZRN Coffee', self.main(lang)), (P['bread'], canonical)])]
+            h = self.head(lang, P['title'], P['desc'], canonical, alts, 'website', f"{self.url}/img/og.jpg", ld)
+            h += self.header(lang, f"{UI[other]['pre']}/calculator/")
+            h += (f'<nav class="crumbs" aria-label="breadcrumb"><a href="{home}">ZRN Coffee</a> › <span>{P["bread"]}</span></nav>\n'
+                  f'<article class="article rich">\n  <small class="kicker">{P["kicker"]}</small>\n  <h1>{P["h1"]}</h1>\n'
+                  f'  {CW.page_html(lang)}\n</article>\n')
+            h += self.footer(lang)
+            self.write(f"{u['pre'].strip('/')}/calculator/index.html".lstrip('/'), h)
 
     # --- сторінка статусу замовлення (/status/, /ru/status/)
     def status_pages(self):
@@ -1809,6 +1846,9 @@ class Site:
             a = {'uk': self.b_url('uk', a_['id']), 'ru': self.b_url('ru', a_['id']), 'x-default': self.b_url('uk', a_['id'])}
             lm = a_.get('updated')
             sm += entry(a['uk'], a, '0.7' if a_.get('_new') else '0.6', 'monthly', lm) + entry(a['ru'], a, '0.6' if a_.get('_new') else '0.5', 'monthly', lm)
+        if CW:
+            ci = {'uk': f'{self.url}/calculator/', 'ru': f'{self.url}/ru/calculator/', 'x-default': f'{self.url}/calculator/'}
+            sm += entry(ci['uk'], ci, '0.8', 'monthly') + entry(ci['ru'], ci, '0.6', 'monthly')
         for path in ('oferta', 'privacy'):
             sm += entry(f'{self.url}/{path}/', {}, '0.3', 'yearly')
         self.write('sitemap.xml', sm + '</urlset>\n')
@@ -1986,13 +2026,16 @@ def main():
     site.blog_pages()
     site.review_pages()
     site.status_pages()
+    site.calc_pages()
     site.subscription_pages()
     site.page_404()
     site.short_links()
     site.home_ru()
     site.merchant_feed()
     site.sitemap()
-    site.write('pages.css', CSS + SB_CSS + GAL_CSS + BLOG_CSS)
+    site.write('pages.css', CSS + SB_CSS + GAL_CSS + BLOG_CSS + (CW.CALC_CSS if CW else ''))
+    if CW:
+        site.write('calc.js', CW.js())
     # прибираємо застарілі сторінки сортів/статей, яких більше немає в catalog.json
     keep = set(site.out)
     for base in ('coffee', 'blog', 'ru/coffee', 'ru/blog'):
