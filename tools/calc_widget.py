@@ -65,7 +65,19 @@ CALC_CSS = r"""
 .calc-act button:focus-visible{outline-color:#f3ead9}
 .calc-toast{min-height:1.3em;font-size:.82rem;margin-top:8px;opacity:.9}
 .calc-pre{margin:0 0 14px}
-.calc-pre .calc-chips{margin-top:6px}
+.calc-prebtn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--gold-soft);background:linear-gradient(135deg,#2a1d12,#4a3320);color:#f3ead9;border-radius:16px;padding:14px 16px;font-size:1rem;font-weight:600;text-align:left;box-shadow:0 6px 18px rgba(42,29,18,.18)}
+.calc-prebtn span:first-child{display:flex;flex-direction:column;gap:2px}
+.calc-prebtn small{font-weight:400;font-size:.78rem;color:rgba(243,234,217,.75)}
+.calc-prebtn i{font-style:normal;transition:transform .2s}
+.calc-prebtn[aria-expanded=true] i{transform:rotate(180deg)}
+.calc-prelist{margin-top:10px;display:grid;gap:12px}
+.calc-prelist[hidden]{display:none}
+.calc-prelist h4{margin:0 0 6px!important;font-size:.78rem!important;letter-spacing:.06em;text-transform:uppercase;color:var(--sub)!important;font-weight:600}
+.calc-prelist .calc-pc{display:grid;gap:6px}
+.calc-prelist button.calc-card{text-align:left;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;font-size:.95rem;font-weight:600}
+.calc-prelist button.calc-card small{font-weight:400;font-size:.78rem;color:var(--sub)}
+.calc-prelist button.calc-card[aria-pressed=true]{background:var(--gold-soft);border-color:var(--gold-soft);color:#fff}
+.calc-prelist button.calc-card[aria-pressed=true] small{color:rgba(255,255,255,.85)}
 .calc-steps{margin:10px 0 0;font-size:.9rem;color:#f3ead9}
 .calc-steps summary{cursor:pointer;font-weight:600;color:var(--gold-soft)}
 .calc-steps ol{margin:8px 0 0!important;padding:0 0 0 1.2em!important;display:grid;gap:7px}
@@ -108,31 +120,63 @@ TXT = {
   'ratio': 'Міцність (співвідношення кави до води)', 'strong': 'Міцніше', 'base': 'Базово', 'light': 'Легше', 'lighter': 'Ще легше', 'tea': 'Як чай', 'sca': 'SCA',
   'ret': 'Врахувати воду, яку вбирає гуща', 'ret_h': 'Близько 2 мл на 1 г кави у фільтрі й 3 мл в імерсії (Barista Hustle). Без цього в чашці буде менше, ніж налили.',
   'ret_est': 'Для цього способу утримання води — наша оцінка.',
-  'presets_h': 'Швидкий старт: відомі рецепти', 'steps_h': 'Покроково', 'src_lbl': 'Джерело',
+  'presets_h': 'Відомі рецепти', 'presets_sub': 'Рецепти чемпіонів і відомих бариста: {n}', 'steps_h': 'Покроково', 'src_lbl': 'Джерело',
   'pre': {
-    'v60h': {'n': 'Hoffmann V60', 'g': 'Середньо-дрібний', 'temp': 'якомога гарячіша, щойно з кипіння', 'time': 'до 3:30',
+    'v60h': {'n': 'Hoffmann V60', 'by': 'Джеймс Гоффман · 1:16,7 · 3:30', 'g': 'Середньо-дрібний', 'temp': 'якомога гарячіша, щойно з кипіння', 'time': 'до 3:30',
       'steps': ['Змочіть фільтр окропом, насипте каву, зробіть лунку. Блюм: влийте {a} г (2× кава), закрутіть воронку, щоб гуща змокла рівно. Чекайте до 0:45.',
                 'Влийте воду до {c} г на вазі (ще {a} г), приблизно за 30 с. Тримайте воронку повною.',
                 'Долийте до {c} г (ще {a} г) повільніше й м’якше.',
                 'Один раз помішайте за годинниковою стрілкою й один проти, дайте стекти, злегка закрутіть воронку. Стік має завершитися приблизно до 3:30.'],
       'src': ['https://www.hario-usa.com/blogs/recipes-and-more-from-friends/james-hoffmann-uitimate-v60-technique', 'Hario USA, Джеймс Гоффман']},
-    'k46': {'n': '4:6 (Tetsu Kasuya)', 'g': 'Грубий, як для френч-преса', 'temp': '93 °C світле, 88 °C середнє, 83 °C темне обсмаження', 'time': 'до 3:30',
+    'k46': {'n': '4:6 (Tetsu Kasuya)', 'by': 'Тецу Касуя, чемпіон світу 2016 · 1:15 · 3:30', 'g': 'Грубий, як для френч-преса', 'temp': '93 °C світле, 88 °C середнє, 83 °C темне обсмаження', 'time': 'до 3:30',
       'steps': ['Перша порція: {a} г повільно по колу (на вазі {c} г).', 'Друга порція: {a} г (на вазі {c} г).', 'Третя порція: {a} г (на вазі {c} г).', 'Четверта порція: {a} г (на вазі {c} г).', 'П’ята порція: {a} г (на вазі {c} г). Дайте стекти до 3:30.'],
       'note': 'Перші дві порції (40% води) керують смаком: більша перша порція дає більше кислотності, більша друга — більше солодкості. Останні три (60%) керують міцністю: дві порції по 90 г дадуть слабше, чотири по 45 г міцніше.',
       'src': ['https://pullandpourcoffee.com/v60-4-to-6-method-pour-over/amp/', 'Pull & Pour']},
-    'hedrick': {'n': 'Lance Hedrick V60', 'g': 'Середньо-дрібний, як цукровий пісок', 'temp': '93–96 °C (світле обсмаження ближче до 96, темне 91–93)', 'time': '2:45–3:00',
+    'hedrick': {'n': 'Lance Hedrick V60', 'by': 'Ленс Гедрік · 1:15 · 2:45–3:00', 'g': 'Середньо-дрібний, як цукровий пісок', 'temp': '93–96 °C (світле обсмаження ближче до 96, темне 91–93)', 'time': '2:45–3:00',
       'steps': ['Промийте фільтр гарячою водою й злийте її, насипте каву, струсіть воронку, щоб вирівняти шар, зробіть лунку й обнуліть ваги. Блюм: влийте {a} г по колу, 3–5 разів помішайте, злегка закрутіть.',
                 'Влийте до {c} г (ще {a} г) спіраллю від центру до країв і назад до центру. Злегка закрутіть.',
                 'Коли шар видно, але він не сухий, влийте до {c} г (ще {a} г) такою ж спіраллю. Це найбільша порція. Злегка закрутіть.',
                 'Коли шар знову видно, влийте до {c} г (ще {a} г) у центр, не торкаючись стінок. Один раз злегка закрутіть.',
                 'Дайте каві стекти повністю. Шар має лягти рівно, на стінках мало осаду.'],
       'src': ['https://secure.lamose.com/blogs/recipes/lance-hedricks-pour-over-masterclass-v60-technique', 'LAMOSE, Ленс Гедрік']},
-    'aerohh': {'n': 'Hoffmann, аеропрес', 'g': 'Дрібний або середньо-дрібний', 'temp': 'щойно з кипіння', 'time': '≈2:30–3:00',
+    'aerohh': {'n': 'Hoffmann, аеропрес', 'by': 'Джеймс Гоффман · 1:18 · ≈2:30', 'g': 'Дрібний або середньо-дрібний', 'temp': 'щойно з кипіння', 'time': '≈2:30–3:00',
       'steps': ['Вставте фільтр у кошик, поставте аеропрес на чашку, насипте каву й налийте всю воду ({c} г). Вставте поршень.',
                 'Обережно покрутіть аеропрес.',
                 'Повільно й м’яко притисніть до кінця.'],
       'src': ['https://www.fluentincoffee.com/wprm_print/james-hoffmanns-aeropress', 'Fluent in Coffee, Джеймс Гоффман']},
-    'pressh': {'n': 'Hoffmann, френч-прес', 'g': 'Середньо-грубий, як морська сіль', 'temp': '≈96 °C, щойно з кипіння', 'time': '9–12 хв',
+    'rao': {'n': 'Scott Rao V60', 'by': 'Скотт Рао · 1:16,5 · 4:00–4:30', 'g': 'Підберіть так, щоб злив завершився за 4:00–4:30', 'temp': '97 °C', 'time': '4:00–4:30',
+      'steps': ['Пластикова воронка V60. Насипте каву й зробіть пальцем «пташине гніздо».',
+                'Блюм: влийте {a} г і одразу енергійно закрутіть воронку.',
+                'Через 40 с влийте до {c} г.',
+                'Дуже ніжно закрутіть воронку, менше секунди, щоб заповнити рифлення.',
+                'Коли шар злито приблизно на 70%, долийте до {c} г і ще раз дуже ніжно закрутіть.',
+                'Лийте низько рівним струменем на постійній висоті, переміщуючи чайник так, щоб увесь шар екстрагувався рівномірно.'],
+      'note': 'За словами автора, екстракція зазвичай виходить у межах 22–24,5% залежно від кавомолки, сорту й обсмаження. Точних часів, крім 40 с, автор не дає, тому таймера для цього рецепта немає.',
+      'src': ['https://www.hario.co.uk/blogs/hario-ambassadors/hario-v60-recipe-interview-with-hario-ambassador-scott-rao', 'Hario UK, Скотт Рао']},
+    'chemex': {'n': 'Hoffmann Chemex', 'by': 'Джеймс Гоффман · 1:16,7 · ≈4:15', 'g': 'Середній', 'temp': 'щойно з кипіння (100 °C)', 'time': '≈4:15',
+      'steps': ['Вставте фільтр так, щоб трисловий бік дивився на носик. Промийте гарячою водою, злийте її. Насипте каву, струсіть, зробіть лунку, обнуліть ваги.',
+                'Блюм: влийте {a} г ніжно по колу (≈10 с). Почекайте до 0:45.',
+                'Влийте по колу до {c} г (ще {a} г) приблизно за 30 с.',
+                'Влийте по колу до {c} г (ще {a} г) приблизно за 30 с.',
+                'Один раз помішайте за годинниковою стрілкою й один проти, зачекайте ≈10 с і злегка струсіть.',
+                'Дайте стекти приблизно до 4:10, зніміть фільтр і збовтайте каву.'],
+      'note': 'Якщо стік закінчується надто швидко, мельніть дрібніше, а якщо надто повільно, грубіше. Часи в джерелі наближені, тому таймера для цього рецепта немає.',
+      'src': ['https://honestcoffeeguide.com/brew-recipes/james-hoffmann-chemex-recipe/', 'Honest Coffee Guide, Джеймс Гоффман']},
+    'wac24': {'n': 'WAC 2024: George Stanica', 'by': 'Чемпіон світу · перевернутий · 18 г / 100 г', 'g': 'Підібраний під конкретну каву: Comandante C40 Mk4 Red Clix, 58 кліків (≈870 мкм)', 'temp': '96 °C, вода ≈85–90 ppm', 'time': '≈2:10 і розбавлення',
+      'steps': ['Перевернутий аеропрес (близько позначки 4). Насипте каву й влийте {a} г (5–6 с).',
+                'Після блюму приблизно 30 с влийте ще {a} г (на вазі {c} г) і 10 с помішуйте «північ-південь-схід-захід».',
+                'Накрийте змоченим фільтром і обережно видавіть повітря (≈10 с).',
+                'Злегка закрутіть, поставте на сервер і почніть повільно тиснути.',
+                'Тисніть 30–40 с, поки вага напою не досягне ≈76–79 г (для 18 г кави). Розбавте теплою водою до 130–135 г, потім додайте 20–30 г води кімнатної температури з нульовою мінералізацією.'],
+      'note': 'Чемпіон зазначає, що метод підібраний під конкретну каву й обсмаження, тому підлаштуйте його під свій смак. Автор дає точні часи лише для 1:20 й 1:35, решта часів приблизні. Наведені в «Вийде напою» ≈157 г це кінцевий об’єм після розбавлення.',
+      'src': ['https://worldaeropresschampionship.com/pages/1st-george-stanica-romania-2024', 'World AeroPress Championship']},
+    'wac25': {'n': 'WAC 2025: Némo Pop', 'by': 'Чемпіон світу · вертикальний · 18 г / 100 г', 'g': 'Спеціальний: Comandante Trailmaster, 31 клік, відсіяно через 200 мкм', 'temp': '84 °C, вода ≈125 ppm; додаткова вода 50 °C', 'time': '≈1:10',
+      'steps': ['Заздалегідь налийте {x} г води 50 °C у карафу. Поставте аеропрес вертикально на карафу з фільтр-кришкою Flow Control і двома паперовими фільтрами, насипте каву. Влийте {c} г води 84 °C, щоб змокла вся кава.',
+                'Через 25 с помішайте за схемою «NSNS-WEWE» (північ-південь двічі, схід-захід двічі).',
+                'Через 50 с почніть повільно тиснути, приблизно 20 с. Подавайте.'],
+      'note': 'Цей змагальний рецепт потребує спеціальної води й помелу з відсіюванням дрібної фракції, тому вдома результат буде трохи іншим. Кінцевий об’єм ≈125 г включає додаткову воду.',
+      'src': ['https://worldaeropresschampionship.com/pages/1st-nemo-pop-australia-2025', 'World AeroPress Championship']},
+    'pressh': {'n': 'Hoffmann, френч-прес', 'by': 'Джеймс Гоффман · 1:16,7 · 9–12 хв', 'g': 'Середньо-грубий, як морська сіль', 'temp': '≈96 °C, щойно з кипіння', 'time': '9–12 хв',
       'steps': ['Насипте каву, влийте всю воду ({c} г) так, щоб уся гуща змокла. Не мішайте.',
                 'Через 4 хв розбийте кірку ложкою й акуратно помішайте 2–3 рази.',
                 'Двома ложками зніміть піну й гущу, що плаває.',
@@ -188,31 +232,63 @@ TXT = {
   'ratio': 'Крепость (соотношение кофе к воде)', 'strong': 'Крепче', 'base': 'Базово', 'light': 'Легче', 'lighter': 'Ещё легче', 'tea': 'Как чай', 'sca': 'SCA',
   'ret': 'Учесть воду, которую впитывает гуща', 'ret_h': 'Около 2 мл на 1 г кофе в фильтре и 3 мл в иммерсии (Barista Hustle). Без этого в чашке будет меньше, чем налили.',
   'ret_est': 'Для этого способа удержание воды — наша оценка.',
-  'presets_h': 'Быстрый старт: известные рецепты', 'steps_h': 'По шагам', 'src_lbl': 'Источник',
+  'presets_h': 'Известные рецепты', 'presets_sub': 'Рецепты чемпионов и известных бариста: {n}', 'steps_h': 'По шагам', 'src_lbl': 'Источник',
   'pre': {
-    'v60h': {'n': 'Hoffmann V60', 'g': 'Средне-мелкий', 'temp': 'как можно горячее, только с кипения', 'time': 'до 3:30',
+    'v60h': {'n': 'Hoffmann V60', 'by': 'Джеймс Хоффман · 1:16,7 · 3:30', 'g': 'Средне-мелкий', 'temp': 'как можно горячее, только с кипения', 'time': 'до 3:30',
       'steps': ['Смочите фильтр кипятком, насыпьте кофе, сделайте лунку. Блюм: влейте {a} г (2× кофе), закрутите воронку, чтобы гуща смочилась ровно. Ждите до 0:45.',
                 'Влейте воду до {c} г на весах (ещё {a} г), примерно за 30 с. Держите воронку полной.',
                 'Долейте до {c} г (ещё {a} г) медленнее и мягче.',
                 'Один раз помешайте по часовой стрелке и один против, дайте стечь, слегка закрутите воронку. Стекание должно завершиться примерно к 3:30.'],
       'src': ['https://www.hario-usa.com/blogs/recipes-and-more-from-friends/james-hoffmann-uitimate-v60-technique', 'Hario USA, Джеймс Хоффман']},
-    'k46': {'n': '4:6 (Tetsu Kasuya)', 'g': 'Крупный, как для френч-пресса', 'temp': '93 °C светлая, 88 °C средняя, 83 °C тёмная обжарка', 'time': 'до 3:30',
+    'k46': {'n': '4:6 (Tetsu Kasuya)', 'by': 'Тэцу Касуя, чемпион мира 2016 · 1:15 · 3:30', 'g': 'Крупный, как для френч-пресса', 'temp': '93 °C светлая, 88 °C средняя, 83 °C тёмная обжарка', 'time': 'до 3:30',
       'steps': ['Первая порция: {a} г медленно по кругу (на весах {c} г).', 'Вторая порция: {a} г (на весах {c} г).', 'Третья порция: {a} г (на весах {c} г).', 'Четвёртая порция: {a} г (на весах {c} г).', 'Пятая порция: {a} г (на весах {c} г). Дайте стечь до 3:30.'],
       'note': 'Первые две порции (40% воды) управляют вкусом: большая первая порция даёт больше кислотности, большая вторая — больше сладости. Последние три (60%) управляют крепостью: две порции по 90 г дадут слабее, четыре по 45 г крепче.',
       'src': ['https://pullandpourcoffee.com/v60-4-to-6-method-pour-over/amp/', 'Pull & Pour']},
-    'hedrick': {'n': 'Lance Hedrick V60', 'g': 'Средне-мелкий, как сахарный песок', 'temp': '93–96 °C (светлая обжарка ближе к 96, тёмная 91–93)', 'time': '2:45–3:00',
+    'hedrick': {'n': 'Lance Hedrick V60', 'by': 'Ленс Хедрик · 1:15 · 2:45–3:00', 'g': 'Средне-мелкий, как сахарный песок', 'temp': '93–96 °C (светлая обжарка ближе к 96, тёмная 91–93)', 'time': '2:45–3:00',
       'steps': ['Промойте фильтр горячей водой и слейте её, насыпьте кофе, встряхните воронку, чтобы выровнять слой, сделайте лунку и обнулите весы. Блюм: влейте {a} г по кругу, 3–5 раз помешайте, слегка закрутите.',
                 'Влейте до {c} г (ещё {a} г) спиралью от центра к краям и обратно к центру. Слегка закрутите.',
                 'Когда слой виден, но не сухой, влейте до {c} г (ещё {a} г) такой же спиралью. Это самая большая порция. Слегка закрутите.',
                 'Когда слой снова виден, влейте до {c} г (ещё {a} г) в центр, не касаясь стенок. Один раз слегка закрутите.',
                 'Дайте кофе стечь полностью. Слой должен лечь ровно, на стенках мало осадка.'],
       'src': ['https://secure.lamose.com/blogs/recipes/lance-hedricks-pour-over-masterclass-v60-technique', 'LAMOSE, Ленс Хедрик']},
-    'aerohh': {'n': 'Hoffmann, аэропресс', 'g': 'Мелкий или средне-мелкий', 'temp': 'только с кипения', 'time': '≈2:30–3:00',
+    'aerohh': {'n': 'Hoffmann, аэропресс', 'by': 'Джеймс Хоффман · 1:18 · ≈2:30', 'g': 'Мелкий или средне-мелкий', 'temp': 'только с кипения', 'time': '≈2:30–3:00',
       'steps': ['Вставьте фильтр в корзину, поставьте аэропресс на чашку, насыпьте кофе и налейте всю воду ({c} г). Вставьте поршень.',
                 'Осторожно покрутите аэропресс.',
                 'Медленно и мягко прижмите до конца.'],
       'src': ['https://www.fluentincoffee.com/wprm_print/james-hoffmanns-aeropress', 'Fluent in Coffee, Джеймс Хоффман']},
-    'pressh': {'n': 'Hoffmann, френч-пресс', 'g': 'Средне-крупный, как морская соль', 'temp': '≈96 °C, только с кипения', 'time': '9–12 мин',
+    'rao': {'n': 'Scott Rao V60', 'by': 'Скотт Рао · 1:16,5 · 4:00–4:30', 'g': 'Подберите так, чтобы слив завершился за 4:00–4:30', 'temp': '97 °C', 'time': '4:00–4:30',
+      'steps': ['Пластиковая воронка V60. Насыпьте кофе и сделайте пальцем «птичье гнездо».',
+                'Блюм: влейте {a} г и сразу энергично закрутите воронку.',
+                'Через 40 с влейте до {c} г.',
+                'Очень нежно закрутите воронку, меньше секунды, чтобы заполнить рифление.',
+                'Когда слой слит примерно на 70%, долейте до {c} г и ещё раз очень нежно закрутите.',
+                'Лейте низко ровной струёй на постоянной высоте, перемещая чайник так, чтобы весь слой экстрагировался равномерно.'],
+      'note': 'По словам автора, экстракция обычно получается в пределах 22–24,5% в зависимости от кофемолки, сорта и обжарки. Точных времён, кроме 40 с, автор не даёт, поэтому таймера для этого рецепта нет.',
+      'src': ['https://www.hario.co.uk/blogs/hario-ambassadors/hario-v60-recipe-interview-with-hario-ambassador-scott-rao', 'Hario UK, Скотт Рао']},
+    'chemex': {'n': 'Hoffmann Chemex', 'by': 'Джеймс Хоффман · 1:16,7 · ≈4:15', 'g': 'Средний', 'temp': 'только с кипения (100 °C)', 'time': '≈4:15',
+      'steps': ['Вставьте фильтр так, чтобы трёхслойная сторона смотрела на носик. Промойте горячей водой, слейте её. Насыпьте кофе, встряхните, сделайте лунку, обнулите весы.',
+                'Блюм: влейте {a} г нежно по кругу (≈10 с). Подождите до 0:45.',
+                'Влейте по кругу до {c} г (ещё {a} г) примерно за 30 с.',
+                'Влейте по кругу до {c} г (ещё {a} г) примерно за 30 с.',
+                'Один раз помешайте по часовой стрелке и один против, подождите ≈10 с и слегка встряхните.',
+                'Дайте стечь примерно до 4:10, снимите фильтр и взболтайте кофе.'],
+      'note': 'Если стекание заканчивается слишком быстро, мелите мельче, а если слишком медленно, крупнее. Времена в источнике приблизительные, поэтому таймера для этого рецепта нет.',
+      'src': ['https://honestcoffeeguide.com/brew-recipes/james-hoffmann-chemex-recipe/', 'Honest Coffee Guide, Джеймс Хоффман']},
+    'wac24': {'n': 'WAC 2024: George Stanica', 'by': 'Чемпион мира · перевёрнутый · 18 г / 100 г', 'g': 'Подобран под конкретный кофе: Comandante C40 Mk4 Red Clix, 58 щелчков (≈870 мкм)', 'temp': '96 °C, вода ≈85–90 ppm', 'time': '≈2:10 и разбавление',
+      'steps': ['Перевёрнутый аэропресс (около отметки 4). Насыпьте кофе и влейте {a} г (5–6 с).',
+                'После блюма примерно 30 с влейте ещё {a} г (на весах {c} г) и 10 с помешивайте «север-юг-восток-запад».',
+                'Накройте смоченным фильтром и осторожно выдавите воздух (≈10 с).',
+                'Слегка покрутите, поставьте на сервер и начните медленно давить.',
+                'Давите 30–40 с, пока вес напитка не достигнет ≈76–79 г (для 18 г кофе). Разбавьте тёплой водой до 130–135 г, затем добавьте 20–30 г воды комнатной температуры с нулевой минерализацией.'],
+      'note': 'Чемпион отмечает, что метод подобран под конкретный кофе и обжарку, поэтому подстройте его под свой вкус. Автор даёт точные времена только для 1:20 и 1:35, остальные времена приблизительные. Указанные в «Получится напитка» ≈157 г это конечный объём после разбавления.',
+      'src': ['https://worldaeropresschampionship.com/pages/1st-george-stanica-romania-2024', 'World AeroPress Championship']},
+    'wac25': {'n': 'WAC 2025: Némo Pop', 'by': 'Чемпион мира · вертикальный · 18 г / 100 г', 'g': 'Специальный: Comandante Trailmaster, 31 щелчок, отсеяно через 200 мкм', 'temp': '84 °C, вода ≈125 ppm; дополнительная вода 50 °C', 'time': '≈1:10',
+      'steps': ['Заранее налейте {x} г воды 50 °C в карафу. Поставьте аэропресс вертикально на карафу с фильтр-крышкой Flow Control и двумя бумажными фильтрами, насыпьте кофе. Влейте {c} г воды 84 °C, чтобы смочился весь кофе.',
+                'Через 25 с помешайте по схеме «NSNS-WEWE» (север-юг дважды, восток-запад дважды).',
+                'Через 50 с начните медленно давить, примерно 20 с. Подавайте.'],
+      'note': 'Этот соревновательный рецепт требует специальной воды и помола с отсевом мелкой фракции, поэтому дома результат будет немного другим. Конечный объём ≈125 г включает дополнительную воду.',
+      'src': ['https://worldaeropresschampionship.com/pages/1st-nemo-pop-australia-2025', 'World AeroPress Championship']},
+    'pressh': {'n': 'Hoffmann, френч-пресс', 'by': 'Джеймс Хоффман · 1:16,7 · 9–12 мин', 'g': 'Средне-крупный, как морская соль', 'temp': '≈96 °C, только с кипения', 'time': '9–12 мин',
       'steps': ['Насыпьте кофе, влейте всю воду ({c} г), чтобы вся гуща смочилась. Не мешайте.',
                 'Через 4 мин разбейте корку ложкой и аккуратно помешайте 2–3 раза.',
                 'Двумя ложками снимите пену и плавающую гущу.',
@@ -274,7 +350,7 @@ CALC_JS = r"""
                 chips: [[15, 'strong'], [16, 'base'], [17, 'light'], [18.18, 'sca'], [20, 'lighter'], [24, 'tea']] },
     press:    { r: 15,   min: 10, max: 26, k: 3,   cupMl: 250, cups: 1, temp: '≈93 °C', time: LANG === 'ru' ? '4 мин' : '4 хв', est: false,
                 chips: [[14, 'strong'], [15, 'base'], [16, 'light'], [18, 'lighter']] },
-    aero:     { r: 11.7, min: 8,  max: 24, k: 2.5, cupMl: 200, cups: 1, temp: '≈96 °C', time: '≈2:00', est: true,
+    aero:     { r: 11.7, min: 5,  max: 24, k: 2.5, cupMl: 200, cups: 1, temp: '≈96 °C', time: '≈2:00', est: true,
                 chips: [[10, 'strong'], [11.7, 'base'], [14, 'light'], [18, 'lighter']] },
     espresso: { r: 2,    min: 1,  max: 4,  dose: 18, temp: '92–94 °C', time: LANG === 'ru' ? '25–30 с' : '25–30 с' },
     turka:    { r: 10,   min: 8,  max: 14, serv: 1, per: 70, temp: null, time: null,
@@ -292,14 +368,24 @@ CALC_JS = r"""
               cum: function (d, w) { return [w * 40 / 300, w * 120 / 300, w * 260 / 300, w, null]; } },
     aerohh: { m: 'aero', dose: 11, r: 200 / 11, t: ['0:00', '2:00', '2:30'], at: [0, 120, 150], end: 180,
               cum: function (d, w) { return [w, null, null]; } },
+    rao:    { m: 'filter', dose: 20, r: 16.5, t: ['', '0:00', '0:40', '', '≈70%', ''],
+              cum: function (d, w) { return [null, 3 * d, w * 200 / 330, null, w, null]; } },
+    chemex: { m: 'filter', dose: 30, r: 500 / 30, t: ['', '0:00', '0:45', '1:15', '1:45', 'до 4:10'],
+              cum: function (d, w) { return [null, w * 80 / 500, w * 0.6, w, null, null]; } },
+    wac24:  { m: 'aero', dose: 18, r: 100 / 18, t: ['0:00', '≈0:35', '1:20', '1:35', '≈2:10'], at: [0, 35, 80, 95, 130], end: 170,
+              cum: function (d, w) { return [w / 2, w, null, null, null]; },
+              drinkT: function (d) { return 157 * d / 18; } },
+    wac25:  { m: 'aero', dose: 18, r: 100 / 18, t: ['0:00', '0:25', '0:50'], at: [0, 25, 50], end: 75,
+              cum: function (d, w) { return [w, null, null]; }, x: function (d) { return 70 * d / 18; },
+              drinkT: function (d) { return 125 * d / 18; } },
     pressh: { m: 'press', dose: 30, r: 500 / 30, t: ['0:00', '4:00', '4:00', '4:00+', '9–12'],
               cum: function (d, w) { return [w, null, null, null, null]; } }
   };
-  var PORDER = ['v60h', 'k46', 'hedrick', 'pressh', 'aerohh'];
+  var PORDER = ['v60h', 'k46', 'hedrick', 'rao', 'chemex', 'pressh', 'aerohh', 'wac24', 'wac25'];
   var ORDER = ['filter', 'press', 'aero', 'espresso', 'turka', 'moka', 'cold'];
 
   var S = { m: 'filter', g: 'drink', cups: 1, cupMl: 250, dose: 18, water: 288, r: 16, ret: true, prec: 1,
-            edose: 18, er: 2, tds: 0, preset: '', pot: 2, serv: 1, per: 70, variant: 'rtd', to: 12 };
+            edose: 18, er: 2, tds: 0, preset: '', preOpen: false, pot: 2, serv: 1, per: 70, variant: 'rtd', to: 12 };
 
   function $(sel, el) { return (el || root).querySelector(sel); }
   function $$(sel, el) { return [].slice.call((el || root).querySelectorAll(sel)); }
@@ -314,7 +400,7 @@ CALC_JS = r"""
   // ---------- каркас ----------
   function build() {
     var h = '';
-    h += '<div class="calc-pre"><span class="calc-lab">' + T.presets_h + '</span><div class="calc-chips" data-chips="preset"></div></div>';
+    h += '<div class="calc-pre"><button type="button" class="calc-prebtn" data-prepanel aria-expanded="false"><span data-prelabel></span><i aria-hidden="true">▾</i></button><div class="calc-prelist" data-prelist hidden></div></div>';
     h += '<div class="calc-methods" role="group" aria-label="' + T.aria_methods + '">';
     ORDER.forEach(function (k) { h += '<button type="button" data-m="' + k + '" aria-pressed="false">' + T.methods[k] + '</button>'; });
     h += '</div><div class="calc-grid"><div class="calc-in">';
@@ -383,6 +469,7 @@ CALC_JS = r"""
     }
     o.dose = dose2; o.water = water2; o.ratio = water2 / dose2; o.k = k;
     o.drink = Math.max(0, water2 - k * dose2); o.mode = 'brew';
+    if (S.preset && PRESETS[S.preset] && PRESETS[S.preset].drinkT) o.drink = PRESETS[S.preset].drinkT(dose2);
     return o;
   }
 
@@ -410,7 +497,18 @@ CALC_JS = r"""
     show('conc', isCold && S.variant === 'conc');
     show('opts', brew || isEsp || isTurka);
     show('tds', (brew && !isCold) || isEsp);
-    $('[data-chips=preset]').innerHTML = PORDER.map(function (id) { return '<button type="button" data-preset="' + id + '" aria-pressed="' + (S.preset === id) + '">' + T.pre[id].n + '</button>'; }).join('');
+    var pbtn = $('[data-prepanel]'), plist = $('[data-prelist]');
+    pbtn.setAttribute('aria-expanded', String(!!S.preOpen)); plist.hidden = !S.preOpen;
+    $('[data-prelabel]').innerHTML = '★ ' + T.presets_h + '<small>' + (S.preset ? T.pre[S.preset].n : T.presets_sub.replace('{n}', PORDER.length)) + '</small>';
+    if (S.preOpen) {
+      var gr = {}, gh = '';
+      PORDER.forEach(function (id) { (gr[PRESETS[id].m] = gr[PRESETS[id].m] || []).push(id); });
+      ['filter', 'press', 'aero'].forEach(function (mm) {
+        if (!gr[mm]) return;
+        gh += '<div><h4>' + T.methods[mm] + '</h4><div class="calc-pc">' + gr[mm].map(function (id) { return '<button type="button" class="calc-card" data-preset="' + id + '" aria-pressed="' + (S.preset === id) + '">' + T.pre[id].n + '<small>' + T.pre[id].by + '</small></button>'; }).join('') + '</div></div>';
+      });
+      plist.innerHTML = gh;
+    }
     var PI = S.preset ? T.pre[S.preset] : null, tempV = PI ? PI.temp : c.temp, timeV = PI ? PI.time : c.time;
     var retw = $('[data-retwrap]'); retw.hidden = !brew;
     $('[data-reth]').textContent = T.ret_h + (c.est ? ' ' + T.ret_est : '');
@@ -535,7 +633,7 @@ CALC_JS = r"""
     return PI.steps.map(function (tx, i) {
       var c = cum[i], a = '';
       if (c != null) { a = Math.round(c - prev); prev = c; }
-      return { t: P.t[i], at: P.at ? P.at[i] : null, text: tx.replace('{a}', a).replace('{c}', c != null ? Math.round(c) : '') };
+      return { t: P.t[i], at: P.at ? P.at[i] : null, text: tx.replace('{a}', a).replace('{c}', c != null ? Math.round(c) : '').replace('{x}', P.x ? Math.round(P.x(o.dose)) : '') };
     });
   }
   // ---------- таймер ----------
@@ -680,7 +778,8 @@ CALC_JS = r"""
   root.addEventListener('click', function (e) {
     var b = e.target.closest ? e.target.closest('button') : null; if (!b || !root.contains(b)) return;
     if (b.hasAttribute('data-tm')) { if (b.getAttribute('data-tm') === 'go') tmToggle(); else tmReset(); return; }
-    if (b.hasAttribute('data-preset')) { applyPreset(b.getAttribute('data-preset')); }
+    if (b.hasAttribute('data-prepanel')) { S.preOpen = !S.preOpen; }
+    else if (b.hasAttribute('data-preset')) { S.preOpen = false; applyPreset(b.getAttribute('data-preset')); }
     else if (b.hasAttribute('data-m')) { applyMethod(b.getAttribute('data-m')); }
     else if (b.hasAttribute('data-g')) { S.g = b.getAttribute('data-g'); if (S.g === 'dose' && S.m !== 'espresso') S.dose = (root._o && root._o.dose) ? root._o.dose : S.dose; if (S.g === 'water' && root._o && root._o.water) S.water = root._o.water; }
     else if (b.hasAttribute('data-v')) { S.variant = b.getAttribute('data-v'); S.r = S.variant === 'conc' ? 8 : 10; }
