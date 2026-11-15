@@ -49,6 +49,17 @@
           "sizes": "192x192"
         }
       ]
+    },
+    {
+      "name": "Калькулятор кави",
+      "short_name": "Калькулятор",
+      "url": "/calculator/",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
     }
   ]
 }
