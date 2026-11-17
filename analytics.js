@@ -5,7 +5,7 @@
    ID — у блоці IDS. Порожній ID = лічильник пропускається. */
 (function () {
   'use strict';
-  var IDS = { ga: 'G-48K7D4T5YX', meta: '2014029492638771', clarity: 'z03t1a5xtl' };
+  var IDS = { ga: 'G-48K7D4T5YX', meta: '1347151410757080', clarity: 'z03t1a5xtl' };
   var KEY = 'zrn_consent', AKEY = 'zrn_attr', TTL = 30 * 864e5;
 
   function store(v) { try { if (v === null) localStorage.removeItem(KEY); else localStorage.setItem(KEY, v); } catch (e) {} }
