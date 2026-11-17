@@ -62,24 +62,40 @@
   }
 
   /* ---------- 3. Meta Pixel + Clarity: лише після згоди ---------- */
-  var stubbed = false, injected = false;
+  var stubbed = false, injected = false, healed = false;
+  function makeFbq() {                     // офіційна заглушка Meta + черга init/PageView
+    var n = window.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); };
+    if (!window._fbq) window._fbq = n; n.push = n; n.loaded = true; n.version = '2.0'; n.queue = [];
+    n('init', IDS.meta); n('track', 'PageView');
+  }
   function stubs() {                       // заглушки: події не втрачаються до завантаження скриптів
     if (stubbed) return; stubbed = true;
-    if (IDS.meta && !window.fbq) {
-      var n = window.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); };
-      if (!window._fbq) window._fbq = n; n.push = n; n.loaded = true; n.version = '2.0'; n.queue = [];
-      n('init', IDS.meta); n('track', 'PageView');
-    }
+    if (IDS.meta && !window.fbq) makeFbq();
     if (IDS.clarity && !window.clarity) {
       window.clarity = function () { (window.clarity.q = window.clarity.q || []).push(arguments); };
     }
   }
-  function inject(src) { var s = document.createElement('script'); s.async = true; s.src = src; document.head.appendChild(s); }
+  function inject(src, onload) { var s = document.createElement('script'); s.async = true; s.src = src; if (onload) s.onload = onload; document.head.appendChild(s); }
+  function injectMeta() {                  // після завантаження fbevents.js перевіряємо, що піксель справді ініціалізовано
+    inject('https://connect.facebook.net/en_US/fbevents.js', function () {
+      try {
+        if (!window.fbq || !window.fbq.getState) return;
+        var ps = window.fbq.getState().pixels || [], has = false;
+        for (var i = 0; i < ps.length; i++) if (String(ps[i].id) === IDS.meta) has = true;
+        if (has || healed) return;
+        // перший екземпляр бібліотеки не зареєстрував піксель: один раз пересоздаємо заглушку і вантажимо бібліотеку заново
+        healed = true;
+        try { delete window.fbq; delete window._fbq; } catch (e) { window.fbq = undefined; window._fbq = undefined; }
+        makeFbq();
+        inject('https://connect.facebook.net/en_US/fbevents.js?r=' + Date.now());
+      } catch (e) {}
+    });
+  }
   function injectAll() {
     if (injected) return; injected = true;
     if (IDS.ga) inject('https://www.googletagmanager.com/gtag/js?id=' + IDS.ga);
     if (consent() === 'granted') {
-      if (IDS.meta) inject('https://connect.facebook.net/en_US/fbevents.js');
+      if (IDS.meta) injectMeta();
       if (IDS.clarity) inject('https://www.clarity.ms/tag/' + IDS.clarity);
     }
   }
@@ -90,7 +106,7 @@
   function onGrant() {
     if (IDS.ga) gtag('consent', 'update', GRANT);
     stubs();
-    if (injected) { if (IDS.meta) inject('https://connect.facebook.net/en_US/fbevents.js'); if (IDS.clarity) inject('https://www.clarity.ms/tag/' + IDS.clarity); }
+    if (injected) { if (IDS.meta) injectMeta(); if (IDS.clarity) inject('https://www.clarity.ms/tag/' + IDS.clarity); }
     else injectAll();
   }
   if (consent() === 'granted') stubs();
