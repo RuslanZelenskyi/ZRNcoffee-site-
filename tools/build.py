@@ -1284,7 +1284,7 @@ class Site:
 {alt_tags}<meta property="og:type" content="{og_type}">
 <meta property="og:locale" content="{u['loc']}">
 <meta property="og:locale:alternate" content="{other}">
-<meta property="og:site_name" content="ZRN Coffee">
+<meta property="og:site_name" content="ZRN Coffee Roasters">
 <meta property="og:title" content="{E(title)}">
 <meta property="og:description" content="{E(desc)}">
 <meta property="og:url" content="{canonical}">
@@ -1336,8 +1336,9 @@ class Site:
   <div class="wrap">
     <div class="foot-brand"><b>ZRN</b> {u['foot']}</div>
     {city_html}
+    <div class="foot-city">ZRN Coffee Roasters · zrncoffee.com.ua</div>
     <div class="foot-links">
-      <a href="{home}">ZRN Coffee</a>
+      <a href="{home}">ZRN Coffee Roasters</a>
       <a href="{u['pre']}/blog/">{u['blog']}</a>{calc_link}
       <a href="{self.tg}" rel="noopener">Telegram</a>
       {f'<a href="{self.insta}" rel="noopener me">Instagram</a>' if self.insta else ''}
@@ -1606,8 +1607,8 @@ class Site:
                            'image': imgs or [f"{self.url}/img/og.jpg"], 'datePublished': a['published'], 'dateModified': a['updated'],
                            'wordCount': words, 'articleSection': a['k'][lang],
                            'author': {'@type': 'Person', 'name': u['author'], 'jobTitle': T['role'],
-                                      'worksFor': {'@type': 'Organization', 'name': 'ZRN Coffee', 'url': self.url + '/'}},
-                           'publisher': {'@type': 'Organization', 'name': 'ZRN Coffee', 'url': self.url + '/',
+                                      'worksFor': {'@type': 'Organization', 'name': 'ZRN Coffee Roasters', 'url': self.url + '/'}},
+                           'publisher': {'@type': 'Organization', 'name': 'ZRN Coffee Roasters', 'url': self.url + '/',
                                          'logo': {'@type': 'ImageObject', 'url': f'{self.url}/icon-512.png'}}},
                           self.crumbs([('ZRN Coffee', self.main(lang)), (u['blogTitle'], self.blog_idx(lang)), (a['title'][lang], canonical)])]
                     if a.get('faq'):
@@ -1628,7 +1629,7 @@ class Site:
                     ld = [{'@context': 'https://schema.org', '@type': 'Article', 'headline': a['title'][lang], 'description': a['excerpt'][lang],
                            'inLanguage': lang, 'mainEntityOfPage': canonical, 'image': f"{self.url}/img/og.jpg",
                            'author': {'@type': 'Person', 'name': u['author']},
-                           'publisher': {'@type': 'Organization', 'name': 'ZRN Coffee', 'url': self.url + '/'}},
+                           'publisher': {'@type': 'Organization', 'name': 'ZRN Coffee Roasters', 'url': self.url + '/'}},
                           self.crumbs([('ZRN Coffee', self.main(lang)), (u['blogTitle'], self.blog_idx(lang)), (a['title'][lang], canonical)])]
                     h = self.head(lang, title, desc, canonical, alts, 'article', f"{self.url}/img/og.jpg", ld)
                     h += self.header(lang, self.b_url(other, a['id']).replace(self.url, ''))
@@ -1657,7 +1658,7 @@ class Site:
                    'description': P['desc'], 'inLanguage': lang, 'applicationCategory': 'LifestyleApplication', 'operatingSystem': 'Any',
                    'browserRequirements': 'Requires JavaScript', 'isAccessibleForFree': True,
                    'offers': {'@type': 'Offer', 'price': '0', 'priceCurrency': 'UAH'},
-                   'publisher': {'@type': 'Organization', 'name': 'ZRN Coffee', 'url': self.url + '/'}},
+                   'publisher': {'@type': 'Organization', 'name': 'ZRN Coffee Roasters', 'url': self.url + '/'}},
                   CW.page_faq_ld(lang),
                   self.crumbs([('ZRN Coffee', self.main(lang)), (P['bread'], canonical)])]
             h = self.head(lang, P['title'], P['desc'], canonical, alts, 'website', f"{self.url}/img/og.jpg", ld)
