@@ -18,7 +18,7 @@
 <meta property="og:locale:alternate" content="ru_RU">
 <meta property="og:title" content="Свіжообсмажена кава в зернах — купити в Україні | ZRN Coffee">
 <meta property="og:description" content="Свіжообсмажена кава ZRN. Моносорти та авторські бленди. Обсмаження під замовлення, зерно або мелена кава. Доставка по Україні.">
-<meta property="og:site_name" content="ZRN Coffee">
+<meta property="og:site_name" content="ZRN Coffee Roasters">
 <meta property="og:url" content="https://zrncoffee.com.ua/">
 <meta property="og:image" content="https://zrncoffee.com.ua/img/og.jpg">
 <meta property="og:image:type" content="image/jpeg">
@@ -879,8 +879,8 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
     {
       "@type": "Organization",
       "@id": "https://zrncoffee.com.ua/#organization",
-      "name": "ZRN Coffee",
-      "alternateName": "ZRN",
+      "name": "ZRN Coffee Roasters",
+      "alternateName": ["ZRN Coffee", "ZRN", "zrncoffee"],
       "url": "https://zrncoffee.com.ua/",
       "logo": "https://zrncoffee.com.ua/icon-512.png",
       "description": "Мікроростерня свіжообсмаженої кави. Моносорти та авторські бленди. Обсмаження під замовлення.",
@@ -903,7 +903,10 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
     },
     {
       "@type": "WebSite",
-      "name": "ZRN Coffee",
+      "@id": "https://zrncoffee.com.ua/#website",
+      "name": "ZRN Coffee Roasters",
+      "alternateName": ["ZRN Coffee", "zrncoffee", "zrncoffee.com.ua"],
+      "publisher": {"@id": "https://zrncoffee.com.ua/#organization"},
       "url": "https://zrncoffee.com.ua/",
       "description": "Свіжообсмажена кава ZRN. Моносорти та авторські бленди. Доставка по Україні.",
       "inLanguage": "uk"
@@ -1259,6 +1262,7 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
         <a href="tel:+380735286527">+38 073 528 65 27</a>
       </div>
       <div class="foot-city" data-i18n="foot.city">м. Черкаси · відправляємо по всій Україні</div>
+      <div class="foot-city" style="margin-top:4px">ZRN Coffee Roasters · zrncoffee.com.ua</div>
       <div class="foot-contacts foot-legal" style="margin-top:6px">
         <a href="/oferta/" data-i18n="foot.oferta">Публічна оферта</a>
         <a href="/privacy/" data-i18n="foot.privacy">Політика конфіденційності</a>
@@ -3324,7 +3328,7 @@ var SET_PRODS = [];   /* набори як «товари» для кошика;
             '@type': 'Product',
             name: p.name,
             description: p.notes,
-            image: SITE + p.img,
+            image: SITE + String(p.img).replace(/^\/+/, ''),
             url: url,
             brand: {'@type': 'Brand', name: 'ZRN Coffee'},
             offers: {
