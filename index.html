@@ -402,6 +402,13 @@ section{padding:56px 0;}
 
 
 /* ===== who we are ===== */
+.brand-film{padding:46px 0 10px;}
+.film-box{position:relative; max-width:860px; margin:0 auto; border-radius:14px; overflow:hidden; background:#0d0a07; border:1px solid var(--line); box-shadow:0 14px 34px -16px rgba(33,26,17,.5); aspect-ratio:1280/698;}
+.film-box img,.film-box video{display:block; width:100%; height:100%; object-fit:cover;}
+.film-play{position:absolute; right:16px; bottom:16px; width:58px; height:58px; border-radius:50%; border:1.5px solid #f3ead9; background:rgba(13,10,7,.55); color:#f3ead9; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:transform .2s, background .2s;}
+.film-play:hover,.film-play:focus-visible{transform:scale(1.07); background:rgba(201,162,77,.85); color:#1f1912;}
+.film-play svg{width:24px; height:24px; margin-left:3px; fill:currentColor;}
+.film-cap{text-align:center; color:var(--sub); font-size:.84rem; margin-top:12px;}
 .who-we-are{padding:60px 0; background:var(--bg2);}
 .who-grid{display:grid; grid-template-columns:1.5fr 1fr; gap:40px; align-items:center;}
 @media(max-width:720px){.who-grid{grid-template-columns:1fr;}}
@@ -910,6 +917,16 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       "url": "https://zrncoffee.com.ua/",
       "description": "Свіжообсмажена кава ZRN. Моносорти та авторські бленди. Доставка по Україні.",
       "inLanguage": "uk"
+    },
+    {
+      "@type": "VideoObject",
+      "name": "ZRN Coffee Roasters — The Art of the Roast",
+      "description": "Брендовий ролик мікроростерні ZRN Coffee Roasters: свіжообсмажена кава, мистецтво обсмаження.",
+      "thumbnailUrl": "https://zrncoffee.com.ua/img/zrn-intro-poster.webp",
+      "uploadDate": "2026-11-21",
+      "duration": "PT18S",
+      "contentUrl": "https://zrncoffee.com.ua/video/zrn-intro.mp4",
+      "publisher": {"@id": "https://zrncoffee.com.ua/#organization"}
     }
   ]
 }
@@ -1151,6 +1168,16 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
       <a class="help-pick-cta" href="https://t.me/zrncoffee" target="_blank" rel="noopener" data-i18n="help.cta">Написати в Telegram →</a>
     </div>
   </section>
+
+<section class="brand-film" id="film">
+  <div class="wrap">
+    <div class="film-box" id="filmBox">
+      <img src="/img/zrn-intro-poster.webp" width="1280" height="698" alt="ZRN Coffee Roasters — The Art of the Roast" data-i18n-alt="film.alt" loading="lazy" decoding="async">
+      <button type="button" class="film-play" id="filmPlay" aria-label="Дивитись відео" data-i18n-aria="film.play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></button>
+    </div>
+    <p class="film-cap" data-i18n="film.cap">ZRN Coffee Roasters — The Art of the Roast · 18 с</p>
+  </div>
+</section>
 
 <section class="who-we-are" id="who">
   <div class="wrap">
@@ -1555,6 +1582,9 @@ uk: {
   'who.contact': 'Пишіть у <a href="https://t.me/zrncoffee" target="_blank">Telegram</a>',
   'who.alt': 'Руслан — засновник мікроростерні ZRN',
   'who.cap': 'Руслан, засновник ZRN',
+  'film.alt': 'ZRN Coffee Roasters — The Art of the Roast',
+  'film.play': 'Дивитись відео',
+  'film.cap': 'ZRN Coffee Roasters — The Art of the Roast · 18 с',
   'catalog.title': 'Моносорти кави',
   'catalog.sub': 'Одне походження — один характер. Обсмажуємо малими партіями, щоб у чашці відчувався регіон, а не «просто кава».',
   'blends.title': 'Бленди ZRN',
@@ -1880,6 +1910,9 @@ ru: {
   'who.contact': 'Пишите в <a href="https://t.me/zrncoffee" target="_blank">Telegram</a>',
   'who.alt': 'Руслан — основатель микрообжарочной ZRN',
   'who.cap': 'Руслан, основатель ZRN',
+  'film.alt': 'ZRN Coffee Roasters — The Art of the Roast',
+  'film.play': 'Смотреть видео',
+  'film.cap': 'ZRN Coffee Roasters — The Art of the Roast · 18 с',
   'catalog.title': 'Моносорты кофе',
   'catalog.sub': 'Одно происхождение — один характер. Обжариваем малыми партиями, чтобы в чашке чувствовался регион, а не «просто кофе».',
   'blends.title': 'Бленды ZRN',
@@ -3260,6 +3293,21 @@ function grindTipBean(){ return t('grind.tipBean'); }
 /* ============================================================
    БЛОГ
    ============================================================ */
+(function(){
+  var b=document.getElementById('filmPlay'), box=document.getElementById('filmBox');
+  if(!b||!box) return;
+  b.addEventListener('click',function(){
+    var v=document.createElement('video');
+    v.src='/video/zrn-intro.mp4'; v.poster='/img/zrn-intro-poster.webp';
+    v.controls=true; v.autoplay=true; v.playsInline=true; v.preload='auto';
+    v.setAttribute('playsinline','');
+    v.setAttribute('aria-label', b.getAttribute('aria-label')||'ZRN');
+    box.innerHTML=''; box.appendChild(v);
+    var p=v.play(); if(p&&p.catch) p.catch(function(){});
+    try{ if(window.zrnTrack) zrnTrack('video_play',{video_title:'ZRN intro'}); }catch(e){}
+  });
+})();
+
 function scrollToSel(sel){
   if(typeof closeMobileNav === 'function') closeMobileNav();
   if(typeof closeBlogOverlay === 'function') closeBlogOverlay();
