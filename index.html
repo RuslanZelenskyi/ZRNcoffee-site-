@@ -405,6 +405,11 @@ section{padding:56px 0;}
 .brand-film{padding:46px 0 10px;}
 .film-box{position:relative; max-width:860px; margin:0 auto; border-radius:14px; overflow:hidden; background:#0d0a07; border:1px solid var(--line); box-shadow:0 14px 34px -16px rgba(33,26,17,.5); aspect-ratio:1280/698;}
 .film-box img,.film-box video{display:block; width:100%; height:100%; object-fit:cover;}
+.film-box video{object-fit:contain; background:#000;}
+.film-fs{position:absolute; top:10px; right:10px; width:38px; height:38px; border-radius:50%; border:1px solid rgba(243,234,217,.55); background:rgba(13,10,7,.5); color:#f3ead9; cursor:pointer; display:flex; align-items:center; justify-content:center; z-index:2;}
+.film-fs svg{width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round;}
+.film-box:fullscreen{aspect-ratio:auto; max-width:none; width:100%; height:100%; border-radius:0; border:0; box-shadow:none; background:#000;}
+.film-box:-webkit-full-screen{aspect-ratio:auto; max-width:none; width:100%; height:100%; border-radius:0; border:0; box-shadow:none; background:#000;}
 .film-play{position:absolute; right:16px; bottom:16px; width:58px; height:58px; border-radius:50%; border:1.5px solid #f3ead9; background:rgba(13,10,7,.55); color:#f3ead9; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:transform .2s, background .2s;}
 .film-play:hover,.film-play:focus-visible{transform:scale(1.07); background:rgba(201,162,77,.85); color:#1f1912;}
 .film-play svg{width:24px; height:24px; margin-left:3px; fill:currentColor;}
@@ -1172,10 +1177,10 @@ footer{border-top:1px solid var(--line); padding:30px 0 46px; color:var(--sub); 
 <section class="brand-film" id="film">
   <div class="wrap">
     <div class="film-box" id="filmBox">
-      <img src="/img/zrn-intro-poster.webp" width="1280" height="698" alt="ZRN Coffee Roasters — The Art of the Roast" data-i18n-alt="film.alt" loading="lazy" decoding="async">
+      <img src="/img/zrn-intro-poster.webp" width="1280" height="698" alt="" data-i18n-alt="film.alt" loading="lazy" decoding="async" onerror="this.style.visibility='hidden'">
       <button type="button" class="film-play" id="filmPlay" aria-label="Дивитись відео" data-i18n-aria="film.play"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg></button>
     </div>
-    <p class="film-cap" data-i18n="film.cap">ZRN Coffee Roasters — The Art of the Roast · 18 с</p>
+    <p class="film-cap" data-i18n="film.cap">ZRN Coffee Roasters — The Art of the Roast</p>
   </div>
 </section>
 
@@ -1584,7 +1589,7 @@ uk: {
   'who.cap': 'Руслан, засновник ZRN',
   'film.alt': 'ZRN Coffee Roasters — The Art of the Roast',
   'film.play': 'Дивитись відео',
-  'film.cap': 'ZRN Coffee Roasters — The Art of the Roast · 18 с',
+  'film.cap': 'ZRN Coffee Roasters — The Art of the Roast',
   'catalog.title': 'Моносорти кави',
   'catalog.sub': 'Одне походження — один характер. Обсмажуємо малими партіями, щоб у чашці відчувався регіон, а не «просто кава».',
   'blends.title': 'Бленди ZRN',
@@ -1912,7 +1917,7 @@ ru: {
   'who.cap': 'Руслан, основатель ZRN',
   'film.alt': 'ZRN Coffee Roasters — The Art of the Roast',
   'film.play': 'Смотреть видео',
-  'film.cap': 'ZRN Coffee Roasters — The Art of the Roast · 18 с',
+  'film.cap': 'ZRN Coffee Roasters — The Art of the Roast',
   'catalog.title': 'Моносорты кофе',
   'catalog.sub': 'Одно происхождение — один характер. Обжариваем малыми партиями, чтобы в чашке чувствовался регион, а не «просто кофе».',
   'blends.title': 'Бленды ZRN',
@@ -3296,13 +3301,24 @@ function grindTipBean(){ return t('grind.tipBean'); }
 (function(){
   var b=document.getElementById('filmPlay'), box=document.getElementById('filmBox');
   if(!b||!box) return;
+  var FS_SVG='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>';
   b.addEventListener('click',function(){
     var v=document.createElement('video');
     v.src='/video/zrn-intro.mp4'; v.poster='/img/zrn-intro-poster.webp';
     v.controls=true; v.autoplay=true; v.playsInline=true; v.preload='auto';
-    v.setAttribute('playsinline','');
+    v.setAttribute('playsinline',''); v.setAttribute('controlsList','nofullscreen noremoteplayback');
     v.setAttribute('aria-label', b.getAttribute('aria-label')||'ZRN');
     box.innerHTML=''; box.appendChild(v);
+    var f=document.createElement('button'); f.type='button'; f.className='film-fs'; f.innerHTML=FS_SVG;
+    f.setAttribute('aria-label', document.documentElement.lang==='ru' ? 'На весь экран' : 'На весь екран');
+    f.addEventListener('click',function(){
+      var d=document, cur=d.fullscreenElement||d.webkitFullscreenElement;
+      if(cur){ (d.exitFullscreen||d.webkitExitFullscreen).call(d); return; }
+      var r=box.requestFullscreen||box.webkitRequestFullscreen;
+      if(r){ try{ var pr=r.call(box); if(pr&&pr.catch) pr.catch(function(){ if(v.webkitEnterFullscreen) v.webkitEnterFullscreen(); }); }catch(e){} }
+      else if(v.webkitEnterFullscreen){ v.webkitEnterFullscreen(); }
+    });
+    box.appendChild(f);
     var p=v.play(); if(p&&p.catch) p.catch(function(){});
     try{ if(window.zrnTrack) zrnTrack('video_play',{video_title:'ZRN intro'}); }catch(e){}
   });
